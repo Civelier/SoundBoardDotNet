@@ -37,10 +37,10 @@
             this.Menu = new System.Windows.Forms.MenuStrip();
             this.File = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.FileSave = new System.Windows.Forms.ToolStripMenuItem();
-            this.FileSaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.FileNew = new System.Windows.Forms.ToolStripMenuItem();
             this.FileOpen = new System.Windows.Forms.ToolStripMenuItem();
+            this.FileSave = new System.Windows.Forms.ToolStripMenuItem();
+            this.FileSaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.Menu.SuspendLayout();
             this.SuspendLayout();
@@ -112,32 +112,32 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
-            // 
-            // FileSave
-            // 
-            this.FileSave.Name = "FileSave";
-            this.FileSave.Size = new System.Drawing.Size(152, 22);
-            this.FileSave.Text = "Save";
-            // 
-            // FileSaveAs
-            // 
-            this.FileSaveAs.Name = "FileSaveAs";
-            this.FileSaveAs.Size = new System.Drawing.Size(152, 22);
-            this.FileSaveAs.Text = "Save as";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(109, 6);
             // 
             // FileNew
             // 
             this.FileNew.Name = "FileNew";
-            this.FileNew.Size = new System.Drawing.Size(152, 22);
+            this.FileNew.Size = new System.Drawing.Size(112, 22);
             this.FileNew.Text = "New";
             this.FileNew.Click += new System.EventHandler(this.FileNew_Click);
             // 
             // FileOpen
             // 
             this.FileOpen.Name = "FileOpen";
-            this.FileOpen.Size = new System.Drawing.Size(152, 22);
+            this.FileOpen.Size = new System.Drawing.Size(112, 22);
             this.FileOpen.Text = "Open";
+            // 
+            // FileSave
+            // 
+            this.FileSave.Name = "FileSave";
+            this.FileSave.Size = new System.Drawing.Size(112, 22);
+            this.FileSave.Text = "Save";
+            // 
+            // FileSaveAs
+            // 
+            this.FileSaveAs.Name = "FileSaveAs";
+            this.FileSaveAs.Size = new System.Drawing.Size(112, 22);
+            this.FileSaveAs.Text = "Save as";
             // 
             // Form1
             // 

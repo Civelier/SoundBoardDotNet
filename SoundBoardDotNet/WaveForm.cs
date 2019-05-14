@@ -22,13 +22,15 @@ namespace SoundBoardDotNet
             InitializeComponent();
         }
 
-        private void _drawRectangle(Point start, Point end)
+        private void _drawRectangle(Rectangle rect, Graphics graph)
         {
-            var brush = new SolidBrush(Color.Cyan);
-            var pen = new Pen(brush);
-            pen.Width = RectWidth;
-            pen.TranslateTransform(start.X, start.Y);
-            pen.TranslateTransform(end.X, end.Y);
+
+            System.Drawing.SolidBrush myBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Red);
+
+            graph = this.CreateGraphics();
+            graph.FillRectangle(myBrush, rect);
+            myBrush.Dispose();
+            graph.Dispose();
         }
 
         public void Draw()
@@ -40,8 +42,27 @@ namespace SoundBoardDotNet
 
             for (int i = 0; i < Values.Count; i++)
             {
-                _drawRectangle(new Point(i, 0), new Point(i, i));
+                _drawRectangle(new Rectangle(i * RectWidth, XAxis, RectWidth, i), CreateGraphics());
             }
+        }
+
+        public void DrawGraph(Graphics graph)
+        {
+            for (int i = 0; i < Values.Count; i++)
+            {
+                _drawRectangle(new Rectangle(Values[i] * RectWidth, XAxis - Values[i] / 2, RectWidth, Values[i]), graph);
+            }
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                Values.Add((byte)i);
+            }
+
+            base.OnPaint(e);
+            DrawGraph(e.Graphics);
         }
     }
 }

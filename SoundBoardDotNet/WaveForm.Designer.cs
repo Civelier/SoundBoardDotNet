@@ -28,21 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.GraphPanel = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
-            // panel1
+            // GraphPanel
             // 
-            this.panel1.Location = new System.Drawing.Point(3, 3);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(368, 172);
-            this.panel1.TabIndex = 0;
+            this.GraphPanel.Location = new System.Drawing.Point(3, 3);
+            this.GraphPanel.Name = "GraphPanel";
+            this.GraphPanel.Size = new System.Drawing.Size(368, 172);
+            this.GraphPanel.TabIndex = 0;
+            this.GraphPanel.Visible = false;
             // 
             // WaveForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.GraphPanel);
             this.Name = "WaveForm";
             this.Size = new System.Drawing.Size(374, 178);
             this.ResumeLayout(false);
@@ -51,6 +52,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel GraphPanel;
     }
 }
