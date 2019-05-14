@@ -34,7 +34,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.BackColor = System.Drawing.Color.DarkGray;
             this.Name = "WaveForm";
             this.Size = new System.Drawing.Size(374, 178);
             this.VisibleChanged += new System.EventHandler(this.WaveForm_VisibleChanged);

@@ -44,8 +44,12 @@ namespace SoundBoardDotNet
 
         private byte[] _soundWaves(string file)
         {
+            Engine.RemoveSoundSource(file);
             var source = Engine.AddSoundSourceFromFile(file);
-            if (source != null) return source.SampleData;
+            if (source != null)
+            {
+                return source.SampleData;
+            }
             return new byte[0];
         }
 
@@ -64,6 +68,7 @@ namespace SoundBoardDotNet
             }
             if (bytes.Length == 0)
             {
+                Debug.WriteLine("No bytes");
                 if (eraseIfEmpty)
                 {
                     WaveGraph.ResetValues();
@@ -79,7 +84,7 @@ namespace SoundBoardDotNet
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            _updateGraph();
+            //_updateGraph();
         }
 
         private void _updateData()
@@ -155,16 +160,18 @@ namespace SoundBoardDotNet
 
         private void SelectSound_FormClosing(object sender, FormClosingEventArgs e)
         {
-            _updateGraph(true);
             Hide();
+            LoadFromData();
+            _updateGraph(true);
             if (Sound != null) Sound.Stop();
             e.Cancel = true;
         }
 
         private void CancelButton_Click(object sender, EventArgs e)
         {
-            _updateGraph(true);
             Hide();
+            LoadFromData();
+            _updateGraph(true);
         }
 
         private void VolumeTrack_Scroll(object sender, EventArgs e)
