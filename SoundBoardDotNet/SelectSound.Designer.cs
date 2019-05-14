@@ -28,8 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.SaveButton = new System.Windows.Forms.Button();
             this.FileNameBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -43,9 +41,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.LabelVolume = new System.Windows.Forms.Label();
             this.ClearButton = new System.Windows.Forms.Button();
-            this.WaveChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.WaveGraph = new SoundBoardDotNet.WaveForm();
             ((System.ComponentModel.ISupportInitialize)(this.VolumeTrack)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.WaveChart)).BeginInit();
             this.SuspendLayout();
             // 
             // SaveButton
@@ -169,29 +166,19 @@
             this.ClearButton.UseVisualStyleBackColor = true;
             this.ClearButton.Click += new System.EventHandler(this.ClearButton_Click);
             // 
-            // WaveChart
+            // WaveGraph
             // 
-            chartArea1.AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea1.AxisX2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea1.AxisY.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea1.AxisY2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
-            chartArea1.Name = "ChartArea1";
-            this.WaveChart.ChartAreas.Add(chartArea1);
-            this.WaveChart.Location = new System.Drawing.Point(15, 187);
-            this.WaveChart.Name = "WaveChart";
-            series1.ChartArea = "ChartArea1";
-            series1.Name = "Series1";
-            this.WaveChart.Series.Add(series1);
-            this.WaveChart.Size = new System.Drawing.Size(478, 151);
-            this.WaveChart.TabIndex = 13;
-            this.WaveChart.Text = "chart1";
+            this.WaveGraph.Location = new System.Drawing.Point(15, 179);
+            this.WaveGraph.Name = "WaveGraph";
+            this.WaveGraph.Size = new System.Drawing.Size(478, 169);
+            this.WaveGraph.TabIndex = 13;
             // 
             // SelectSound
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(505, 389);
-            this.Controls.Add(this.WaveChart);
+            this.Controls.Add(this.WaveGraph);
             this.Controls.Add(this.ClearButton);
             this.Controls.Add(this.LabelVolume);
             this.Controls.Add(this.label3);
@@ -211,7 +198,6 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SelectSound_FormClosed);
             this.Shown += new System.EventHandler(this.SelectSound_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.VolumeTrack)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.WaveChart)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -232,6 +218,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label LabelVolume;
         private System.Windows.Forms.Button ClearButton;
-        private System.Windows.Forms.DataVisualization.Charting.Chart WaveChart;
+        private WaveForm WaveGraph;
     }
 }

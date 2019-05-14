@@ -35,14 +35,9 @@ namespace SoundBoardDotNet
 
         public void Draw()
         {
-            for (int i = 0; i < 10; i++)
-            {
-                Values.Add(0);
-            }
-
             for (int i = 0; i < Values.Count; i++)
             {
-                _drawRectangle(new Rectangle(i * RectWidth, XAxis, RectWidth, i), CreateGraphics());
+                _drawRectangle(new Rectangle(Values[i] * RectWidth, XAxis - Values[i] / 2, RectWidth, Values[i]), CreateGraphics());
             }
         }
 
@@ -56,11 +51,6 @@ namespace SoundBoardDotNet
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            for (int i = 0; i < 100; i++)
-            {
-                Values.Add((byte)i);
-            }
-
             base.OnPaint(e);
             DrawGraph(e.Graphics);
         }

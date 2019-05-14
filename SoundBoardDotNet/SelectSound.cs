@@ -43,8 +43,15 @@ namespace SoundBoardDotNet
 
         private byte[] _soundWaves(string file)
         {
-            return Engine.AddSoundSourceFromFile(file).SampleData;
-            
+            var source = Engine.AddSoundSourceFromFile(file);
+            if (source != null) return source.SampleData;
+            return new byte[0];
+        }
+
+        private void _updateGraph()
+        {
+            WaveGraph.Values = new List<byte>(_soundWaves(FileNameBox.Text));
+            WaveGraph.Draw();
         }
 
         private void _updateData()
@@ -61,6 +68,7 @@ namespace SoundBoardDotNet
             var pathList = FileNameBox.Text.Split('\\');
             var extensionList = pathList[pathList.Length - 1].Split('.');
             NameTextBox.Text = extensionList[0];
+            _updateGraph();
         }
 
         private void FileNameBox_TextChanged(object sender, EventArgs e)
@@ -68,6 +76,7 @@ namespace SoundBoardDotNet
             var pathList = FileNameBox.Text.Split('\\');
             var extensionList = pathList[pathList.Length - 1].Split('.');
             NameTextBox.Text = extensionList[0];
+            _updateGraph();
         }
 
         private void PlayButton_Click(object sender, EventArgs e)
