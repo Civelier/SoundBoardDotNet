@@ -33,6 +33,7 @@
             // 
             // GraphPanel
             // 
+            this.GraphPanel.BackColor = System.Drawing.SystemColors.ButtonShadow;
             this.GraphPanel.Location = new System.Drawing.Point(3, 3);
             this.GraphPanel.Name = "GraphPanel";
             this.GraphPanel.Size = new System.Drawing.Size(368, 172);

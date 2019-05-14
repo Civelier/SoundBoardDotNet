@@ -41,7 +41,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.LabelVolume = new System.Windows.Forms.Label();
             this.ClearButton = new System.Windows.Forms.Button();
-            this.WaveGraph = new SoundBoardDotNet.WaveForm();
             ((System.ComponentModel.ISupportInitialize)(this.VolumeTrack)).BeginInit();
             this.SuspendLayout();
             // 
@@ -166,19 +165,11 @@
             this.ClearButton.UseVisualStyleBackColor = true;
             this.ClearButton.Click += new System.EventHandler(this.ClearButton_Click);
             // 
-            // WaveGraph
-            // 
-            this.WaveGraph.Location = new System.Drawing.Point(15, 179);
-            this.WaveGraph.Name = "WaveGraph";
-            this.WaveGraph.Size = new System.Drawing.Size(478, 169);
-            this.WaveGraph.TabIndex = 13;
-            // 
             // SelectSound
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(505, 389);
-            this.Controls.Add(this.WaveGraph);
             this.Controls.Add(this.ClearButton);
             this.Controls.Add(this.LabelVolume);
             this.Controls.Add(this.label3);
@@ -218,6 +209,5 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label LabelVolume;
         private System.Windows.Forms.Button ClearButton;
-        private WaveForm WaveGraph;
     }
 }

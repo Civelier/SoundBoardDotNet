@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using IrrKlang;
 using System.Windows.Forms.DataVisualization.Charting;
+using System.Diagnostics;
 
 namespace SoundBoardDotNet
 {
@@ -50,8 +51,14 @@ namespace SoundBoardDotNet
 
         private void _updateGraph()
         {
-            WaveGraph.Values = new List<byte>(_soundWaves(FileNameBox.Text));
-            WaveGraph.Draw();
+            var bytes = _soundWaves(FileNameBox.Text);
+            if (bytes == null)
+            {
+                Debug.WriteLine("File was invalid!");
+                return;
+            }
+            WaveGraph.Values = new List<byte>(bytes);
+            WaveGraph.Refresh();
         }
 
         private void _updateData()

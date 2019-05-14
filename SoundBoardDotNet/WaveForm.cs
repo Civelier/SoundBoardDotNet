@@ -33,6 +33,11 @@ namespace SoundBoardDotNet
             graph.Dispose();
         }
 
+        private int _scale(byte b)
+        {
+            return b * Height / 2 / 255;
+        }
+
         public void Draw()
         {
             for (int i = 0; i < Values.Count; i++)
@@ -45,7 +50,7 @@ namespace SoundBoardDotNet
         {
             for (int i = 0; i < Values.Count; i++)
             {
-                _drawRectangle(new Rectangle(Values[i] * RectWidth, XAxis - Values[i] / 2, RectWidth, Values[i]), graph);
+                _drawRectangle(new Rectangle(Values[i] * RectWidth, XAxis - Values[i] / 2, RectWidth, _scale(Values[i])), graph);
             }
         }
 
