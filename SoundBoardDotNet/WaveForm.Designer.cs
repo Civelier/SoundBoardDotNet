@@ -28,31 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.GraphPanel = new System.Windows.Forms.Panel();
             this.SuspendLayout();
-            // 
-            // GraphPanel
-            // 
-            this.GraphPanel.BackColor = System.Drawing.SystemColors.ButtonShadow;
-            this.GraphPanel.Location = new System.Drawing.Point(3, 3);
-            this.GraphPanel.Name = "GraphPanel";
-            this.GraphPanel.Size = new System.Drawing.Size(368, 172);
-            this.GraphPanel.TabIndex = 0;
-            this.GraphPanel.Visible = false;
             // 
             // WaveForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.GraphPanel);
+            this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.Name = "WaveForm";
             this.Size = new System.Drawing.Size(374, 178);
+            this.VisibleChanged += new System.EventHandler(this.WaveForm_VisibleChanged);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Panel GraphPanel;
     }
 }

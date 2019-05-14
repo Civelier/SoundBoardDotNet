@@ -41,7 +41,10 @@
             this.label3 = new System.Windows.Forms.Label();
             this.LabelVolume = new System.Windows.Forms.Label();
             this.ClearButton = new System.Windows.Forms.Button();
+            this.WaveGraph = new SoundBoardDotNet.WaveForm();
+            this.panel1 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.VolumeTrack)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // SaveButton
@@ -165,11 +168,28 @@
             this.ClearButton.UseVisualStyleBackColor = true;
             this.ClearButton.Click += new System.EventHandler(this.ClearButton_Click);
             // 
+            // WaveGraph
+            // 
+            this.WaveGraph.Location = new System.Drawing.Point(0, 0);
+            this.WaveGraph.Name = "WaveGraph";
+            this.WaveGraph.Size = new System.Drawing.Size(478, 160);
+            this.WaveGraph.TabIndex = 13;
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.panel1.Controls.Add(this.WaveGraph);
+            this.panel1.Location = new System.Drawing.Point(15, 188);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(478, 160);
+            this.panel1.TabIndex = 14;
+            // 
             // SelectSound
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(505, 389);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.ClearButton);
             this.Controls.Add(this.LabelVolume);
             this.Controls.Add(this.label3);
@@ -189,6 +209,7 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SelectSound_FormClosed);
             this.Shown += new System.EventHandler(this.SelectSound_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.VolumeTrack)).EndInit();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -209,5 +230,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label LabelVolume;
         private System.Windows.Forms.Button ClearButton;
+        private WaveForm WaveGraph;
+        private System.Windows.Forms.Panel panel1;
     }
 }

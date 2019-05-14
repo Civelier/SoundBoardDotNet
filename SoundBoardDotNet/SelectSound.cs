@@ -49,16 +49,37 @@ namespace SoundBoardDotNet
             return new byte[0];
         }
 
-        private void _updateGraph()
+        private void _updateGraph(bool eraseIfEmpty = false)
         {
             var bytes = _soundWaves(FileNameBox.Text);
             if (bytes == null)
             {
                 Debug.WriteLine("File was invalid!");
+                if (eraseIfEmpty)
+                {
+                    WaveGraph.ResetValues();
+                    WaveGraph.EraseGraph();
+                }
+                return;
+            }
+            if (bytes.Length == 0)
+            {
+                if (eraseIfEmpty)
+                {
+                    WaveGraph.ResetValues();
+                    WaveGraph.EraseGraph();
+                }
                 return;
             }
             WaveGraph.Values = new List<byte>(bytes);
-            WaveGraph.Refresh();
+            WaveGraph.DrawGraphOptimizedAvg(WaveGraph.CreateGraphics());
+            WaveGraph.Show();
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            _updateGraph();
         }
 
         private void _updateData()
@@ -134,6 +155,7 @@ namespace SoundBoardDotNet
 
         private void SelectSound_FormClosing(object sender, FormClosingEventArgs e)
         {
+            _updateGraph(true);
             Hide();
             if (Sound != null) Sound.Stop();
             e.Cancel = true;
@@ -141,6 +163,7 @@ namespace SoundBoardDotNet
 
         private void CancelButton_Click(object sender, EventArgs e)
         {
+            _updateGraph(true);
             Hide();
         }
 
@@ -157,6 +180,7 @@ namespace SoundBoardDotNet
         {
             FileNameBox.Text = "";
             NameTextBox.Text = "";
+            _updateGraph(true);
         }
     }
 }
