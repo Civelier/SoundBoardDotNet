@@ -34,7 +34,7 @@ namespace SoundBoardDotNet
         {
             Data = data;
             _cb = cb;
-            _fileDialog.Filter = "All playable files (*.mp3;*.ogg;*.wav;*.mod;*.it;*.xm;*.it;*.s3d)|*.mp3;*.ogg;*.wav;*.mod;*.it;*.xm;*.it;*.s3d";
+            _fileDialog.Filter = "All playable files (*.wav)|*.wav";
             _fileDialog.FilterIndex = 0;
             InitializeComponent();
             FileNameBox.Text = data.FilePath;

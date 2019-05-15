@@ -171,6 +171,7 @@
             // 
             // WaveGraph
             // 
+            this.WaveGraph.BackColor = System.Drawing.Color.DarkGray;
             this.WaveGraph.Location = new System.Drawing.Point(0, 0);
             this.WaveGraph.Name = "WaveGraph";
             this.WaveGraph.Size = new System.Drawing.Size(478, 160);

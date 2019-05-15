@@ -120,7 +120,10 @@ namespace SoundBoardDotNet
                 }
             }
             
-            GradLabel.Text = "Grad: " + _timeToString(grad);
+            if (GradLabel != null)
+            {
+                GradLabel.Text = "Grad: " + _timeToString(grad);
+            }
         }
 
         private string _timeToString(int time)
