@@ -99,10 +99,20 @@ namespace SoundBoardDotNet
             var p = new Pen(Color.Black);
             List<Point> points = new List<Point>();
             int grad = _getGraduation(Convert.ToInt32(SoundLength), 30);
-            for (int i = 0; i < 30; i++)
+            if (SoundLength == 0)
             {
-                _graph.DrawLine(p, new Point(_Origin.X + i * grad, _XAxis + 5), new Point(_Origin.X + i * grad, _XAxis - 5));
+                _graph.DrawLine(p, new Point(_Origin.X, _XAxis + 5), new Point(_Origin.X, _XAxis - 5));
             }
+            else
+            {
+                for (int i = 0; i < 40; i++)
+                {
+                    if (i * grad * MyMargin.Width / Convert.ToInt32(SoundLength) > MyMargin.Width) break;
+                    _graph.DrawLine(p, new Point(_Origin.X + i * grad * MyMargin.Width / Convert.ToInt32(SoundLength), _XAxis + 5),
+                        new Point(_Origin.X + i * grad * MyMargin.Width / Convert.ToInt32(SoundLength), _XAxis - 5));
+                }
+            }
+            
             GradLabel.Text = "Grad: " + _timeToString(grad);
         }
 
