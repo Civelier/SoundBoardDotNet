@@ -61,7 +61,14 @@ namespace SoundBoardDotNet
         private void _drawAxes()
         {
             var p = new Pen(Color.Black);
-            _graph.DrawLine(p, _Origin, _EndAxis);
+            try
+            {
+                _graph.DrawLine(p, _Origin, _EndAxis);
+            }
+            catch (ArgumentException)
+            {
+
+            }
         }
 
         private int _getClosest(int iTarget, int i1, int i2)
