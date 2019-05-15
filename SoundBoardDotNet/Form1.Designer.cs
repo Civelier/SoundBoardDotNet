@@ -38,6 +38,7 @@
             this.FileOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.FileSave = new System.Windows.Forms.ToolStripMenuItem();
             this.FileSaveAs = new System.Windows.Forms.ToolStripMenuItem();
+            this.DeselectButton = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.Menu.SuspendLayout();
             this.SuspendLayout();
@@ -107,11 +108,22 @@
             this.FileSaveAs.Size = new System.Drawing.Size(112, 22);
             this.FileSaveAs.Text = "Save as";
             // 
+            // DeselectButton
+            // 
+            this.DeselectButton.Location = new System.Drawing.Point(361, 203);
+            this.DeselectButton.Name = "DeselectButton";
+            this.DeselectButton.Size = new System.Drawing.Size(75, 23);
+            this.DeselectButton.TabIndex = 4;
+            this.DeselectButton.Text = "Deselect";
+            this.DeselectButton.UseVisualStyleBackColor = true;
+            this.DeselectButton.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1039, 552);
+            this.Controls.Add(this.DeselectButton);
             this.Controls.Add(this.Menu);
             this.MainMenuStrip = this.Menu;
             this.Name = "Form1";
@@ -136,6 +148,7 @@
         private System.Windows.Forms.ToolStripMenuItem FileOpen;
         private System.Windows.Forms.ToolStripMenuItem FileSave;
         private System.Windows.Forms.ToolStripMenuItem FileSaveAs;
+        private System.Windows.Forms.Button DeselectButton;
     }
 }
 

@@ -142,6 +142,15 @@ namespace SoundBoardDotNet
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
+            if (FileNameBox.Text != "")
+            {
+                if (Engine.Play2D(FileNameBox.Text, false, true) == null)
+                {
+                    MessageBox.Show("Invalid file name!");
+                    return;
+                }
+            }
+            
             _updateData();
             _cb();
             Hide();

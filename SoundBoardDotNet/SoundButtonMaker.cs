@@ -123,10 +123,19 @@ namespace SoundBoardDotNet
 
         private void Form_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == char.Parse(_name))
+            char c;
+            if (char.TryParse(_name, out c))
             {
-                Data.Sound = Engine.Play2D(Data.FilePath);
-                Data.Sound.Volume = Data.Volume;
+                if (e.KeyChar == c)
+                {
+                    Data.Sound = Engine.Play2D(Data.FilePath);
+                    if (Data.Sound == null) return;
+                    Data.Sound.Volume = Data.Volume;
+                }
+            }
+            if (e.KeyChar == ' ')
+            {
+                Engine.StopAllSounds();
             }
         }
 
@@ -135,7 +144,7 @@ namespace SoundBoardDotNet
             Btn.Text = $"{_name}\n{SoundForm.GetNameTextBox.Text}";
         }
 
-        private void Btn_Click(object sender, EventArgs e)
+        virtual protected void Btn_Click(object sender, EventArgs e)
         {
             if (SoundForm == null) SoundForm = new SelectSound(_updateBtnText, Data);
             try

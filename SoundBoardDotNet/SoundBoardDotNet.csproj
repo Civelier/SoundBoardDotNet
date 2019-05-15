@@ -100,6 +100,7 @@
     </Compile>
     <Compile Include="SoundButtonData.cs" />
     <Compile Include="SoundButtonMaker.cs" />
+    <Compile Include="SpaceBarButton.cs" />
     <Compile Include="WaveForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
