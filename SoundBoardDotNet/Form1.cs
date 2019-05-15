@@ -21,7 +21,6 @@ namespace SoundBoardDotNet
         {
             
             if (Sound != null) Sound.Stop();
-            Sound = Engine.Play2D(textBox1.Text, true);
         }
 
         public Form1()
@@ -109,22 +108,9 @@ namespace SoundBoardDotNet
             KeyboardBuilder();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            var file = new OpenFileDialog();
-            file.ShowDialog();
-            textBox1.Text = file.FileName;
-        }
-
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (textBox1.Focused) return;
             System.Diagnostics.Debug.WriteLine($"Key {e.KeyChar}");
-        }
-
-        private void FileNew_Click(object sender, EventArgs e)
-        {
-            
         }
     }
 }

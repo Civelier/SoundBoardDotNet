@@ -13,14 +13,25 @@ namespace SoundBoardDotNet
     public partial class WaveForm : UserControl
     {
         public List<byte> Values = new List<byte>();
+        public uint SoundLength;
+        public Size MyMargin = new Size();
+        public Label GradLabel;
 
-        private int XAxis { get { return Height / 2; } }
-        private int RectWidth { get { return (int)Math.Ceiling((double)Width / Values.Count); } }
+        static int _XMargin = 10, _YMargin = 10;
+
+        private int _XAxis { get { return MyMargin.Height / 2; } }
+        private int _RectWidth { get { return (int)Math.Ceiling((double)MyMargin.Width / Values.Count); } }
+        private Point _Origin { get { return new Point(_XMargin, _XAxis); } }
+        private Point _EndAxis { get { return new Point(Width - _XMargin, _XAxis); } }
         private Graphics _graph;
+        private static int[] _grads = { 1, 2, 5 };
+        
         //private Bitmap _bitmap;
         
         public WaveForm()
         {
+            //Temporary Size******************
+            MyMargin = new Size(478 - 2 * _XMargin, 160 - 2 * _YMargin);
             for (int i = 0; i < 100000; i++)
             {
                 Values.Add((byte)(i * 255 / 100000));
@@ -47,6 +58,60 @@ namespace SoundBoardDotNet
             return output;
         }
 
+        private void _drawAxes()
+        {
+            var p = new Pen(Color.Black);
+            _graph.DrawLine(p, _Origin, _EndAxis);
+        }
+
+        private int _getClosest(int iTarget, int i1, int i2)
+        {
+            if (Math.Abs(iTarget - i1) <= Math.Abs(iTarget - i2)) return i1;
+            return i2;
+        }
+
+        private int _getGraduation(int size, int nGrads)
+        {
+            int target = size / nGrads;
+            if (target == 0) return 0;
+            int closest = 0;
+            bool bFirst = true;
+            for (int i = 0; i < 6; i++)
+            {
+                foreach (var v in _grads)
+                {
+                    if (bFirst)
+                    {
+                        closest = Convert.ToInt32(v * Math.Pow(10, i));
+                        bFirst = false;
+                    }
+                    else
+                    {
+                        closest = _getClosest(target, closest, Convert.ToInt32(v * Math.Pow(10, i)));
+                    }
+                }
+            }
+            return closest;
+        }
+
+        private void _xGraduate()
+        {
+            var p = new Pen(Color.Black);
+            List<Point> points = new List<Point>();
+            int grad = _getGraduation(Convert.ToInt32(SoundLength), 30);
+            for (int i = 0; i < 30; i++)
+            {
+                _graph.DrawLine(p, new Point(_Origin.X + i * grad, _XAxis + 5), new Point(_Origin.X + i * grad, _XAxis - 5));
+            }
+            GradLabel.Text = "Grad: " + _timeToString(grad);
+        }
+
+        private string _timeToString(int time)
+        {
+            if (time > 1000) return ((double)time).ToString() + "s";
+            return time.ToString() + "ms";
+        }
+
         public void Draw()
         {
             DrawGraph(_graph);
@@ -54,11 +119,11 @@ namespace SoundBoardDotNet
 
         public void DrawGraph(Graphics graph)
         {
-            double d = 0, increment = (double)Width / Values.Count;
+            double d = 0, increment = (double)MyMargin.Width / Values.Count;
             for (int i = 0; i < Values.Count; i++)
             {
                 d += increment;
-                _drawRectangle(new Rectangle(Convert.ToInt32(d), XAxis - _scale(Values[i]) / 2, RectWidth, _scale(Values[i])), graph);
+                _drawRectangle(new Rectangle(Convert.ToInt32(d), _XAxis - _scale(Values[i]) / 2, _RectWidth, _scale(Values[i])), graph);
             }
         }
 
@@ -72,7 +137,7 @@ namespace SoundBoardDotNet
                 diff1 = (int)d;
                 if (diff1 != diff2)
                 {
-                    _drawRectangle(new Rectangle(Convert.ToInt32(d), XAxis - _scale(Values[i]) / 2, RectWidth, _scale(Values[i])), graph);
+                    _drawRectangle(new Rectangle(Convert.ToInt32(d), _XAxis - _scale(Values[i]) / 2, _RectWidth, _scale(Values[i])), graph);
                     diff2 = diff1;
                 }
             }
@@ -83,7 +148,7 @@ namespace SoundBoardDotNet
             _graph = graph;
             if (Values.Count == 0) return;
             EraseGraph();
-            double d = 0, increment = (double)Width / Values.Count;
+            double d = 0, increment = (double)(MyMargin.Width) / Values.Count;
             int diff1 = 0, diff2 = 0;
             int sum = Values[0], sumCount = 1;
             Func<byte> avg = () => (byte)(sum / sumCount);
@@ -93,7 +158,7 @@ namespace SoundBoardDotNet
                 diff1 = (int)d;
                 if (diff1 != diff2)
                 {
-                    _drawRectangle(new Rectangle(Convert.ToInt32(d), XAxis - _scale(avg()) / 2, RectWidth, _scale(avg())), _graph);
+                    _drawRectangle(new Rectangle(Convert.ToInt32(d) + _Origin.X, _XAxis - _scale(avg()) / 2, _RectWidth, _scale(avg())), _graph);
                     diff2 = diff1;
                     sum = 0;
                     sumCount = 0;
@@ -105,6 +170,9 @@ namespace SoundBoardDotNet
                 }
             }
             //DrawToBitmap(_bitmap, new Rectangle(0, 0, Width, Height));
+
+            _drawAxes();
+            _xGraduate();
         }
 
         public void ResetValues()
@@ -129,7 +197,7 @@ namespace SoundBoardDotNet
         {
             //base.OnPaint(e);
             //_graph = e.Graphics;
-            
+            //DrawGraph(e.Graphics);
             DrawGraphOptimizedAvg(e.Graphics);
             e.Graphics.Dispose();
             //e.Graphics.DrawImage(_bitmap, new Rectangle(0, 0, Width, Height));

@@ -43,6 +43,7 @@
             this.ClearButton = new System.Windows.Forms.Button();
             this.WaveGraph = new SoundBoardDotNet.WaveForm();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.GradLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.VolumeTrack)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -184,11 +185,21 @@
             this.panel1.Size = new System.Drawing.Size(478, 160);
             this.panel1.TabIndex = 14;
             // 
+            // GradLabel
+            // 
+            this.GradLabel.AutoSize = true;
+            this.GradLabel.Location = new System.Drawing.Point(15, 355);
+            this.GradLabel.Name = "GradLabel";
+            this.GradLabel.Size = new System.Drawing.Size(36, 13);
+            this.GradLabel.TabIndex = 15;
+            this.GradLabel.Text = "Grad: ";
+            // 
             // SelectSound
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(505, 389);
+            this.Controls.Add(this.GradLabel);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.ClearButton);
             this.Controls.Add(this.LabelVolume);
@@ -232,5 +243,6 @@
         private System.Windows.Forms.Button ClearButton;
         private WaveForm WaveGraph;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label GradLabel;
     }
 }

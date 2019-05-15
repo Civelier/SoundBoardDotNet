@@ -40,6 +40,7 @@ namespace SoundBoardDotNet
             FileNameBox.Text = data.FilePath;
             NameTextBox.Text = data.Name;
             Sound = data.Sound;
+            WaveGraph.GradLabel = GradLabel;
         }
 
         private byte[] _soundWaves(string file)
@@ -48,6 +49,7 @@ namespace SoundBoardDotNet
             var source = Engine.AddSoundSourceFromFile(file);
             if (source != null)
             {
+                WaveGraph.SoundLength = source.PlayLength;
                 return source.SampleData;
             }
             return new byte[0];
