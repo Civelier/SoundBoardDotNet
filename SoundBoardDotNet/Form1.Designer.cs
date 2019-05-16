@@ -128,6 +128,7 @@
             this.MainMenuStrip = this.Menu;
             this.Name = "Form1";
             this.Text = "SoundBoard";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             this.contextMenuStrip1.ResumeLayout(false);

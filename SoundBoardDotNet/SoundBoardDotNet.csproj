@@ -74,6 +74,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AudioSound.cs" />
     <Compile Include="FileEncoding\EncodedData.cs" />
     <Compile Include="FileEncoding\IDecodable.cs" />
     <Compile Include="FileEncoding\IEncodable.cs" />
@@ -101,6 +102,12 @@
     <Compile Include="SoundButtonData.cs" />
     <Compile Include="SoundButtonMaker.cs" />
     <Compile Include="SpaceBarButton.cs" />
+    <Compile Include="SliderCursor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SliderCursor.Designer.cs">
+      <DependentUpon>SliderCursor.cs</DependentUpon>
+    </Compile>
     <Compile Include="WaveForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -126,6 +133,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SelectSound.resx">
       <DependentUpon>SelectSound.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SliderCursor.resx">
+      <DependentUpon>SliderCursor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WaveForm.resx">
       <DependentUpon>WaveForm.cs</DependentUpon>

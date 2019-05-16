@@ -14,8 +14,20 @@ namespace SoundBoardDotNet
     {
         public List<byte> Values = new List<byte>();
         public uint SoundLength;
-        public Size MyMargin = new Size();
+        public Rectangle MyMargin = new Rectangle();
         public Label GradLabel;
+
+        public double Slider1Value
+        {
+            get { return Slider1.Value; }
+            set { Slider1.Value = value; }
+        }
+
+        public double Slider2Value
+        {
+            get { return Slider2.Value; }
+            set { Slider2.Value = value; }
+        }
 
         static int _XMargin = 10, _YMargin = 10;
 
@@ -31,7 +43,7 @@ namespace SoundBoardDotNet
         public WaveForm()
         {
             //Temporary Size******************
-            MyMargin = new Size(478 - 2 * _XMargin, 160 - 2 * _YMargin);
+            MyMargin = new Rectangle(_XMargin, _YMargin, 478 - 2 * _XMargin, 160 - 2 * _YMargin);
             for (int i = 0; i < 100000; i++)
             {
                 Values.Add((byte)(i * 255 / 100000));
@@ -108,15 +120,33 @@ namespace SoundBoardDotNet
             int grad = _getGraduation(Convert.ToInt32(SoundLength), 30);
             if (SoundLength == 0)
             {
-                _graph.DrawLine(p, new Point(_Origin.X, _XAxis + 5), new Point(_Origin.X, _XAxis - 5));
+                try
+                {
+                    _graph.DrawLine(p, new Point(_Origin.X, _XAxis + 5), new Point(_Origin.X, _XAxis - 5));
+                }
+                catch (ArgumentException)
+                {
+                    _graph = CreateGraphics();
+                    _graph.DrawLine(p, new Point(_Origin.X, _XAxis + 5), new Point(_Origin.X, _XAxis - 5));
+                }
             }
             else
             {
                 for (int i = 0; i < 40; i++)
                 {
                     if (i * grad * MyMargin.Width / Convert.ToInt32(SoundLength) > MyMargin.Width) break;
-                    _graph.DrawLine(p, new Point(_Origin.X + i * grad * MyMargin.Width / Convert.ToInt32(SoundLength), _XAxis + 5),
-                        new Point(_Origin.X + i * grad * MyMargin.Width / Convert.ToInt32(SoundLength), _XAxis - 5));
+                    try
+                    {
+                        _graph.DrawLine(p, new Point(_Origin.X + i * grad * MyMargin.Width / Convert.ToInt32(SoundLength), _XAxis + 5),
+                            new Point(_Origin.X + i * grad * MyMargin.Width / Convert.ToInt32(SoundLength), _XAxis - 5));
+                    }
+                    catch (ArgumentException)
+                    {
+                        _graph = CreateGraphics();
+                        _graph.DrawLine(p, new Point(_Origin.X + i * grad * MyMargin.Width / Convert.ToInt32(SoundLength), _XAxis + 5),
+                            new Point(_Origin.X + i * grad * MyMargin.Width / Convert.ToInt32(SoundLength), _XAxis - 5));
+                    }
+                    
                 }
             }
             
@@ -195,8 +225,15 @@ namespace SoundBoardDotNet
             _xGraduate();
         }
 
+        public void ResetCursors()
+        {
+            Slider1.Value = 0;
+            Slider2.Value = 100;
+        }
+
         public void ResetValues()
         {
+            ResetCursors();
             Values = new List<byte>();
         }
 
@@ -216,10 +253,9 @@ namespace SoundBoardDotNet
         protected override void OnPaint(PaintEventArgs e)
         {
             //base.OnPaint(e);
-            //_graph = e.Graphics;
+            _graph = e.Graphics;
             //DrawGraph(e.Graphics);
             DrawGraphOptimizedAvg(e.Graphics);
-            e.Graphics.Dispose();
             //e.Graphics.DrawImage(_bitmap, new Rectangle(0, 0, Width, Height));
         }
 
@@ -229,12 +265,40 @@ namespace SoundBoardDotNet
             OnPaint(e);
         }
 
+        private void Slider1_Load(object sender, EventArgs e)
+        {
+            Slider1.Location = new Point(MyMargin.Left, Slider1.Location.Y);
+            Slider1.MinBoundary = MyMargin.Left;
+            Slider1.MaxBoundary = Slider2.Location.X;
+        }
+
+        private void Slider1_Paint(object sender, PaintEventArgs e)
+        {
+            Slider2.MinBoundary = Slider1.Location.X;
+        }
+
+        private void Slider2_Load(object sender, EventArgs e)
+        {
+            Slider2.Location = new Point(MyMargin.Right, Slider2.Location.Y);
+            Slider2.MinBoundary = Slider1.Location.X;
+            Slider2.MaxBoundary = MyMargin.Right;
+        }
+
+        private void Slider2_Paint(object sender, PaintEventArgs e)
+        {
+            Slider1.MaxBoundary = Slider2.Location.X;
+        }
+
         private void WaveForm_VisibleChanged(object sender, EventArgs e)
         {
             if (Visible)
             {
                 DrawGraphOptimizedAvg(_graph);
                 Refresh();
+            }
+            else
+            {
+                _graph.Dispose();
             }
         }
     }

@@ -8,7 +8,7 @@ namespace SoundBoardDotNet
 {
     class LetterKey : SoundButtonMaker
     {
-        public LetterKey(int x, int y, string name) : base(x, y, 3, 3, name)
+        public LetterKey(int x, int y, string name) : base(x, y, 6, 6, name)
         {
         }
     }

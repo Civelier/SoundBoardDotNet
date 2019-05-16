@@ -21,7 +21,7 @@ namespace SoundBoardDotNet
 
         public static Form Parent;
         public static ISoundEngine Engine;
-        public static int Scale = 20;
+        public static int Scale = 10;
         public static Point Origin;
 
         public static char KeyToChar(Keys k)
@@ -123,14 +123,11 @@ namespace SoundBoardDotNet
 
         private void Form_KeyPress(object sender, KeyPressEventArgs e)
         {
-            char c;
-            if (char.TryParse(_name, out c))
+            if (char.TryParse(_name, out char c))
             {
                 if (e.KeyChar == c)
                 {
-                    Data.Sound = Engine.Play2D(Data.FilePath);
-                    if (Data.Sound == null) return;
-                    Data.Sound.Volume = Data.Volume;
+                    SoundForm.PlaySoundAsync();
                 }
             }
             if (e.KeyChar == ' ')

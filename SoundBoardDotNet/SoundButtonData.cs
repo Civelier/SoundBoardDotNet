@@ -12,7 +12,8 @@ namespace SoundBoardDotNet
         public string Name = "";
         public ISound Sound = null;
         public string FilePath = "";
-        public float Volume = 0;
+        public float Volume = 1;
+        public double Slider1 = 0, Slider2 = 100;
 
         private static List<List<string>> _decode(string encodedString)
         {
@@ -55,7 +56,9 @@ namespace SoundBoardDotNet
             Name = "";
             Sound = null;
             FilePath = "";
-            Volume = 0;
+            Volume = 1;
+            Slider1 = 0;
+            Slider2 = 100;
         }
     }
 }

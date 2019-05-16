@@ -22,6 +22,7 @@ namespace SoundBoardDotNet
 
         public TextBox GetNameTextBox { get { return NameTextBox; } }
         public TextBox GetFileTextBox { get { return FileNameBox; } }
+        public WaveForm MyWaveForm { get { return WaveGraph; } }
 
         private OpenFileDialog _fileDialog = new OpenFileDialog();
         public SoundButtonData Data;
@@ -79,7 +80,8 @@ namespace SoundBoardDotNet
                 return;
             }
             WaveGraph.Values = new List<byte>(bytes);
-            WaveGraph.DrawGraphOptimizedAvg(WaveGraph.CreateGraphics());
+            //WaveGraph.DrawGraphOptimizedAvg(WaveGraph.CreateGraphics());
+            Refresh();
             WaveGraph.Show();
         }
 
@@ -94,6 +96,32 @@ namespace SoundBoardDotNet
             Data.FilePath = FileNameBox.Text;
             Data.Name = NameTextBox.Text;
             Data.Sound = Sound;
+            Data.Volume = (float)VolumeTrack.Value / 100;
+            Data.Slider1 = WaveGraph.Slider1Value;
+            Data.Slider2 = WaveGraph.Slider2Value;
+        }
+
+        private uint _percentToTime(double percent, uint time)
+        {
+            var output = Convert.ToUInt32(Math.Round(percent * time / 100, 0));
+            return output;
+        }
+
+        [Obsolete]
+        public void PlaySound()
+        {
+            var sound = Engine.Play2D(FileNameBox.Text, false, true);
+            if (sound == null) return;
+            sound.Volume = (float)VolumeTrack.Value / 100;
+            var pos = _percentToTime(WaveGraph.Slider1Value, sound.PlayLength);
+            sound.PlayPosition = pos;
+            sound.Paused = false;
+        }
+
+        public bool PlaySoundAsync()
+        {
+            var sound = AudioSound.AddSound(FileNameBox.Text, WaveGraph.Slider1Value, WaveGraph.Slider2Value, (float)VolumeTrack.Value / 100);
+            return sound != null;// true if successfull
         }
 
         private void BrowseButton_Click(object sender, EventArgs e)
@@ -103,6 +131,7 @@ namespace SoundBoardDotNet
             var pathList = FileNameBox.Text.Split('\\');
             var extensionList = pathList[pathList.Length - 1].Split('.');
             NameTextBox.Text = extensionList[0];
+            WaveGraph.ResetCursors();
             _updateGraph();
         }
 
@@ -111,6 +140,7 @@ namespace SoundBoardDotNet
             var pathList = FileNameBox.Text.Split('\\');
             var extensionList = pathList[pathList.Length - 1].Split('.');
             NameTextBox.Text = extensionList[0];
+            WaveGraph.ResetCursors();
             _updateGraph();
         }
 
@@ -121,13 +151,11 @@ namespace SoundBoardDotNet
                 MessageBox.Show("Enter a valid File to play!");
                 return;
             }
-            Sound = Engine.Play2D(FileNameBox.Text);
-            if (Sound == null)
+            if (!PlaySoundAsync())
             {
                 MessageBox.Show("Enter a valid File to play!");
                 return;
             }
-            Sound.Volume = (float)VolumeTrack.Value / 100;
         }
 
         private void StopButton_Click(object sender, EventArgs e)
@@ -150,7 +178,7 @@ namespace SoundBoardDotNet
                     return;
                 }
             }
-            
+
             _updateData();
             _cb();
             Hide();
@@ -161,7 +189,9 @@ namespace SoundBoardDotNet
             FileNameBox.Text = Data.FilePath;
             NameTextBox.Text = Data.Name;
             Sound = Data.Sound;
-            Data.Volume = (float)VolumeTrack.Value / 100;
+            WaveGraph.Slider1Value = Data.Slider1;
+            WaveGraph.Slider2Value = Data.Slider2;
+            VolumeTrack.Value = Convert.ToInt32(Data.Volume * 100);
         }
 
         private void SelectSound_Shown(object sender, EventArgs e)
