@@ -5,12 +5,13 @@ using System.Text;
 using System.Threading;
 using IrrKlang;
 using System.Diagnostics;
+using NAudio;
+using NAudio.Wave;
 
 namespace SoundBoardDotNet
 {
     class AudioSound
     {
-        public static ISoundEngine Engine;
         public static List<AudioSound> Sounds = new List<AudioSound>();
 
         private static double _time = 0;
@@ -24,16 +25,12 @@ namespace SoundBoardDotNet
         {
             get
             {
-                if (Sound == null) return -1;
-                return Sound.Volume;
+                throw new NotImplementedException();
             }
             set
             {
-                if (Sound == null) return;
-                Sound.Volume = value;
             }
         }
-        public ISound Sound;
 
         private uint _stopPos = uint.MaxValue;
 
@@ -43,14 +40,13 @@ namespace SoundBoardDotNet
             StartPos = startPos;
             EndPos = endPos;
             Volume = volume;
-            Sound = Engine.Play2D(fileName, loop, true);
+
         }
 
         private AudioSound(string fileName, float volume, bool loop = false)
         {
             FileName = fileName;
             Volume = volume;
-            Sound = Engine.Play2D(fileName, loop, true);
         }
 
         public static void Run()
@@ -88,13 +84,14 @@ namespace SoundBoardDotNet
 
         public static AudioSound AddSound(string fileName, uint startPos, uint endPos, float volume, bool startPaused = false, bool loop = false)
         {
-            Engine.RemoveSoundSource(fileName);
-            var source = Engine.AddSoundSourceFromFile(fileName, StreamMode.NoStreaming, false);
+
+            //Engine.RemoveSoundSource(fileName);
+            //var source = Engine.AddSoundSourceFromFile(fileName, StreamMode.NoStreaming, false);
             var sound = new AudioSound(fileName, startPos, endPos, volume, loop);
-            if (sound.Sound == null) return null;
+            //if (sound.Sound == null) return null;
             while (!_canWrite) ;
             Sounds.Add(sound);
-            sound.Sound.PlayPosition = startPos;
+            //sound.Sound.PlayPosition = startPos;
             if (!startPaused)
             {
                 sound.Play();
@@ -105,15 +102,15 @@ namespace SoundBoardDotNet
 
         public static AudioSound AddSound(string fileName, double startPercent, double endPercent, float volume, bool startPaused = false, bool loop = false)
         {
-            Engine.RemoveSoundSource(fileName);
-            var source = Engine.AddSoundSourceFromFile(fileName, StreamMode.NoStreaming, false);
+            //Engine.RemoveSoundSource(fileName);
+            //var source = Engine.AddSoundSourceFromFile(fileName, StreamMode.NoStreaming, false);
             var sound = new AudioSound(fileName, volume, loop);
             sound.StartPos = sound._percentToTime(startPercent);
             sound.EndPos = sound._percentToTime(endPercent);
-            if (sound.Sound == null) return null;
+            //if (sound.Sound == null) return null;
             while (!_canWrite) ;
             Sounds.Add(sound);
-            sound.Sound.PlayPosition = sound.StartPos;
+            //sound.Sound.PlayPosition = sound.StartPos;
             if (!startPaused)
             {
                 sound.Play();
@@ -125,7 +122,7 @@ namespace SoundBoardDotNet
 
         public void Play()
         {
-            Sound.Paused = false;
+            //Sound.Paused = false;
             _stopPos = EndPos + (uint)_time;
         }
 
@@ -133,20 +130,21 @@ namespace SoundBoardDotNet
         {
             EndPos = (uint)_time - _stopPos;
             _stopPos = uint.MaxValue;
-            Sound.Paused = true;
+            //Sound.Paused = true;
         }
 
         public void Stop()
         {
-            Sound.Stop();
+            //Sound.Stop();
             Sounds.Remove(this);
         }
 
         private uint _percentToTime(double percent)
         {
-            if (Sound == null) return uint.MaxValue;
-            var output = Convert.ToUInt32(Math.Round(percent * Sound.PlayLength / 100, 0));
-            return output;
+            //if (Sound == null) return uint.MaxValue;
+            //var output = Convert.ToUInt32(Math.Round(percent * Sound.PlayLength / 100, 0));
+
+            return 0;
         }
     }
 }

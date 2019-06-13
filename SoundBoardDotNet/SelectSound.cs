@@ -10,19 +10,22 @@ using System.Windows.Forms;
 using IrrKlang;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Diagnostics;
+using NAudio;
+using NAudio.Wave;
+using System.IO;
 
 namespace SoundBoardDotNet
 {
     public partial class SelectSound : Form
     {
-        public static ISoundEngine Engine;
+        public static WaveOut Device;
 
-        public ISound Sound;
+        public WaveStream Sound;
         public string FileName;
 
         public TextBox GetNameTextBox { get { return NameTextBox; } }
         public TextBox GetFileTextBox { get { return FileNameBox; } }
-        public WaveForm MyWaveForm { get { return WaveGraph; } }
+        //public WaveForm MyWaveForm { get { return WaveGraph; } }
 
         private OpenFileDialog _fileDialog = new OpenFileDialog();
         public SoundButtonData Data;
@@ -35,24 +38,24 @@ namespace SoundBoardDotNet
         {
             Data = data;
             _cb = cb;
-            _fileDialog.Filter = "All playable files (*.wav)|*.wav";
+            _fileDialog.Filter = "All playable files (*.wav)|*.wav;*.WAV";
             _fileDialog.FilterIndex = 0;
             InitializeComponent();
             FileNameBox.Text = data.FilePath;
             NameTextBox.Text = data.Name;
             Sound = data.Sound;
-            WaveGraph.GradLabel = GradLabel;
         }
 
         private byte[] _soundWaves(string file)
         {
-            Engine.RemoveSoundSource(file);
-            var source = Engine.AddSoundSourceFromFile(file);
-            if (source != null)
-            {
-                WaveGraph.SoundLength = source.PlayLength;
-                return source.SampleData;
-            }
+            //Engine.RemoveSoundSource(file);
+            //var source = Engine.AddSoundSourceFromFile(file);
+            //if (source != null)
+            //{
+            //    return source.SampleData;
+            //}
+
+            //get data
             return new byte[0];
         }
 
@@ -64,8 +67,10 @@ namespace SoundBoardDotNet
                 Debug.WriteLine("File was invalid!");
                 if (eraseIfEmpty)
                 {
-                    WaveGraph.ResetValues();
-                    WaveGraph.EraseGraph();
+                    //Erase wave graph
+
+                    //WaveGraph.ResetValues();
+                    //WaveGraph.EraseGraph();
                 }
                 return;
             }
@@ -74,12 +79,16 @@ namespace SoundBoardDotNet
                 Debug.WriteLine("No bytes");
                 if (eraseIfEmpty)
                 {
-                    WaveGraph.ResetValues();
-                    WaveGraph.EraseGraph();
+                    //Erase graph
+
+                    //WaveGraph.ResetValues();
+                    //WaveGraph.EraseGraph();
                 }
                 return;
             }
-            WaveGraph.Values = new List<byte>(bytes);
+            //Draw graph
+
+            //WaveGraph.Values = new List<byte>(bytes);
             //WaveGraph.DrawGraphOptimizedAvg(WaveGraph.CreateGraphics());
             Refresh();
             WaveGraph.Show();
@@ -93,12 +102,18 @@ namespace SoundBoardDotNet
 
         private void _updateData()
         {
+            FileInfo file = new FileInfo(FileNameBox.Text);
+
+            if (!file.Exists) throw new FileNotFoundException("File not found!", file.FullName);
+
             Data.FilePath = FileNameBox.Text;
             Data.Name = NameTextBox.Text;
             Data.Sound = Sound;
-            Data.Volume = (float)VolumeTrack.Value / 100;
-            Data.Slider1 = WaveGraph.Slider1Value;
-            Data.Slider2 = WaveGraph.Slider2Value;
+            Data.Volume = VolumeControl.Volume;
+
+            //Data.Volume = (float)VolumeTrack.Value / 100;
+            //Data.Slider1 = WaveGraph.Slider1Value;
+            //Data.Slider2 = WaveGraph.Slider2Value;
         }
 
         private uint _percentToTime(double percent, uint time)
@@ -107,21 +122,11 @@ namespace SoundBoardDotNet
             return output;
         }
 
-        [Obsolete]
-        public void PlaySound()
-        {
-            var sound = Engine.Play2D(FileNameBox.Text, false, true);
-            if (sound == null) return;
-            sound.Volume = (float)VolumeTrack.Value / 100;
-            var pos = _percentToTime(WaveGraph.Slider1Value, sound.PlayLength);
-            sound.PlayPosition = pos;
-            sound.Paused = false;
-        }
-
         public bool PlaySoundAsync()
         {
-            var sound = AudioSound.AddSound(FileNameBox.Text, WaveGraph.Slider1Value, WaveGraph.Slider2Value, (float)VolumeTrack.Value / 100);
-            return sound != null;// true if successfull
+            //var sound = AudioSound.AddSound(FileNameBox.Text, WaveGraph.Slider1Value, WaveGraph.Slider2Value, (float)VolumeTrack.Value / 100);
+            //return sound != null;// true if successfull
+            return false;
         }
 
         private void BrowseButton_Click(object sender, EventArgs e)
@@ -131,7 +136,7 @@ namespace SoundBoardDotNet
             var pathList = FileNameBox.Text.Split('\\');
             var extensionList = pathList[pathList.Length - 1].Split('.');
             NameTextBox.Text = extensionList[0];
-            WaveGraph.ResetCursors();
+            //WaveGraph.ResetCursors();
             _updateGraph();
         }
 
@@ -140,7 +145,7 @@ namespace SoundBoardDotNet
             var pathList = FileNameBox.Text.Split('\\');
             var extensionList = pathList[pathList.Length - 1].Split('.');
             NameTextBox.Text = extensionList[0];
-            WaveGraph.ResetCursors();
+            //WaveGraph.ResetCursors();
             _updateGraph();
         }
 
@@ -160,23 +165,26 @@ namespace SoundBoardDotNet
 
         private void StopButton_Click(object sender, EventArgs e)
         {
-            if (Sound != null) Sound.Stop();
+            //Stop sounds
+            //if (Sound != null) Engine.Init(Sound);
         }
 
         private void SelectSound_FormClosed(object sender, FormClosedEventArgs e)
         {
-            if (Sound != null) Sound.Stop();
+            //Stop sounds
+            //if (Sound != null) Sound.Stop();
         }
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
             if (FileNameBox.Text != "")
             {
-                if (Engine.Play2D(FileNameBox.Text, false, true) == null)
-                {
-                    MessageBox.Show("Invalid file name!");
-                    return;
-                }
+                //Verify if file is playable
+                //if (Engine.Play2D(FileNameBox.Text, false, true) == null)
+                //{
+                //    MessageBox.Show("Invalid file name!");
+                //    return;
+                //}
             }
 
             _updateData();
@@ -189,9 +197,11 @@ namespace SoundBoardDotNet
             FileNameBox.Text = Data.FilePath;
             NameTextBox.Text = Data.Name;
             Sound = Data.Sound;
-            WaveGraph.Slider1Value = Data.Slider1;
-            WaveGraph.Slider2Value = Data.Slider2;
-            VolumeTrack.Value = Convert.ToInt32(Data.Volume * 100);
+            VolumeControl.Volume = Data.Volume;
+
+            //WaveGraph.Slider1Value = Data.Slider1;
+            //WaveGraph.Slider2Value = Data.Slider2;
+            //VolumeTrack.Value = Convert.ToInt32(Data.Volume * 100);
         }
 
         private void SelectSound_Shown(object sender, EventArgs e)
@@ -204,7 +214,9 @@ namespace SoundBoardDotNet
             Hide();
             LoadFromData();
             _updateGraph(true);
-            if (Sound != null) Sound.Stop();
+
+            //Stop sound
+            //if (Sound != null) Sound.Stop();
             e.Cancel = true;
         }
 
@@ -215,20 +227,16 @@ namespace SoundBoardDotNet
             _updateGraph(true);
         }
 
-        private void VolumeTrack_Scroll(object sender, EventArgs e)
-        {
-            if (Sound != null)
-            {
-                Sound.Volume = (float)VolumeTrack.Value / 100;
-            }
-            LabelVolume.Text = VolumeTrack.Value.ToString();
-        }
-
         private void ClearButton_Click(object sender, EventArgs e)
         {
             FileNameBox.Text = "";
             NameTextBox.Text = "";
             _updateGraph(true);
+        }
+
+        private void Volume_VolumeChanged(object sender, EventArgs e)
+        {
+            //Change the sounds volume
         }
     }
 }

@@ -14,8 +14,8 @@ namespace SoundBoardDotNet
     public partial class Form1 : Form
     {
         List<SoundButtonMaker> Buttons = new List<SoundButtonMaker>();
-        ISound Sound;
-        ISoundEngine Engine;
+        //ISound Sound;
+        //ISoundEngine Engine;
 
         string[] englishKeyboard = { "`1234567890-=", "qwertyuiop[]\\", "asdfghjkl;'", "zxcvbnm,./" };
         string[] frenchKeyboard = { "#1234567890-=", "qwertyuiop^¸<", "asdfghjkl;`", "zxcvbnm,.é" };
@@ -24,15 +24,13 @@ namespace SoundBoardDotNet
         void PlaySound()
         {
             
-            if (Sound != null) Sound.Stop();
         }
 
         public Form1()
         {
             KeyPreview = true;
-            Engine = new ISoundEngine();
             InitializeComponent();
-            SoundButtonMaker.Engine = Engine;
+            //SoundButtonMaker.Engine = Engine;
         }
 
         private void KeyboardLine(int xIncrement, int x, int y, string keys)
@@ -127,7 +125,6 @@ namespace SoundBoardDotNet
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            AudioSound.Engine = Engine;
             AudioSound.Run();
             SoundButtonMaker.Parent = this;
             KeyboardBuilder(englishKeyboard, new Point(10, 30), 7, 7);

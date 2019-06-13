@@ -4,13 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IrrKlang;
+using NAudio;
+using NAudio.Wave;
 
 namespace SoundBoardDotNet
 {
     public class SoundButtonData
     {
         public string Name = "";
-        public ISound Sound = null;
+        public WaveStream Sound;
         public string FilePath = "";
         public float Volume = 1;
         public double Slider1 = 0, Slider2 = 100;

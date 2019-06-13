@@ -11,7 +11,6 @@ namespace SoundBoardDotNet
 {
     class SoundButtonMaker
     {
-        public ISoundSource MySoundSource;
         public SelectSound SoundForm;
         public bool HasSound = false;
         public Button Btn;
@@ -20,7 +19,6 @@ namespace SoundBoardDotNet
         private string _name;
 
         public static Form Parent;
-        public static ISoundEngine Engine;
         public static int Scale = 10;
         public static Point Origin;
 
@@ -108,7 +106,6 @@ namespace SoundBoardDotNet
         public SoundButtonMaker(int x, int y, int height, int width, string name)
         {
             _name = name;
-            SelectSound.Engine = Engine;
             Data = new SoundButtonData();
             SoundForm = new SelectSound(_updateBtnText, Data);
             Btn = new Button();
@@ -132,7 +129,7 @@ namespace SoundBoardDotNet
             }
             if (e.KeyChar == ' ')
             {
-                Engine.StopAllSounds();
+                //Stop sounds
             }
         }
 

@@ -60,6 +60,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\OneDrive\Documents\irrKlang-64bit-1.6.0\bin\dotnet-4-64\irrKlang.NET4.dll</HintPath>
     </Reference>
+    <Reference Include="NAudio">
+      <HintPath>..\..\..\..\Downloads\NAudio-Release\NAudio.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
@@ -102,18 +105,6 @@
     <Compile Include="SoundButtonData.cs" />
     <Compile Include="SoundButtonMaker.cs" />
     <Compile Include="SpaceBarButton.cs" />
-    <Compile Include="SliderCursor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="SliderCursor.Designer.cs">
-      <DependentUpon>SliderCursor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="WaveForm.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="WaveForm.Designer.cs">
-      <DependentUpon>WaveForm.cs</DependentUpon>
-    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -133,12 +124,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SelectSound.resx">
       <DependentUpon>SelectSound.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SliderCursor.resx">
-      <DependentUpon>SliderCursor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WaveForm.resx">
-      <DependentUpon>WaveForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
