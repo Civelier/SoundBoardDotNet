@@ -39,7 +39,6 @@
             this.FileSave = new System.Windows.Forms.ToolStripMenuItem();
             this.FileSaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.DeselectButton = new System.Windows.Forms.Button();
-            this.TestButton = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.Menu.SuspendLayout();
             this.SuspendLayout();
@@ -123,22 +122,11 @@
             this.DeselectButton.UseVisualStyleBackColor = true;
             this.DeselectButton.Visible = false;
             // 
-            // TestButton
-            // 
-            this.TestButton.Location = new System.Drawing.Point(736, 567);
-            this.TestButton.Name = "TestButton";
-            this.TestButton.Size = new System.Drawing.Size(75, 23);
-            this.TestButton.TabIndex = 5;
-            this.TestButton.Text = "Test";
-            this.TestButton.UseVisualStyleBackColor = true;
-            this.TestButton.Click += new System.EventHandler(this.TestButton_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1385, 679);
-            this.Controls.Add(this.TestButton);
             this.Controls.Add(this.DeselectButton);
             this.Controls.Add(this.Menu);
             this.MainMenuStrip = this.Menu;
@@ -167,7 +155,6 @@
         private System.Windows.Forms.ToolStripMenuItem FileSave;
         private System.Windows.Forms.ToolStripMenuItem FileSaveAs;
         private System.Windows.Forms.Button DeselectButton;
-        private System.Windows.Forms.Button TestButton;
     }
 }
 

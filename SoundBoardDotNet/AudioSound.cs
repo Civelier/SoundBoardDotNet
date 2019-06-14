@@ -25,7 +25,7 @@ namespace SoundBoardDotNet
             set
             {
                 _startPos = value;
-                try { _timer.Interval = _endPos - _startPos; }
+                try { _timer.Interval = (_endPos - _startPos) * 1000; }
                 catch (ArgumentException)
                 {
                     _timer.Interval = 0.001;
@@ -39,7 +39,7 @@ namespace SoundBoardDotNet
             set
             {
                 _endPos = value;
-                try { _timer.Interval = _endPos - _startPos; }
+                try { _timer.Interval = (_endPos - _startPos) * 1000; }
                 catch (ArgumentException)
                 {
                     _timer.Interval = 0.001;
@@ -58,7 +58,7 @@ namespace SoundBoardDotNet
             _startPos = startPos;
             _endPos = endPos;
             Volume = volume;
-            try { _timer = new Timer(_endPos - _startPos); }
+            try { _timer = new Timer((_endPos - _startPos) * 1000); }
             catch (ArgumentException)
             {
                 _timer = new Timer(0.001);
@@ -87,7 +87,7 @@ namespace SoundBoardDotNet
         public void Play()
         {
             _fileReader.Volume = Volume;
-            _fileReader.CurrentTime = TimeSpan.FromMilliseconds(_startPos);
+            _fileReader.CurrentTime = TimeSpan.FromSeconds(_startPos);
             _out.Play();
             _timer.Start();
             Sounds.Add(this);

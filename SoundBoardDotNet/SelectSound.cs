@@ -77,10 +77,10 @@ namespace SoundBoardDotNet
 
             WaveGraph.WaveStream = Sound.FileReader;
             var temp = EndTime.Maximum;
-            EndTime.Maximum = (decimal)Sound.FileReader.TotalTime.TotalMilliseconds;
+            EndTime.Maximum = (decimal)Sound.FileReader.TotalTime.TotalSeconds;
             if (temp == 0)
                 EndTime.Value = EndTime.Maximum;
-            TotalTimeLabel.Text = $"{EndTime.Maximum} ms";
+            TotalTimeLabel.Text = $"{EndTime.Maximum} s";
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -232,7 +232,7 @@ namespace SoundBoardDotNet
 
         private void StartTime_ValueChanged(object sender, EventArgs e)
         {
-            EndTime.Minimum = StartTime.Maximum;
+            EndTime.Minimum = StartTime.Value;
             Sound.StartPos = (double)StartTime.Value;
         }
 
