@@ -12,7 +12,6 @@ namespace SoundBoardDotNet
     public class SoundButtonData
     {
         public string Name = "";
-        public WaveStream Sound;
         public string FilePath = "";
         public float Volume = 1;
         public double Slider1 = 0, Slider2 = 100;
@@ -31,7 +30,6 @@ namespace SoundBoardDotNet
 
         public SoundButtonData(string encodedData)
         {
-            Sound = null;
             var decodedData = _decode(encodedData);
 
             foreach(var v in decodedData)
@@ -56,7 +54,6 @@ namespace SoundBoardDotNet
         public SoundButtonData()
         {
             Name = "";
-            Sound = null;
             FilePath = "";
             Volume = 1;
             Slider1 = 0;

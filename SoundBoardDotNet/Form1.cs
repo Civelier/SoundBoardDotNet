@@ -125,7 +125,6 @@ namespace SoundBoardDotNet
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            AudioSound.Run();
             SoundButtonMaker.Parent = this;
             KeyboardBuilder(englishKeyboard, new Point(10, 30), 7, 7);
         }
@@ -138,7 +137,14 @@ namespace SoundBoardDotNet
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            AudioSound.StopMain();
+        }
+
+        private void TestButton_Click(object sender, EventArgs e)
+        {
+            var timer = new System.Timers.Timer(1000);
+            timer.Elapsed += new System.Timers.ElapsedEventHandler((object tsender, System.Timers.ElapsedEventArgs te) => System.Diagnostics.Debug.WriteLine(te.SignalTime.ToString() + " Time ended"));
+            timer.AutoReset = false;
+            timer.Start();
         }
     }
 }

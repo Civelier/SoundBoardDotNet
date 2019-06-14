@@ -2,141 +2,112 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using IrrKlang;
 using System.Diagnostics;
 using NAudio;
 using NAudio.Wave;
+using System.Timers;
+using System.IO;
 
 namespace SoundBoardDotNet
 {
-    class AudioSound
+    public class AudioSound
     {
         public static List<AudioSound> Sounds = new List<AudioSound>();
-
-        private static double _time = 0;
-        private static Thread _main = new Thread(_run);
-        private static bool _canWrite;
-        private static bool _interupt = false;
+        private AudioFileReader _fileReader;
+        private WaveOut _out;
 
         public string FileName;
-        public uint StartPos, EndPos;
-        public float Volume
+        private double _startPos, _endPos;
+        public double StartPos
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { return _startPos; }
             set
             {
-            }
-        }
-
-        private uint _stopPos = uint.MaxValue;
-
-        public AudioSound(string fileName, uint startPos, uint endPos, float volume, bool loop = false)
-        {
-            FileName = fileName;
-            StartPos = startPos;
-            EndPos = endPos;
-            Volume = volume;
-
-        }
-
-        private AudioSound(string fileName, float volume, bool loop = false)
-        {
-            FileName = fileName;
-            Volume = volume;
-        }
-
-        public static void Run()
-        {
-            _main.Start();
-        }
-
-        public static void StopMain()
-        {
-            _interupt = true;
-        }
-
-        private static void _run()
-        {
-            List<AudioSound> sounds;
-            DateTime time;
-            while (!_interupt)
-            {
-                time = DateTime.Now;
-                _canWrite = false;
-                sounds = new List<AudioSound>(Sounds);
-                _canWrite = true;
-                foreach (var sound in sounds)
+                _startPos = value;
+                try { _timer.Interval = _endPos - _startPos; }
+                catch (ArgumentException)
                 {
-                    if (sound._stopPos <= (uint)_time)
-                    {
-                        _canWrite = false;
-                        sound.Stop();
-                        _canWrite = true;
-                    }
+                    _timer.Interval = 0.001;
                 }
-                _time += (DateTime.Now - time).TotalMilliseconds;
             }
         }
 
-        public static AudioSound AddSound(string fileName, uint startPos, uint endPos, float volume, bool startPaused = false, bool loop = false)
+        public double EndPos
         {
-
-            //Engine.RemoveSoundSource(fileName);
-            //var source = Engine.AddSoundSourceFromFile(fileName, StreamMode.NoStreaming, false);
-            var sound = new AudioSound(fileName, startPos, endPos, volume, loop);
-            //if (sound.Sound == null) return null;
-            while (!_canWrite) ;
-            Sounds.Add(sound);
-            //sound.Sound.PlayPosition = startPos;
-            if (!startPaused)
+            get { return _endPos; }
+            set
             {
-                sound.Play();
+                _endPos = value;
+                try { _timer.Interval = _endPos - _startPos; }
+                catch (ArgumentException)
+                {
+                    _timer.Interval = 0.001;
+                }
             }
-
-            return sound;
         }
 
-        public static AudioSound AddSound(string fileName, double startPercent, double endPercent, float volume, bool startPaused = false, bool loop = false)
+        public float Volume;
+        public AudioFileReader FileReader => _fileReader;
+
+        private Timer _timer;
+
+        public AudioSound(string fileName, double startPos, double endPos, float volume, bool loop = false)
         {
-            //Engine.RemoveSoundSource(fileName);
-            //var source = Engine.AddSoundSourceFromFile(fileName, StreamMode.NoStreaming, false);
-            var sound = new AudioSound(fileName, volume, loop);
-            sound.StartPos = sound._percentToTime(startPercent);
-            sound.EndPos = sound._percentToTime(endPercent);
-            //if (sound.Sound == null) return null;
-            while (!_canWrite) ;
-            Sounds.Add(sound);
-            //sound.Sound.PlayPosition = sound.StartPos;
-            if (!startPaused)
+            FileName = fileName;
+            _startPos = startPos;
+            _endPos = endPos;
+            Volume = volume;
+            try { _timer = new Timer(_endPos - _startPos); }
+            catch (ArgumentException)
             {
-                sound.Play();
+                _timer = new Timer(0.001);
             }
-
-            return sound;
+            _timer.Elapsed += new ElapsedEventHandler(_stop);
+            _timer.AutoReset = false;
+            _fileReader = new AudioFileReader(fileName);
+            _out = new WaveOut();
+            _out.Init(_fileReader);
         }
 
+        private AudioSound(AudioSound sound) : this(sound.FileName, sound._startPos, sound._endPos, sound.Volume) { }
+
+        public void _stop(object sender, ElapsedEventArgs e)
+        {
+            Debug.WriteLine(e.SignalTime.ToString() + "  stop raised");
+            Stop();
+        }
+
+        public static void PlaySound(AudioSound sound)
+        {
+            if (Sounds.Contains(sound)) new AudioSound(sound).Play();
+            else sound.Play();
+        }
 
         public void Play()
         {
-            //Sound.Paused = false;
-            _stopPos = EndPos + (uint)_time;
-        }
-
-        public void Pause()
-        {
-            EndPos = (uint)_time - _stopPos;
-            _stopPos = uint.MaxValue;
-            //Sound.Paused = true;
+            _fileReader.Volume = Volume;
+            _fileReader.CurrentTime = TimeSpan.FromMilliseconds(_startPos);
+            _out.Play();
+            _timer.Start();
+            Sounds.Add(this);
         }
 
         public void Stop()
         {
-            //Sound.Stop();
+            _out.Stop();
+            _timer.Stop();
             Sounds.Remove(this);
+        }
+
+        public static void StopAll()
+        {
+            foreach (var sound in Sounds)
+            {
+                sound._out.Stop();
+                sound._timer.Stop();
+            }
+            Sounds.Clear();
         }
 
         private uint _percentToTime(double percent)

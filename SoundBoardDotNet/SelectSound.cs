@@ -18,9 +18,7 @@ namespace SoundBoardDotNet
 {
     public partial class SelectSound : Form
     {
-        public static WaveOut Device;
-
-        public WaveStream Sound;
+        public AudioSound Sound;
         public string FileName;
 
         public TextBox GetNameTextBox { get { return NameTextBox; } }
@@ -38,12 +36,16 @@ namespace SoundBoardDotNet
         {
             Data = data;
             _cb = cb;
-            _fileDialog.Filter = "All playable files (*.wav)|*.wav;*.WAV";
+            _fileDialog.Filter = "All playable files (*.wav)|*.wav;*.WAV;*.mp3;*.MP3";
             _fileDialog.FilterIndex = 0;
             InitializeComponent();
             FileNameBox.Text = data.FilePath;
             NameTextBox.Text = data.Name;
-            Sound = data.Sound;
+            StartTime.Minimum = 0;
+            StartTime.Maximum = 0;
+            EndTime.Minimum = 0;
+            EndTime.Maximum = 0;
+            //Sound = new AudioSound(data.FilePath, data.Slider1, data.Slider2, data.Volume);
         }
 
         private byte[] _soundWaves(string file)
@@ -61,37 +63,24 @@ namespace SoundBoardDotNet
 
         private void _updateGraph(bool eraseIfEmpty = false)
         {
-            var bytes = _soundWaves(FileNameBox.Text);
-            if (bytes == null)
+            if (FileNameBox.Text == "")
             {
-                Debug.WriteLine("File was invalid!");
                 if (eraseIfEmpty)
                 {
-                    //Erase wave graph
-
-                    //WaveGraph.ResetValues();
-                    //WaveGraph.EraseGraph();
+                    TotalTimeLabel.Text = "";
+                    EndTime.Maximum = 0;
                 }
                 return;
             }
-            if (bytes.Length == 0)
-            {
-                Debug.WriteLine("No bytes");
-                if (eraseIfEmpty)
-                {
-                    //Erase graph
 
-                    //WaveGraph.ResetValues();
-                    //WaveGraph.EraseGraph();
-                }
-                return;
-            }
-            //Draw graph
+            Sound = new AudioSound(FileNameBox.Text, (double)StartTime.Value, (double)EndTime.Value, VolumeControl.Volume);
 
-            //WaveGraph.Values = new List<byte>(bytes);
-            //WaveGraph.DrawGraphOptimizedAvg(WaveGraph.CreateGraphics());
-            Refresh();
-            WaveGraph.Show();
+            WaveGraph.WaveStream = Sound.FileReader;
+            var temp = EndTime.Maximum;
+            EndTime.Maximum = (decimal)Sound.FileReader.TotalTime.TotalMilliseconds;
+            if (temp == 0)
+                EndTime.Value = EndTime.Maximum;
+            TotalTimeLabel.Text = $"{EndTime.Maximum} ms";
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -108,8 +97,8 @@ namespace SoundBoardDotNet
 
             Data.FilePath = FileNameBox.Text;
             Data.Name = NameTextBox.Text;
-            Data.Sound = Sound;
             Data.Volume = VolumeControl.Volume;
+            
 
             //Data.Volume = (float)VolumeTrack.Value / 100;
             //Data.Slider1 = WaveGraph.Slider1Value;
@@ -122,11 +111,12 @@ namespace SoundBoardDotNet
             return output;
         }
 
-        public bool PlaySoundAsync()
+        public void PlaySoundAsync()
         {
             //var sound = AudioSound.AddSound(FileNameBox.Text, WaveGraph.Slider1Value, WaveGraph.Slider2Value, (float)VolumeTrack.Value / 100);
             //return sound != null;// true if successfull
-            return false;
+            if (Sound == null) return;
+            AudioSound.PlaySound(Sound);
         }
 
         private void BrowseButton_Click(object sender, EventArgs e)
@@ -156,38 +146,40 @@ namespace SoundBoardDotNet
                 MessageBox.Show("Enter a valid File to play!");
                 return;
             }
-            if (!PlaySoundAsync())
-            {
-                MessageBox.Show("Enter a valid File to play!");
-                return;
-            }
+            AudioSound.PlaySound(Sound);
+            //if (!PlaySoundAsync())
+            //{
+            //    MessageBox.Show("Enter a valid File to play!");
+            //    return;
+            //}
         }
 
         private void StopButton_Click(object sender, EventArgs e)
         {
             //Stop sounds
             //if (Sound != null) Engine.Init(Sound);
+            AudioSound.StopAll();
         }
 
         private void SelectSound_FormClosed(object sender, FormClosedEventArgs e)
         {
             //Stop sounds
             //if (Sound != null) Sound.Stop();
+            AudioSound.StopAll();
         }
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            if (FileNameBox.Text != "")
+            try
             {
-                //Verify if file is playable
-                //if (Engine.Play2D(FileNameBox.Text, false, true) == null)
-                //{
-                //    MessageBox.Show("Invalid file name!");
-                //    return;
-                //}
+                _updateData();
+            }
+            catch (FileNotFoundException)
+            {
+                MessageBox.Show("Invalid file name!");
+                return;
             }
 
-            _updateData();
             _cb();
             Hide();
         }
@@ -196,7 +188,6 @@ namespace SoundBoardDotNet
         {
             FileNameBox.Text = Data.FilePath;
             NameTextBox.Text = Data.Name;
-            Sound = Data.Sound;
             VolumeControl.Volume = Data.Volume;
 
             //WaveGraph.Slider1Value = Data.Slider1;
@@ -236,7 +227,19 @@ namespace SoundBoardDotNet
 
         private void Volume_VolumeChanged(object sender, EventArgs e)
         {
-            //Change the sounds volume
+            Sound.Volume = VolumeControl.Volume;
+        }
+
+        private void StartTime_ValueChanged(object sender, EventArgs e)
+        {
+            EndTime.Minimum = StartTime.Maximum;
+            Sound.StartPos = (double)StartTime.Value;
+        }
+
+        private void EndTime_ValueChanged(object sender, EventArgs e)
+        {
+            StartTime.Maximum = EndTime.Value;
+            Sound.EndPos = (double)EndTime.Value;
         }
     }
 }

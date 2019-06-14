@@ -129,6 +129,7 @@ namespace SoundBoardDotNet
             }
             if (e.KeyChar == ' ')
             {
+                AudioSound.StopAll();
                 //Stop sounds
             }
         }

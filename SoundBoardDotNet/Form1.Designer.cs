@@ -39,31 +39,35 @@
             this.FileSave = new System.Windows.Forms.ToolStripMenuItem();
             this.FileSaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.DeselectButton = new System.Windows.Forms.Button();
+            this.TestButton = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.Menu.SuspendLayout();
             this.SuspendLayout();
             // 
             // contextMenuStrip1
             // 
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem1});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 26);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(212, 28);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(211, 24);
             this.toolStripMenuItem1.Text = "toolStripMenuItem1";
             // 
             // Menu
             // 
             this.Menu.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.Menu.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.Menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.File});
             this.Menu.Location = new System.Drawing.Point(0, 0);
             this.Menu.Name = "Menu";
-            this.Menu.Size = new System.Drawing.Size(1039, 24);
+            this.Menu.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
+            this.Menu.Size = new System.Drawing.Size(1385, 28);
             this.Menu.TabIndex = 3;
             this.Menu.Text = "menuStrip1";
             // 
@@ -76,56 +80,69 @@
             this.FileSave,
             this.FileSaveAs});
             this.File.Name = "File";
-            this.File.Size = new System.Drawing.Size(37, 20);
+            this.File.Size = new System.Drawing.Size(46, 24);
             this.File.Text = "File";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(109, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(138, 6);
             // 
             // FileNew
             // 
             this.FileNew.Name = "FileNew";
-            this.FileNew.Size = new System.Drawing.Size(112, 22);
+            this.FileNew.Size = new System.Drawing.Size(141, 26);
             this.FileNew.Text = "New";
             // 
             // FileOpen
             // 
             this.FileOpen.Name = "FileOpen";
-            this.FileOpen.Size = new System.Drawing.Size(112, 22);
+            this.FileOpen.Size = new System.Drawing.Size(141, 26);
             this.FileOpen.Text = "Open";
             // 
             // FileSave
             // 
             this.FileSave.Name = "FileSave";
-            this.FileSave.Size = new System.Drawing.Size(112, 22);
+            this.FileSave.Size = new System.Drawing.Size(141, 26);
             this.FileSave.Text = "Save";
             // 
             // FileSaveAs
             // 
             this.FileSaveAs.Name = "FileSaveAs";
-            this.FileSaveAs.Size = new System.Drawing.Size(112, 22);
+            this.FileSaveAs.Size = new System.Drawing.Size(141, 26);
             this.FileSaveAs.Text = "Save as";
             // 
             // DeselectButton
             // 
-            this.DeselectButton.Location = new System.Drawing.Point(361, 203);
+            this.DeselectButton.Location = new System.Drawing.Point(481, 250);
+            this.DeselectButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.DeselectButton.Name = "DeselectButton";
-            this.DeselectButton.Size = new System.Drawing.Size(75, 23);
+            this.DeselectButton.Size = new System.Drawing.Size(100, 28);
             this.DeselectButton.TabIndex = 4;
             this.DeselectButton.Text = "Deselect";
             this.DeselectButton.UseVisualStyleBackColor = true;
             this.DeselectButton.Visible = false;
             // 
+            // TestButton
+            // 
+            this.TestButton.Location = new System.Drawing.Point(736, 567);
+            this.TestButton.Name = "TestButton";
+            this.TestButton.Size = new System.Drawing.Size(75, 23);
+            this.TestButton.TabIndex = 5;
+            this.TestButton.Text = "Test";
+            this.TestButton.UseVisualStyleBackColor = true;
+            this.TestButton.Click += new System.EventHandler(this.TestButton_Click);
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1039, 552);
+            this.ClientSize = new System.Drawing.Size(1385, 679);
+            this.Controls.Add(this.TestButton);
             this.Controls.Add(this.DeselectButton);
             this.Controls.Add(this.Menu);
             this.MainMenuStrip = this.Menu;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Form1";
             this.Text = "SoundBoard";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
@@ -150,6 +167,7 @@
         private System.Windows.Forms.ToolStripMenuItem FileSave;
         private System.Windows.Forms.ToolStripMenuItem FileSaveAs;
         private System.Windows.Forms.Button DeselectButton;
+        private System.Windows.Forms.Button TestButton;
     }
 }
 
