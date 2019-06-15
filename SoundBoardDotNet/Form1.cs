@@ -7,7 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using IrrKlang;
+using NAudio;
+using NAudio.Wave;
 
 namespace SoundBoardDotNet
 {
@@ -145,6 +146,20 @@ namespace SoundBoardDotNet
             timer.Elapsed += new System.Timers.ElapsedEventHandler((object tsender, System.Timers.ElapsedEventArgs te) => System.Diagnostics.Debug.WriteLine(te.SignalTime.ToString() + " Time ended"));
             timer.AutoReset = false;
             timer.Start();
+        }
+
+
+        private AudioRecorder _rec = new AudioRecorder(5);
+        private void StartButton_Click(object sender, EventArgs e)
+        {
+            _rec.StopReplay();
+            _rec.StartRecording();
+        }
+
+        private void StopButton_Click(object sender, EventArgs e)
+        {
+            _rec.StopRecording();
+            _rec.PlayRecorded();
         }
     }
 }

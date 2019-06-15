@@ -73,11 +73,11 @@ namespace SoundBoardDotNet
                 return;
             }
 
-            Sound = new AudioSound(FileNameBox.Text, (double)StartTime.Value, (double)EndTime.Value, VolumeControl.Volume);
+            Sound = new AudioSound(FileNameBox.Text, Convert.ToDouble(StartTime.Value), Convert.ToDouble(EndTime.Value), VolumeControl.Volume);
 
             WaveGraph.WaveStream = Sound.FileReader;
             var temp = EndTime.Maximum;
-            EndTime.Maximum = (decimal)Sound.FileReader.TotalTime.TotalSeconds;
+            EndTime.Maximum = Convert.ToDecimal(Sound.FileReader.TotalTime.TotalSeconds);
             if (temp == 0)
                 EndTime.Value = EndTime.Maximum;
             TotalTimeLabel.Text = $"{EndTime.Maximum} s";
@@ -233,13 +233,13 @@ namespace SoundBoardDotNet
         private void StartTime_ValueChanged(object sender, EventArgs e)
         {
             EndTime.Minimum = StartTime.Value;
-            Sound.StartPos = (double)StartTime.Value;
+            Sound.StartPos = Convert.ToDouble(StartTime.Value);
         }
 
         private void EndTime_ValueChanged(object sender, EventArgs e)
         {
             StartTime.Maximum = EndTime.Value;
-            Sound.EndPos = (double)EndTime.Value;
+            Sound.EndPos = Convert.ToDouble(EndTime.Value);
         }
     }
 }

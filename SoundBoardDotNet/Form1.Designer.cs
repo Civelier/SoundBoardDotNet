@@ -39,6 +39,8 @@
             this.FileSave = new System.Windows.Forms.ToolStripMenuItem();
             this.FileSaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.DeselectButton = new System.Windows.Forms.Button();
+            this.StartButton = new System.Windows.Forms.Button();
+            this.StopButton = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.Menu.SuspendLayout();
             this.SuspendLayout();
@@ -114,7 +116,7 @@
             // DeselectButton
             // 
             this.DeselectButton.Location = new System.Drawing.Point(481, 250);
-            this.DeselectButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.DeselectButton.Margin = new System.Windows.Forms.Padding(4);
             this.DeselectButton.Name = "DeselectButton";
             this.DeselectButton.Size = new System.Drawing.Size(100, 28);
             this.DeselectButton.TabIndex = 4;
@@ -122,15 +124,37 @@
             this.DeselectButton.UseVisualStyleBackColor = true;
             this.DeselectButton.Visible = false;
             // 
+            // StartButton
+            // 
+            this.StartButton.Location = new System.Drawing.Point(471, 589);
+            this.StartButton.Name = "StartButton";
+            this.StartButton.Size = new System.Drawing.Size(75, 23);
+            this.StartButton.TabIndex = 5;
+            this.StartButton.Text = "Start";
+            this.StartButton.UseVisualStyleBackColor = true;
+            this.StartButton.Click += new System.EventHandler(this.StartButton_Click);
+            // 
+            // StopButton
+            // 
+            this.StopButton.Location = new System.Drawing.Point(600, 589);
+            this.StopButton.Name = "StopButton";
+            this.StopButton.Size = new System.Drawing.Size(75, 23);
+            this.StopButton.TabIndex = 6;
+            this.StopButton.Text = "Stop";
+            this.StopButton.UseVisualStyleBackColor = true;
+            this.StopButton.Click += new System.EventHandler(this.StopButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1385, 679);
+            this.Controls.Add(this.StopButton);
+            this.Controls.Add(this.StartButton);
             this.Controls.Add(this.DeselectButton);
             this.Controls.Add(this.Menu);
             this.MainMenuStrip = this.Menu;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "SoundBoard";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
@@ -155,6 +179,8 @@
         private System.Windows.Forms.ToolStripMenuItem FileSave;
         private System.Windows.Forms.ToolStripMenuItem FileSaveAs;
         private System.Windows.Forms.Button DeselectButton;
+        private System.Windows.Forms.Button StartButton;
+        private System.Windows.Forms.Button StopButton;
     }
 }
 
