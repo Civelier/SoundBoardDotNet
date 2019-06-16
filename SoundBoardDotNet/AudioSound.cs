@@ -63,6 +63,7 @@ namespace SoundBoardDotNet
         public AudioSound(string fileName, double startPos, double endPos, float volume, bool loop = false)
         {
             _out = new WaveOut();
+            _out.DeviceNumber = DevicesForm.OutDevice;
             FileName = fileName;
             _startPos = startPos;
             _endPos = endPos;
@@ -74,7 +75,18 @@ namespace SoundBoardDotNet
             }
             _timer.Elapsed += new ElapsedEventHandler(_stop);
             _timer.AutoReset = false;
-            _fileReader = new AudioFileReader(fileName);
+            while (true)
+            {
+                try
+                {
+                    _fileReader = new AudioFileReader(fileName);
+                    break;
+                }
+                catch (System.IO.IOException)
+                {
+
+                }
+            }
             
             _out.Init(_fileReader);
         }
@@ -82,6 +94,7 @@ namespace SoundBoardDotNet
         public AudioSound(IWaveProvider wave, double startPos, double endPos, float volume)
         {
             _out = new WaveOut();
+            _out.DeviceNumber = DevicesForm.OutDevice;
             _startPos = startPos;
             _endPos = endPos;
             Volume = volume;

@@ -65,6 +65,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -79,6 +80,12 @@
   <ItemGroup>
     <Compile Include="AudioRecorder.cs" />
     <Compile Include="AudioSound.cs" />
+    <Compile Include="DevicesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DevicesForm.Designer.cs">
+      <DependentUpon>DevicesForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="FileEncoding\EncodedData.cs" />
     <Compile Include="FileEncoding\IDecodable.cs" />
     <Compile Include="FileEncoding\IEncodable.cs" />
@@ -119,6 +126,9 @@
     <Compile Include="SoundButtonData.cs" />
     <Compile Include="SoundButtonMaker.cs" />
     <Compile Include="SpaceBarButton.cs" />
+    <EmbeddedResource Include="DevicesForm.resx">
+      <DependentUpon>DevicesForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

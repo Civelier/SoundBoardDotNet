@@ -21,6 +21,10 @@ namespace SoundBoardDotNet
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
+            foreach (var recorder in Form1.Recorders)
+            {
+                recorder.Reset();
+            }
             Close();
         }
     }

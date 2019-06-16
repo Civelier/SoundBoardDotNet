@@ -7,8 +7,9 @@ namespace SoundBoardDotNet
     public class AudioRecorder
     {
         public WaveInEvent MyWaveIn;
-        public double RecordTime { get; private set; }
-        public double RecordedTime => _isFull ? RecordTime : (double)MyWaveIn.WaveFormat.AverageBytesPerSecond / _pos;
+        public double RecordTime => SoundBoardProperties.Props.RecordingSampleTime;
+        public double RecordedTime => _isFull ? RecordTime : _pos == 0 ? 0 : (double)MyWaveIn.WaveFormat.AverageBytesPerSecond / _pos;
+        public int Device = 0;
 
         public WaveOutEvent Sound = new WaveOutEvent();
         private bool _isFull = false;
@@ -21,9 +22,9 @@ namespace SoundBoardDotNet
         /// Creates a new recorder with a buffer
         /// </summary>
         /// <param name="recordTime">Time to keep in buffer (in seconds)</param>
-        public AudioRecorder(double recordTime, int deviceIndex = 0)
+        public AudioRecorder(int deviceIndex = 0)
         {
-            RecordTime = recordTime;
+            Device = deviceIndex;
             _deviceIndex = deviceIndex;
             MyWaveIn = new WaveInEvent();
             MyWaveIn.DataAvailable += DataAvailable;
@@ -51,13 +52,10 @@ namespace SoundBoardDotNet
             _isRecording = true;
         }
 
-        public void Reset(double? time = null, int? deviceIndex = null)
+        public void Reset()
         {
             MyWaveIn.StopRecording();
             StopReplay();
-
-            if (time != null) RecordTime = (double)time;
-            if (deviceIndex != null) _deviceIndex = (int)deviceIndex;
 
             _buffer = _buffer = new byte[(int)(MyWaveIn.WaveFormat.AverageBytesPerSecond * RecordTime)];
             _isFull = false;
@@ -65,6 +63,7 @@ namespace SoundBoardDotNet
             _pos = 0;
             MyWaveIn.Dispose();
             MyWaveIn = new WaveInEvent();
+            MyWaveIn.DeviceNumber = Device;
             MyWaveIn.DataAvailable += DataAvailable;
             MyWaveIn.RecordingStopped += Stopped;
             MyWaveIn.DeviceNumber = _deviceIndex;
@@ -73,6 +72,7 @@ namespace SoundBoardDotNet
         public IWaveProvider GetWaveProvider()
         {
             var buff = new BufferedWaveProvider(MyWaveIn.WaveFormat);
+            buff.BufferDuration = TimeSpan.FromSeconds(SoundBoardProperties.Props.RecordingSampleTime);
             var bytes = GetBytesToSave();
             buff.AddSamples(bytes, 0, bytes.Length);
             return buff;
@@ -117,6 +117,7 @@ namespace SoundBoardDotNet
             var buff = GetBytesToSave();
             writer.Write(buff, 0, buff.Length);
             writer.Flush();
+            writer.Dispose();
         }
 
 

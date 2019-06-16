@@ -152,6 +152,7 @@ namespace SoundBoardDotNet
                 SoundForm = new SelectSound(UpdateBtnText, Data);
                 SoundForm.Show();
             }
+            Form1.SetFocus();
         }
     }
 }

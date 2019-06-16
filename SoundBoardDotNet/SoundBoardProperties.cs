@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
+using System.Windows.Forms.Design;
 
 namespace SoundBoardDotNet
 {
@@ -42,5 +44,17 @@ namespace SoundBoardDotNet
             get { return _keyboard; }
             set { _keyboard = value; }
         }
+
+        private string _dir = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
+        [Editor(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        [Description("Location where new files should be saved.")]
+        [DisplayName("File save location.")]
+        public string SoundSaveLocation
+        {
+            get { return _dir; }
+            set { _dir = value; }
+        }
+
+
     }
 }

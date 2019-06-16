@@ -47,6 +47,8 @@
             this.SaveButton = new System.Windows.Forms.Button();
             this.KeyCombo = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.InputCombo = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.EndTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.StartTime)).BeginInit();
             this.SuspendLayout();
@@ -54,7 +56,7 @@
             // TotalTimeLabel
             // 
             this.TotalTimeLabel.AutoSize = true;
-            this.TotalTimeLabel.Location = new System.Drawing.Point(589, 137);
+            this.TotalTimeLabel.Location = new System.Drawing.Point(589, 172);
             this.TotalTimeLabel.Name = "TotalTimeLabel";
             this.TotalTimeLabel.Size = new System.Drawing.Size(0, 17);
             this.TotalTimeLabel.TabIndex = 44;
@@ -62,7 +64,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(515, 137);
+            this.label6.Location = new System.Drawing.Point(515, 172);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(74, 17);
             this.label6.TabIndex = 43;
@@ -71,7 +73,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(475, 140);
+            this.label5.Location = new System.Drawing.Point(475, 175);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(15, 17);
             this.label5.TabIndex = 42;
@@ -80,7 +82,7 @@
             // EndTime
             // 
             this.EndTime.DecimalPlaces = 3;
-            this.EndTime.Location = new System.Drawing.Point(349, 135);
+            this.EndTime.Location = new System.Drawing.Point(349, 170);
             this.EndTime.Name = "EndTime";
             this.EndTime.Size = new System.Drawing.Size(120, 22);
             this.EndTime.TabIndex = 41;
@@ -88,7 +90,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(276, 140);
+            this.label7.Location = new System.Drawing.Point(276, 170);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(67, 17);
             this.label7.TabIndex = 40;
@@ -97,7 +99,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(220, 140);
+            this.label4.Location = new System.Drawing.Point(220, 175);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(15, 17);
             this.label4.TabIndex = 39;
@@ -106,7 +108,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(16, 135);
+            this.label3.Location = new System.Drawing.Point(16, 170);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(72, 17);
             this.label3.TabIndex = 38;
@@ -115,7 +117,7 @@
             // StartTime
             // 
             this.StartTime.DecimalPlaces = 3;
-            this.StartTime.Location = new System.Drawing.Point(94, 135);
+            this.StartTime.Location = new System.Drawing.Point(94, 170);
             this.StartTime.Name = "StartTime";
             this.StartTime.Size = new System.Drawing.Size(120, 22);
             this.StartTime.TabIndex = 37;
@@ -124,7 +126,7 @@
             // VolumeLabel
             // 
             this.VolumeLabel.AutoSize = true;
-            this.VolumeLabel.Location = new System.Drawing.Point(12, 105);
+            this.VolumeLabel.Location = new System.Drawing.Point(12, 140);
             this.VolumeLabel.Name = "VolumeLabel";
             this.VolumeLabel.Size = new System.Drawing.Size(59, 17);
             this.VolumeLabel.TabIndex = 36;
@@ -132,17 +134,17 @@
             // 
             // WaveGraph
             // 
-            this.WaveGraph.Location = new System.Drawing.Point(9, 168);
+            this.WaveGraph.Location = new System.Drawing.Point(9, 198);
             this.WaveGraph.Name = "WaveGraph";
             this.WaveGraph.SamplesPerPixel = 128;
-            this.WaveGraph.Size = new System.Drawing.Size(774, 288);
+            this.WaveGraph.Size = new System.Drawing.Size(774, 258);
             this.WaveGraph.StartPosition = ((long)(0));
             this.WaveGraph.TabIndex = 35;
             this.WaveGraph.WaveStream = null;
             // 
             // VolumeControl
             // 
-            this.VolumeControl.Location = new System.Drawing.Point(77, 96);
+            this.VolumeControl.Location = new System.Drawing.Point(77, 131);
             this.VolumeControl.Name = "VolumeControl";
             this.VolumeControl.Size = new System.Drawing.Size(702, 26);
             this.VolumeControl.TabIndex = 34;
@@ -161,7 +163,7 @@
             // 
             // NameTextBox
             // 
-            this.NameTextBox.Location = new System.Drawing.Point(13, 30);
+            this.NameTextBox.Location = new System.Drawing.Point(13, 65);
             this.NameTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.NameTextBox.Name = "NameTextBox";
             this.NameTextBox.Size = new System.Drawing.Size(765, 22);
@@ -170,7 +172,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 9);
+            this.label2.Location = new System.Drawing.Point(13, 44);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(49, 17);
@@ -179,7 +181,7 @@
             // 
             // StopButton
             // 
-            this.StopButton.Location = new System.Drawing.Point(117, 60);
+            this.StopButton.Location = new System.Drawing.Point(117, 95);
             this.StopButton.Margin = new System.Windows.Forms.Padding(4);
             this.StopButton.Name = "StopButton";
             this.StopButton.Size = new System.Drawing.Size(100, 28);
@@ -190,7 +192,7 @@
             // 
             // PlayButton
             // 
-            this.PlayButton.Location = new System.Drawing.Point(9, 61);
+            this.PlayButton.Location = new System.Drawing.Point(9, 96);
             this.PlayButton.Margin = new System.Windows.Forms.Padding(4);
             this.PlayButton.Name = "PlayButton";
             this.PlayButton.Size = new System.Drawing.Size(100, 28);
@@ -213,7 +215,7 @@
             // KeyCombo
             // 
             this.KeyCombo.FormattingEnabled = true;
-            this.KeyCombo.Location = new System.Drawing.Point(301, 63);
+            this.KeyCombo.Location = new System.Drawing.Point(301, 98);
             this.KeyCombo.Name = "KeyCombo";
             this.KeyCombo.Size = new System.Drawing.Size(121, 24);
             this.KeyCombo.TabIndex = 45;
@@ -222,17 +224,37 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(220, 66);
+            this.label8.Location = new System.Drawing.Point(220, 101);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(75, 17);
             this.label8.TabIndex = 46;
             this.label8.Text = "Set to key:";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(13, 13);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(43, 17);
+            this.label1.TabIndex = 47;
+            this.label1.Text = "Input:";
+            // 
+            // InputCombo
+            // 
+            this.InputCombo.FormattingEnabled = true;
+            this.InputCombo.Location = new System.Drawing.Point(62, 10);
+            this.InputCombo.Name = "InputCombo";
+            this.InputCombo.Size = new System.Drawing.Size(211, 24);
+            this.InputCombo.TabIndex = 48;
+            this.InputCombo.SelectedIndexChanged += new System.EventHandler(this.InputCombo_SelectedIndexChanged);
             // 
             // SaveSound
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(804, 505);
+            this.Controls.Add(this.InputCombo);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.KeyCombo);
             this.Controls.Add(this.TotalTimeLabel);
@@ -254,6 +276,7 @@
             this.Controls.Add(this.SaveButton);
             this.Name = "SaveSound";
             this.Text = "SaveSound";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SaveSound_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.EndTime)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.StartTime)).EndInit();
             this.ResumeLayout(false);
@@ -282,5 +305,7 @@
         private System.Windows.Forms.Button SaveButton;
         private System.Windows.Forms.ComboBox KeyCombo;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox InputCombo;
     }
 }

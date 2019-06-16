@@ -19,10 +19,16 @@ namespace SoundBoardDotNet
         public AudioRecorder Recorder;
         public AudioSound Sound;
 
-        public SaveSound(AudioRecorder recorder)
+        public SaveSound()
         {
             InitializeComponent();
-            Recorder = recorder;
+            Recorder = Form1.Recorders[0];
+            foreach (var recorder in Form1.Recorders)
+            {
+                recorder.StopRecording();
+                InputCombo.Items.Add(WaveIn.GetCapabilities(recorder.Device).ProductName);
+            }
+            InputCombo.SelectedIndex = 0;
             var prov = Recorder.GetWaveProvider();
             Sound = new AudioSound(prov, 0, 0, VolumeControl.Volume);
             Sound.EndPos = Recorder.RecordedTime;
@@ -31,6 +37,7 @@ namespace SoundBoardDotNet
             EndTime.Minimum = 0;
             EndTime.Maximum = StartTime.Maximum;
             EndTime.Value = StartTime.Maximum;
+            TotalTimeLabel.Text = $"{EndTime.Maximum} s";
             KeyCombo.Items.Add("Select a key");
             foreach (var item in Form1.MyKeyboard)
             {
@@ -39,11 +46,18 @@ namespace SoundBoardDotNet
                     KeyCombo.Items.Add(key);
                 }
             }
+            KeyCombo.SelectedIndex = 0;
             SaveButton.Enabled = false;
+            WaveGraph.WaveStream = Sound.FileReader;
         }
 
         private bool SaveFile()
         {
+            if (NameTextBox.Text == "")
+            {
+                MessageBox.Show("File name is empty!", "File name empty", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
             string fileName = _defaultStartPath + "\\" + NameTextBox.Text + ".wav";
 
             if (File.Exists(fileName))
@@ -65,6 +79,7 @@ namespace SoundBoardDotNet
             Recorder.Save(fileName);
             System.Threading.Thread.Sleep(2000);
             var btn = GetButton();
+            btn.Btn.Text = btn.Name + "\n" + NameTextBox.Text;
             btn.Data.FilePath = fileName;
             btn.HasSound = true;
             btn.Data.StartTime = (double)StartTime.Value;
@@ -156,6 +171,30 @@ namespace SoundBoardDotNet
                 }
             }
             SaveButton.Enabled = true;
+        }
+
+        private void InputCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var prov = Recorder.GetWaveProvider();
+            VolumeControl.Volume = 1;
+            Sound = new AudioSound(prov, 0, 0, VolumeControl.Volume);
+            Sound.EndPos = Recorder.RecordedTime;
+            StartTime.Minimum = 0;
+            StartTime.Maximum = (decimal)Sound.EndPos;
+            EndTime.Minimum = 0;
+            EndTime.Maximum = StartTime.Maximum;
+            EndTime.Value = StartTime.Maximum;
+            TotalTimeLabel.Text = $"{EndTime.Maximum} s";
+            WaveGraph.WaveStream = Sound.FileReader;
+        }
+
+        private void SaveSound_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            foreach (var recorder in Form1.Recorders)
+            {
+                recorder.Reset();
+                recorder.StartRecording();
+            }
         }
     }
 }

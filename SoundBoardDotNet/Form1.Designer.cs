@@ -38,11 +38,11 @@
             this.FileOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.FileSave = new System.Windows.Forms.ToolStripMenuItem();
             this.FileSaveAs = new System.Windows.Forms.ToolStripMenuItem();
-            this.DeselectButton = new System.Windows.Forms.Button();
-            this.StartButton = new System.Windows.Forms.Button();
-            this.StopButton = new System.Windows.Forms.Button();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.preferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.devicesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DeselectButton = new System.Windows.Forms.Button();
+            this.SaveRecordingButton = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.Menu.SuspendLayout();
             this.SuspendLayout();
@@ -90,31 +90,54 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(221, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(138, 6);
             // 
             // FileNew
             // 
             this.FileNew.Name = "FileNew";
-            this.FileNew.Size = new System.Drawing.Size(224, 26);
+            this.FileNew.Size = new System.Drawing.Size(141, 26);
             this.FileNew.Text = "New";
             // 
             // FileOpen
             // 
             this.FileOpen.Name = "FileOpen";
-            this.FileOpen.Size = new System.Drawing.Size(224, 26);
+            this.FileOpen.Size = new System.Drawing.Size(141, 26);
             this.FileOpen.Text = "Open";
             // 
             // FileSave
             // 
             this.FileSave.Name = "FileSave";
-            this.FileSave.Size = new System.Drawing.Size(224, 26);
+            this.FileSave.Size = new System.Drawing.Size(141, 26);
             this.FileSave.Text = "Save";
             // 
             // FileSaveAs
             // 
             this.FileSaveAs.Name = "FileSaveAs";
-            this.FileSaveAs.Size = new System.Drawing.Size(224, 26);
+            this.FileSaveAs.Size = new System.Drawing.Size(141, 26);
             this.FileSaveAs.Text = "Save as";
+            // 
+            // editToolStripMenuItem
+            // 
+            this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.preferencesToolStripMenuItem,
+            this.devicesToolStripMenuItem});
+            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(49, 24);
+            this.editToolStripMenuItem.Text = "Edit";
+            // 
+            // preferencesToolStripMenuItem
+            // 
+            this.preferencesToolStripMenuItem.Name = "preferencesToolStripMenuItem";
+            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(168, 26);
+            this.preferencesToolStripMenuItem.Text = "Preferences";
+            this.preferencesToolStripMenuItem.Click += new System.EventHandler(this.PreferencesToolStripMenuItem_Click);
+            // 
+            // devicesToolStripMenuItem
+            // 
+            this.devicesToolStripMenuItem.Name = "devicesToolStripMenuItem";
+            this.devicesToolStripMenuItem.Size = new System.Drawing.Size(168, 26);
+            this.devicesToolStripMenuItem.Text = "Devices";
+            this.devicesToolStripMenuItem.Click += new System.EventHandler(this.DevicesToolStripMenuItem_Click);
             // 
             // DeselectButton
             // 
@@ -127,48 +150,22 @@
             this.DeselectButton.UseVisualStyleBackColor = true;
             this.DeselectButton.Visible = false;
             // 
-            // StartButton
+            // SaveRecordingButton
             // 
-            this.StartButton.Location = new System.Drawing.Point(471, 589);
-            this.StartButton.Name = "StartButton";
-            this.StartButton.Size = new System.Drawing.Size(75, 23);
-            this.StartButton.TabIndex = 5;
-            this.StartButton.Text = "Start";
-            this.StartButton.UseVisualStyleBackColor = true;
-            this.StartButton.Click += new System.EventHandler(this.StartButton_Click);
-            // 
-            // StopButton
-            // 
-            this.StopButton.Location = new System.Drawing.Point(600, 589);
-            this.StopButton.Name = "StopButton";
-            this.StopButton.Size = new System.Drawing.Size(75, 23);
-            this.StopButton.TabIndex = 6;
-            this.StopButton.Text = "Stop";
-            this.StopButton.UseVisualStyleBackColor = true;
-            this.StopButton.Click += new System.EventHandler(this.StopButton_Click);
-            // 
-            // editToolStripMenuItem
-            // 
-            this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.preferencesToolStripMenuItem});
-            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(49, 24);
-            this.editToolStripMenuItem.Text = "Edit";
-            // 
-            // preferencesToolStripMenuItem
-            // 
-            this.preferencesToolStripMenuItem.Name = "preferencesToolStripMenuItem";
-            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
-            this.preferencesToolStripMenuItem.Text = "Preferences";
-            this.preferencesToolStripMenuItem.Click += new System.EventHandler(this.PreferencesToolStripMenuItem_Click);
+            this.SaveRecordingButton.Location = new System.Drawing.Point(12, 640);
+            this.SaveRecordingButton.Name = "SaveRecordingButton";
+            this.SaveRecordingButton.Size = new System.Drawing.Size(201, 27);
+            this.SaveRecordingButton.TabIndex = 5;
+            this.SaveRecordingButton.Text = "Save recording (Enter)";
+            this.SaveRecordingButton.UseVisualStyleBackColor = true;
+            this.SaveRecordingButton.Click += new System.EventHandler(this.SaveRecordingButton_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1385, 679);
-            this.Controls.Add(this.StopButton);
-            this.Controls.Add(this.StartButton);
+            this.Controls.Add(this.SaveRecordingButton);
             this.Controls.Add(this.DeselectButton);
             this.Controls.Add(this.Menu);
             this.MainMenuStrip = this.Menu;
@@ -177,6 +174,7 @@
             this.Text = "SoundBoard";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             this.contextMenuStrip1.ResumeLayout(false);
             this.Menu.ResumeLayout(false);
@@ -197,10 +195,10 @@
         private System.Windows.Forms.ToolStripMenuItem FileSave;
         private System.Windows.Forms.ToolStripMenuItem FileSaveAs;
         private System.Windows.Forms.Button DeselectButton;
-        private System.Windows.Forms.Button StartButton;
-        private System.Windows.Forms.Button StopButton;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem preferencesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem devicesToolStripMenuItem;
+        private System.Windows.Forms.Button SaveRecordingButton;
     }
 }
 

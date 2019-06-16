@@ -81,10 +81,12 @@ namespace SoundBoardDotNet
             if (temp == 0)
                 EndTime.Value = EndTime.Maximum;
             TotalTimeLabel.Text = $"{EndTime.Maximum} s";
+            VolumeControl.Volume = 1;
         }
 
         private void _updateData()
         {
+            if (FileNameBox.Text == "") return;
             FileInfo file = new FileInfo(FileNameBox.Text);
 
             if (!file.Exists) throw new FileNotFoundException("File not found!", file.FullName);
@@ -212,7 +214,7 @@ namespace SoundBoardDotNet
 
         private void Volume_VolumeChanged(object sender, EventArgs e)
         {
-            Sound.Volume = VolumeControl.Volume;
+            if (Sound != null) Sound.Volume = VolumeControl.Volume;
         }
 
         private void StartTime_ValueChanged(object sender, EventArgs e)

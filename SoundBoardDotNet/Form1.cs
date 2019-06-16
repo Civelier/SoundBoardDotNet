@@ -15,6 +15,8 @@ namespace SoundBoardDotNet
     public partial class Form1 : Form
     {
         public static List<SoundButtonMaker> Buttons = new List<SoundButtonMaker>();
+        public static List<AudioRecorder> Recorders = new List<AudioRecorder>();
+        public static Form1 MyForm;
 
         private static string[] englishKeyboard = { "`1234567890-=", "qwertyuiop[]\\", "asdfghjkl;'", "zxcvbnm,./" };
         private static string[] frenchKeyboard = { "#1234567890-=", "qwertyuiop^¸<", "asdfghjkl;`", "zxcvbnm,.é" };
@@ -35,6 +37,9 @@ namespace SoundBoardDotNet
         {
             KeyPreview = true;
             InitializeComponent();
+            var r = new AudioRecorder(0);
+            Recorders.Add(r);
+            r.StartRecording();
             //SoundButtonMaker.Engine = Engine;
         }
 
@@ -45,6 +50,11 @@ namespace SoundBoardDotNet
                 Buttons.Add(new LetterKey(x, y, keys[i].ToString()));
                 x += xIncrement;
             }
+        }
+
+        public static void SetFocus()
+        {
+            MyForm.DeselectButton.Select();
         }
 
         private void KeyboardBuilder(string[] keyboard, Point origin, int xincrement = 4, int yincrement = 4)
@@ -61,6 +71,7 @@ namespace SoundBoardDotNet
             }
 
             Buttons.Add(new SpaceBarButton(15, 28, 6, 30));
+            SaveRecordingButton.Select();
 
             //Buttons.Add(new LetterKey(0, 0, "`"));
             //Buttons.Add(new LetterKey(4, 0, "1"));
@@ -132,11 +143,12 @@ namespace SoundBoardDotNet
         {
             SoundButtonMaker.Parent = this;
             KeyboardBuilder(MyKeyboard, new Point(10, 30), 7, 7);
+            MyForm = this;
         }
 
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == ' ') DeselectButton.Select();
+            if (e.KeyChar == ' ') SaveRecordingButton.Select();
             System.Diagnostics.Debug.WriteLine($"Key {e.KeyChar}");
         }
 
@@ -152,27 +164,41 @@ namespace SoundBoardDotNet
             timer.Start();
         }
 
-
-        private AudioRecorder _rec = new AudioRecorder(5);
-
-
-        private void StartButton_Click(object sender, EventArgs e)
-        {
-            _rec.StopReplay();
-            _rec.StartRecording();
-        }
-
-        private void StopButton_Click(object sender, EventArgs e)
-        {
-            _rec.StopRecording();
-            var save = new SaveSound(_rec);
-            save.Show();
-
-        }
-
         private void PreferencesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new PreferencesForm().Show();
+        }
+
+        private void DevicesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new DevicesForm((int[] devices) =>
+            {
+                foreach (var recorder in Recorders)
+                {
+                    recorder.Reset();
+                }
+                Recorders.Clear();
+                foreach (int i in devices)
+                {
+                    var r = new AudioRecorder(i);
+                    Recorders.Add(r);
+                    r.StartRecording();
+                }
+            }).Show();
+        }
+
+        private void SaveRecordingButton_Click(object sender, EventArgs e)
+        {
+            new SaveSound().Show();
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                new SaveSound().Show();
+            }
         }
     }
 }
