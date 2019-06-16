@@ -90,6 +90,12 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="LetterKey.cs" />
+    <Compile Include="PreferencesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PreferencesForm.Designer.cs">
+      <DependentUpon>PreferencesForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
@@ -97,17 +103,27 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SaveSound.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SaveSound.Designer.cs">
+      <DependentUpon>SaveSound.cs</DependentUpon>
+    </Compile>
     <Compile Include="SelectSound.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SelectSound.Designer.cs">
       <DependentUpon>SelectSound.cs</DependentUpon>
     </Compile>
+    <Compile Include="SoundBoardProperties.cs" />
     <Compile Include="SoundButtonData.cs" />
     <Compile Include="SoundButtonMaker.cs" />
     <Compile Include="SpaceBarButton.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PreferencesForm.resx">
+      <DependentUpon>PreferencesForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -122,6 +138,9 @@
     <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SaveSound.resx">
+      <DependentUpon>SaveSound.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SelectSound.resx">
       <DependentUpon>SelectSound.cs</DependentUpon>

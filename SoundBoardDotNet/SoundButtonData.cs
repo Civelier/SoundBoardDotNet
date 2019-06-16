@@ -14,7 +14,7 @@ namespace SoundBoardDotNet
         public string Name = "";
         public string FilePath = "";
         public float Volume = 1;
-        public double Slider1 = 0, Slider2 = 100;
+        public double StartTime = 0, EndTime = 0;
 
         private static List<List<string>> _decode(string encodedString)
         {
@@ -56,8 +56,8 @@ namespace SoundBoardDotNet
             Name = "";
             FilePath = "";
             Volume = 1;
-            Slider1 = 0;
-            Slider2 = 100;
+            StartTime = 0;
+            EndTime = 0;
         }
     }
 }

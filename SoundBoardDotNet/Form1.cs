@@ -14,12 +14,16 @@ namespace SoundBoardDotNet
 {
     public partial class Form1 : Form
     {
-        List<SoundButtonMaker> Buttons = new List<SoundButtonMaker>();
+        public static List<SoundButtonMaker> Buttons = new List<SoundButtonMaker>();
+
+        private static string[] englishKeyboard = { "`1234567890-=", "qwertyuiop[]\\", "asdfghjkl;'", "zxcvbnm,./" };
+        private static string[] frenchKeyboard = { "#1234567890-=", "qwertyuiop^¸<", "asdfghjkl;`", "zxcvbnm,.é" };
+        public static string[] MyKeyboard = englishKeyboard;
+
         //ISound Sound;
         //ISoundEngine Engine;
 
-        string[] englishKeyboard = { "`1234567890-=", "qwertyuiop[]\\", "asdfghjkl;'", "zxcvbnm,./" };
-        string[] frenchKeyboard = { "#1234567890-=", "qwertyuiop^¸<", "asdfghjkl;`", "zxcvbnm,.é" };
+        
 
 
         void PlaySound()
@@ -127,7 +131,7 @@ namespace SoundBoardDotNet
         private void Form1_Load(object sender, EventArgs e)
         {
             SoundButtonMaker.Parent = this;
-            KeyboardBuilder(englishKeyboard, new Point(10, 30), 7, 7);
+            KeyboardBuilder(MyKeyboard, new Point(10, 30), 7, 7);
         }
 
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
@@ -150,6 +154,8 @@ namespace SoundBoardDotNet
 
 
         private AudioRecorder _rec = new AudioRecorder(5);
+
+
         private void StartButton_Click(object sender, EventArgs e)
         {
             _rec.StopReplay();
@@ -159,7 +165,14 @@ namespace SoundBoardDotNet
         private void StopButton_Click(object sender, EventArgs e)
         {
             _rec.StopRecording();
-            _rec.PlayRecorded();
+            var save = new SaveSound(_rec);
+            save.Show();
+
+        }
+
+        private void PreferencesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new PreferencesForm().Show();
         }
     }
 }

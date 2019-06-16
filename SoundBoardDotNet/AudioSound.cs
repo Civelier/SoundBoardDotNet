@@ -19,6 +19,7 @@ namespace SoundBoardDotNet
 
         public string FileName;
         private double _startPos, _endPos;
+
         public double StartPos
         {
             get { return _startPos; }
@@ -47,13 +48,21 @@ namespace SoundBoardDotNet
             }
         }
 
-        public float Volume;
+        public float Volume
+        {
+            get { return _out.Volume; }
+            set
+            {
+                _out.Volume = value;
+            }
+        }
         public AudioFileReader FileReader => _fileReader;
 
         private Timer _timer;
 
         public AudioSound(string fileName, double startPos, double endPos, float volume, bool loop = false)
         {
+            _out = new WaveOut();
             FileName = fileName;
             _startPos = startPos;
             _endPos = endPos;
@@ -66,15 +75,32 @@ namespace SoundBoardDotNet
             _timer.Elapsed += new ElapsedEventHandler(_stop);
             _timer.AutoReset = false;
             _fileReader = new AudioFileReader(fileName);
-            _out = new WaveOut();
+            
             _out.Init(_fileReader);
+        }
+
+        public AudioSound(IWaveProvider wave, double startPos, double endPos, float volume)
+        {
+            _out = new WaveOut();
+            _startPos = startPos;
+            _endPos = endPos;
+            Volume = volume;
+            try { _timer = new Timer((_endPos - _startPos) * 1000); }
+            catch (ArgumentException)
+            {
+                _timer = new Timer(0.001);
+            }
+            _timer.Elapsed += new ElapsedEventHandler(_stop);
+            _timer.AutoReset = false;
+
+            _out.Init(wave);
         }
 
         private AudioSound(AudioSound sound) : this(sound.FileName, sound._startPos, sound._endPos, sound.Volume) { }
 
         public void _stop(object sender, ElapsedEventArgs e)
         {
-            Debug.WriteLine(e.SignalTime.ToString() + "  stop raised");
+            Debug.WriteLine(e.SignalTime.ToString() + " stop raised");
             Stop();
         }
 

@@ -73,20 +73,14 @@ namespace SoundBoardDotNet
                 return;
             }
 
-            Sound = new AudioSound(FileNameBox.Text, Convert.ToDouble(StartTime.Value), Convert.ToDouble(EndTime.Value), VolumeControl.Volume);
+            Sound = new AudioSound(FileNameBox.Text, (double)StartTime.Value, (double)EndTime.Value, VolumeControl.Volume);
 
             WaveGraph.WaveStream = Sound.FileReader;
             var temp = EndTime.Maximum;
-            EndTime.Maximum = Convert.ToDecimal(Sound.FileReader.TotalTime.TotalSeconds);
+            EndTime.Maximum = (decimal)Sound.FileReader.TotalTime.TotalSeconds;
             if (temp == 0)
                 EndTime.Value = EndTime.Maximum;
             TotalTimeLabel.Text = $"{EndTime.Maximum} s";
-        }
-
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            base.OnPaint(e);
-            //_updateGraph();
         }
 
         private void _updateData()
@@ -98,11 +92,8 @@ namespace SoundBoardDotNet
             Data.FilePath = FileNameBox.Text;
             Data.Name = NameTextBox.Text;
             Data.Volume = VolumeControl.Volume;
-            
-
-            //Data.Volume = (float)VolumeTrack.Value / 100;
-            //Data.Slider1 = WaveGraph.Slider1Value;
-            //Data.Slider2 = WaveGraph.Slider2Value;
+            Data.StartTime = (double)StartTime.Value;
+            Data.EndTime = (double)EndTime.Value;
         }
 
         private uint _percentToTime(double percent, uint time)
@@ -126,7 +117,6 @@ namespace SoundBoardDotNet
             var pathList = FileNameBox.Text.Split('\\');
             var extensionList = pathList[pathList.Length - 1].Split('.');
             NameTextBox.Text = extensionList[0];
-            //WaveGraph.ResetCursors();
             _updateGraph();
         }
 
@@ -135,7 +125,6 @@ namespace SoundBoardDotNet
             var pathList = FileNameBox.Text.Split('\\');
             var extensionList = pathList[pathList.Length - 1].Split('.');
             NameTextBox.Text = extensionList[0];
-            //WaveGraph.ResetCursors();
             _updateGraph();
         }
 
@@ -188,11 +177,9 @@ namespace SoundBoardDotNet
         {
             FileNameBox.Text = Data.FilePath;
             NameTextBox.Text = Data.Name;
+            StartTime.Value = (decimal)Data.StartTime;
+            EndTime.Value = (decimal)Data.EndTime;
             VolumeControl.Volume = Data.Volume;
-
-            //WaveGraph.Slider1Value = Data.Slider1;
-            //WaveGraph.Slider2Value = Data.Slider2;
-            //VolumeTrack.Value = Convert.ToInt32(Data.Volume * 100);
         }
 
         private void SelectSound_Shown(object sender, EventArgs e)
@@ -206,8 +193,6 @@ namespace SoundBoardDotNet
             LoadFromData();
             _updateGraph(true);
 
-            //Stop sound
-            //if (Sound != null) Sound.Stop();
             e.Cancel = true;
         }
 
@@ -233,13 +218,13 @@ namespace SoundBoardDotNet
         private void StartTime_ValueChanged(object sender, EventArgs e)
         {
             EndTime.Minimum = StartTime.Value;
-            Sound.StartPos = Convert.ToDouble(StartTime.Value);
+            Sound.StartPos = (double)StartTime.Value;
         }
 
         private void EndTime_ValueChanged(object sender, EventArgs e)
         {
             StartTime.Maximum = EndTime.Value;
-            Sound.EndPos = Convert.ToDouble(EndTime.Value);
+            Sound.EndPos = (double)EndTime.Value;
         }
     }
 }

@@ -185,6 +185,7 @@
             // 
             // StartTime
             // 
+            this.StartTime.DecimalPlaces = 3;
             this.StartTime.Location = new System.Drawing.Point(97, 174);
             this.StartTime.Name = "StartTime";
             this.StartTime.Size = new System.Drawing.Size(120, 22);
@@ -220,6 +221,7 @@
             // 
             // EndTime
             // 
+            this.EndTime.DecimalPlaces = 3;
             this.EndTime.Location = new System.Drawing.Point(354, 177);
             this.EndTime.Name = "EndTime";
             this.EndTime.Size = new System.Drawing.Size(120, 22);

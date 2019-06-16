@@ -9,14 +9,14 @@ using System.Drawing;
 
 namespace SoundBoardDotNet
 {
-    class SoundButtonMaker
+    public class SoundButtonMaker
     {
         public SelectSound SoundForm;
         public bool HasSound = false;
         public Button Btn;
         public SoundButtonData Data;
 
-        private string _name;
+        public string Name;
 
         public static Form Parent;
         public static int Scale = 10;
@@ -105,9 +105,9 @@ namespace SoundBoardDotNet
 
         public SoundButtonMaker(int x, int y, int height, int width, string name)
         {
-            _name = name;
+            Name = name;
             Data = new SoundButtonData();
-            SoundForm = new SelectSound(_updateBtnText, Data);
+            SoundForm = new SelectSound(UpdateBtnText, Data);
             Btn = new Button();
             Btn.Click += Btn_Click;
             Btn.Size = new Size(width * Scale, height * Scale);
@@ -120,7 +120,7 @@ namespace SoundBoardDotNet
 
         private void Form_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (char.TryParse(_name, out char c))
+            if (char.TryParse(Name, out char c))
             {
                 if (e.KeyChar == c)
                 {
@@ -134,14 +134,14 @@ namespace SoundBoardDotNet
             }
         }
 
-        private void _updateBtnText()
+        private void UpdateBtnText()
         {
-            Btn.Text = $"{_name}\n{SoundForm.GetNameTextBox.Text}";
+            Btn.Text = $"{Name}\n{SoundForm.GetNameTextBox.Text}";
         }
 
         virtual protected void Btn_Click(object sender, EventArgs e)
         {
-            if (SoundForm == null) SoundForm = new SelectSound(_updateBtnText, Data);
+            if (SoundForm == null) SoundForm = new SelectSound(UpdateBtnText, Data);
             try
             {
                 SoundForm.LoadFromData();
@@ -149,7 +149,7 @@ namespace SoundBoardDotNet
             }
             catch (ObjectDisposedException)
             {
-                SoundForm = new SelectSound(_updateBtnText, Data);
+                SoundForm = new SelectSound(UpdateBtnText, Data);
                 SoundForm.Show();
             }
         }

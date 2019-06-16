@@ -1,37 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NAudio;
 using NAudio.Wave;
 using System.Diagnostics;
-using NAudio.Utils;
-using System.Timers;
 
 namespace SoundBoardDotNet
 {
     public class AudioRecorder
     {
-        public WaveInProvider Provider;
         public WaveInEvent MyWaveIn;
-        public double RecordTime;
+        public double RecordTime { get; private set; }
+        public double RecordedTime => _isFull ? RecordTime : (double)MyWaveIn.WaveFormat.AverageBytesPerSecond / _pos;
 
-        private WaveOutEvent _wav = new WaveOutEvent();
+        public WaveOutEvent Sound = new WaveOutEvent();
         private bool _isFull = false;
         private int _pos = 0;
         private byte[] _buffer;
         private bool _isRecording = false;
+        private int _deviceIndex;
 
         /// <summary>
         /// Creates a new recorder with a buffer
         /// </summary>
         /// <param name="recordTime">Time to keep in buffer (in seconds)</param>
-        public AudioRecorder(double recordTime)
+        public AudioRecorder(double recordTime, int deviceIndex = 0)
         {
             RecordTime = recordTime;
+            _deviceIndex = deviceIndex;
             MyWaveIn = new WaveInEvent();
             MyWaveIn.DataAvailable += DataAvailable;
+            MyWaveIn.RecordingStopped += Stopped;
             _buffer = new byte[(int)(MyWaveIn.WaveFormat.AverageBytesPerSecond * RecordTime)];
         }
 
@@ -55,6 +51,33 @@ namespace SoundBoardDotNet
             _isRecording = true;
         }
 
+        public void Reset(double? time = null, int? deviceIndex = null)
+        {
+            MyWaveIn.StopRecording();
+            StopReplay();
+
+            if (time != null) RecordTime = (double)time;
+            if (deviceIndex != null) _deviceIndex = (int)deviceIndex;
+
+            _buffer = _buffer = new byte[(int)(MyWaveIn.WaveFormat.AverageBytesPerSecond * RecordTime)];
+            _isFull = false;
+            _isRecording = false;
+            _pos = 0;
+            MyWaveIn.Dispose();
+            MyWaveIn = new WaveInEvent();
+            MyWaveIn.DataAvailable += DataAvailable;
+            MyWaveIn.RecordingStopped += Stopped;
+            MyWaveIn.DeviceNumber = _deviceIndex;
+        }
+
+        public IWaveProvider GetWaveProvider()
+        {
+            var buff = new BufferedWaveProvider(MyWaveIn.WaveFormat);
+            var bytes = GetBytesToSave();
+            buff.AddSamples(bytes, 0, bytes.Length);
+            return buff;
+        }
+
         /// <summary>
         /// Stops recording
         /// </summary>
@@ -69,15 +92,11 @@ namespace SoundBoardDotNet
         /// </summary>
         public void PlayRecorded() 
         {
-            if (_wav.PlaybackState == PlaybackState.Stopped)
+            if (Sound.PlaybackState == PlaybackState.Stopped)
             {
-                var buff = new BufferedWaveProvider(MyWaveIn.WaveFormat);
-                var bytes = GetBytesToSave();
-                buff.AddSamples(bytes, 0, bytes.Length);
-                _wav.Init(buff);
-                _wav.Play();
+                Sound.Init(GetWaveProvider());
+                Sound.Play();
             }
-            
         }
 
         /// <summary>
@@ -85,7 +104,7 @@ namespace SoundBoardDotNet
         /// </summary>
         public void StopReplay()
         {
-            if (_wav != null) _wav.Stop();
+            if (Sound != null) Sound.Stop();
         }
 
         /// <summary>
@@ -95,6 +114,8 @@ namespace SoundBoardDotNet
         public void Save(string fileName)
         {
             var writer = new WaveFileWriter(fileName, MyWaveIn.WaveFormat);
+            var buff = GetBytesToSave();
+            writer.Write(buff, 0, buff.Length);
             writer.Flush();
         }
 
@@ -111,57 +132,6 @@ namespace SoundBoardDotNet
                 // flag if the buffer is full (will only set it from false to true the first time that it reaches the full length of the buffer)
                 _isFull |= (_pos == 0);
             }
-            //var val = Provider.Read(buff, _end, e.BytesRecorded);
-
-            //for (int i = 0; i < e.BytesRecorded; i++)
-            //{
-            //    if (_filled)
-            //    {
-            //        _start = _end + 1 > _bwp.BufferLength - 1 ? _end + 1 : 0;
-            //    }
-            //    if (_end > _buffer.Length - 1 && !_filled) _filled = true;
-            //    _end = _end > _buffer.Length - 1 ? _end + 1 : 0;
-
-            //    _buffer[_end] = e.Buffer[i];
-            //}
-
-
-            //var temp = new BufferedWaveProvider(MyWaveIn.WaveFormat);
-            //temp.BufferDuration = TimeSpan.FromSeconds(temp.WaveFormat.AverageBytesPerSecond / e.BytesRecorded);
-            //temp.AddSamples(e.Buffer, 0, e.BytesRecorded);
-            //_sampleProviders.Enqueue(temp.ToSampleProvider());
-            //if (_sampleProviders.Count > RecordTime / temp.BufferedDuration.TotalSeconds)
-            //{
-            //    _sampleProviders.Dequeue();
-            //}
-            //_datasRecieved++;
-            //if (_datasRecieved / 5 > RecordTime / temp.BufferedDuration.TotalSeconds)
-            //{
-            //    _datasRecieved = 0;
-            //    MyWaveIn.StopRecording();
-            //}
-
-            //int remainingSamples = e.BytesRecorded;
-            //if (_bufferedWaveProvider1.BufferedBytes + e.BytesRecorded >= _bufferedWaveProvider1.BufferLength)
-            //{
-            //    _bufferedWaveProvider2.ClearBuffer();
-            //    _bwp = _bufferedWaveProvider2;
-            //    _bufferedWaveProvider1.AddSamples(buff, 0, _bufferedWaveProvider1.BufferLength - _bufferedWaveProvider1.BufferedBytes);
-            //    remainingSamples -= _bufferedWaveProvider1.BufferLength - _bufferedWaveProvider1.BufferedBytes;
-            //}
-            //if (_bufferedWaveProvider2.BufferedBytes + e.BytesRecorded >= _bufferedWaveProvider2.BufferLength)
-            //{
-            //    _bufferedWaveProvider1.ClearBuffer();
-            //    _bwp = _bufferedWaveProvider1;
-            //    _bufferedWaveProvider2.AddSamples(buff, 0, _bufferedWaveProvider2.BufferLength - _bufferedWaveProvider2.BufferedBytes);
-            //    remainingSamples -= _bufferedWaveProvider2.BufferLength - _bufferedWaveProvider2.BufferedBytes;
-            //}
-
-            //_bwp.AddSamples(buff, e.BytesRecorded - remainingSamples, remainingSamples);
-
-            //_bufferedWaveProvider.AddSamples(e.Buffer, 0, e.BytesRecorded);
-            //_offset += e.BytesRecorded;
-            //_offset = _offset > _buffer.Length - 1 ? _offset - (_buffer.Length - 1) : _offset;
         }
 
         public byte[] GetBytesToSave()
@@ -182,6 +152,11 @@ namespace SoundBoardDotNet
             return bytesToSave;
         }
 
+        /// <summary>
+        /// Starts recording if WaveIn stopped
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Stopped(object sender, StoppedEventArgs e)
         {
             Debug.WriteLine("Recording stopped!");
