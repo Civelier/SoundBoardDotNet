@@ -23,7 +23,7 @@ namespace SoundBoardDotNet
         [Description("Version number.")]
         public string Version
         {
-            get { return "1.0"; }
+            get { return "1.0.2"; }
         }
 
         private static SoundBoardProperties _props = new SoundBoardProperties();
