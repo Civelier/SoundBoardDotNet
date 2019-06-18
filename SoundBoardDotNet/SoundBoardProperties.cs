@@ -19,6 +19,13 @@ namespace SoundBoardDotNet
     [Serializable()]
     public class SoundBoardProperties
     {
+        [ReadOnly(true)]
+        [Description("Version number.")]
+        public string Version
+        {
+            get { return "1.0"; }
+        }
+
         private static SoundBoardProperties _props = new SoundBoardProperties();
 
         public static SoundBoardProperties Props
@@ -42,15 +49,15 @@ namespace SoundBoardDotNet
             set { _recordingSampleBufferTime = value; }
         }
 
-        private KeyboardType _keyboard = KeyboardType.QWERTY_EN;
-        [Description("Keyboard type to use.")]
-        public KeyboardType Keyboard
-        {
-            get { return _keyboard; }
-            set { _keyboard = value; }
-        }
+        //private KeyboardType _keyboard = KeyboardType.QWERTY_EN;
+        //[Description("Keyboard type to use.")]
+        //public KeyboardType Keyboard
+        //{
+        //    get { return _keyboard; }
+        //    set { _keyboard = value; }
+        //}
 
-        private string _dir = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
+        private string _dir = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + "\\SoundBoardRecordedSounds";
         [Editor(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
         [Description("Location where new files should be saved.")]
         [DisplayName("File save location.")]
@@ -59,7 +66,5 @@ namespace SoundBoardDotNet
             get { return _dir; }
             set { _dir = value; }
         }
-
-
     }
 }

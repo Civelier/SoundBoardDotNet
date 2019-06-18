@@ -52,12 +52,24 @@ namespace SoundBoardDotNet
         public static void Load(string filePath)
         {
             FileStream stream = new FileStream(filePath, FileMode.Open);
-            _allData = (SoundBoardData)_formater.Deserialize(stream);
+            try
+            {
+                _allData = (SoundBoardData)_formater.Deserialize(stream);
+            }
+            catch (Exception e)
+            {
+                throw e.InnerException;
+            }
         }
 
         public static DirectoryInfo GetDefaultSaveDirectory()
         {
-            DirectoryInfo dir = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\SoundBoardDotNet Projects");
+            DirectoryInfo dir = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\SoundBoardDotNet");
+            if (!dir.Exists)
+            {
+                dir.Create();
+            }
+            dir = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\SoundBoardDotNet\\Projects");
             if (!dir.Exists)
             {
                 dir.Create();
@@ -107,8 +119,20 @@ namespace SoundBoardDotNet
 
         public SoundBoardData(SerializationInfo info, StreamingContext context)
         {
-            Data.Clear();
-            Data = (List<SoundButtonData>)info.GetValue("Data", typeof(List<SoundButtonData>));
+            try
+            {
+                Data.Clear();
+                Data = (List<SoundButtonData>)info.GetValue("Data", typeof(List<SoundButtonData>));
+                if (info.GetString("Version").Split('.')[0] != SoundBoardProperties.Props.Version.Split('.')[0])
+                {
+                    System.Windows.Forms.MessageBox.Show("Wrong version!", "Version", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                    throw new Exception("Wrong version!");
+                }
+            }
+            catch (SerializationException)
+            {
+                throw new Exception("File corrupted or incompatible!");
+            }
         }
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
@@ -118,6 +142,7 @@ namespace SoundBoardDotNet
                 Data.Add(btn.Data);
             }
             info.AddValue("Data", Data);
+            info.AddValue("Version", SoundBoardProperties.Props.Version);
         }
     }
 }

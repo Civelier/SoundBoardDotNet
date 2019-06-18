@@ -267,7 +267,16 @@ namespace SoundBoardDotNet
             var file = new OpenFileDialog() { AddExtension = true, DefaultExt = "sbdn", CheckFileExists = true, InitialDirectory = SoundBoardData.GetDefaultSaveDirectory().FullName };
             if (file.ShowDialog() == DialogResult.Cancel) return;
             SavePath = file.FileName;
-            SoundBoardData.Load(SavePath);
+            try
+            {
+                SoundBoardData.Load(SavePath);
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show(x.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                SavePath = "";
+                return;
+            }
             foreach (var item in Buttons)
             {
                 item.Data.Reset();
