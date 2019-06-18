@@ -8,7 +8,7 @@ namespace SoundBoardDotNet
     {
         public WaveInEvent MyWaveIn;
         public double RecordTime => SoundBoardProperties.Props.RecordingSampleTime;
-        public double RecordedTime => _isFull ? RecordTime : _pos == 0 ? 0 : (double)MyWaveIn.WaveFormat.AverageBytesPerSecond / _pos;
+        public double RecordedTime => _isFull ? RecordTime : _pos == 0 ? 0 : 1.0 / MyWaveIn.WaveFormat.AverageBytesPerSecond * _pos;
         public int Device = 0;
 
         public WaveOutEvent Sound = new WaveOutEvent();

@@ -36,16 +36,11 @@ namespace SoundBoardDotNet
         {
             Data = data;
             _cb = cb;
-            _fileDialog.Filter = "All playable files (*.wav)|*.wav;*.WAV;*.mp3;*.MP3";
+            _fileDialog.Filter = "All playable files (*.wav,*.mp3)|*.wav;*.WAV;*.mp3;*.MP3";
             _fileDialog.FilterIndex = 0;
             InitializeComponent();
-            FileNameBox.Text = data.FilePath;
-            NameTextBox.Text = data.Name;
-            StartTime.Minimum = 0;
-            StartTime.Maximum = 0;
-            EndTime.Minimum = 0;
-            EndTime.Maximum = 0;
-            //Sound = new AudioSound(data.FilePath, data.Slider1, data.Slider2, data.Volume);
+            LoadFromData();
+            //Sound = new AudioSloaound(data.FilePath, data.Slider1, data.Slider2, data.Volume);
         }
 
         private byte[] _soundWaves(string file)
@@ -69,6 +64,7 @@ namespace SoundBoardDotNet
                 {
                     TotalTimeLabel.Text = "";
                     EndTime.Maximum = 0;
+                    WaveGraph.WaveStream = null;
                 }
                 return;
             }
@@ -90,7 +86,7 @@ namespace SoundBoardDotNet
             FileInfo file = new FileInfo(FileNameBox.Text);
 
             if (!file.Exists) throw new FileNotFoundException("File not found!", file.FullName);
-
+            Form1.MyForm.HasChanged = true;
             Data.FilePath = FileNameBox.Text;
             Data.Name = NameTextBox.Text;
             Data.Volume = VolumeControl.Volume;
@@ -178,6 +174,24 @@ namespace SoundBoardDotNet
         public void LoadFromData()
         {
             FileNameBox.Text = Data.FilePath;
+            if (Data.FilePath != "")
+            {
+                if (Sound == null) Sound = new AudioSound(Data.FilePath, Data.StartTime, Data.EndTime, Data.Volume);
+                else
+                {
+                    if (Sound.FileName != Data.FilePath) Sound = new AudioSound(Data.FilePath, Data.StartTime, Data.EndTime, Data.Volume);
+                }
+                WaveGraph.WaveStream = Sound.FileReader;
+                var temp = EndTime.Maximum;
+                EndTime.Maximum = (decimal)Sound.FileReader.TotalTime.TotalSeconds;
+                if (temp == 0)
+                    EndTime.Value = EndTime.Maximum;
+                TotalTimeLabel.Text = $"{EndTime.Maximum} s";
+                VolumeControl.Volume = 1;
+            }
+
+            
+
             NameTextBox.Text = Data.Name;
             StartTime.Value = (decimal)Data.StartTime;
             EndTime.Value = (decimal)Data.EndTime;
@@ -209,6 +223,7 @@ namespace SoundBoardDotNet
         {
             FileNameBox.Text = "";
             NameTextBox.Text = "";
+            Data.Reset();
             _updateGraph(true);
         }
 

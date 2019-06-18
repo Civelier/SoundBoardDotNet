@@ -85,7 +85,7 @@
             this.EndTime.Location = new System.Drawing.Point(349, 170);
             this.EndTime.Name = "EndTime";
             this.EndTime.Size = new System.Drawing.Size(120, 22);
-            this.EndTime.TabIndex = 41;
+            this.EndTime.TabIndex = 4;
             // 
             // label7
             // 
@@ -120,7 +120,7 @@
             this.StartTime.Location = new System.Drawing.Point(94, 170);
             this.StartTime.Name = "StartTime";
             this.StartTime.Size = new System.Drawing.Size(120, 22);
-            this.StartTime.TabIndex = 37;
+            this.StartTime.TabIndex = 3;
             this.StartTime.ValueChanged += new System.EventHandler(this.StartTime_ValueChanged);
             // 
             // VolumeLabel
@@ -156,7 +156,7 @@
             this.CancelButton.Margin = new System.Windows.Forms.Padding(4);
             this.CancelButton.Name = "CancelButton";
             this.CancelButton.Size = new System.Drawing.Size(100, 28);
-            this.CancelButton.TabIndex = 32;
+            this.CancelButton.TabIndex = 6;
             this.CancelButton.Text = "Cancel";
             this.CancelButton.UseVisualStyleBackColor = true;
             this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
@@ -167,7 +167,7 @@
             this.NameTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.NameTextBox.Name = "NameTextBox";
             this.NameTextBox.Size = new System.Drawing.Size(765, 22);
-            this.NameTextBox.TabIndex = 31;
+            this.NameTextBox.TabIndex = 1;
             // 
             // label2
             // 
@@ -207,7 +207,7 @@
             this.SaveButton.Margin = new System.Windows.Forms.Padding(4);
             this.SaveButton.Name = "SaveButton";
             this.SaveButton.Size = new System.Drawing.Size(100, 28);
-            this.SaveButton.TabIndex = 24;
+            this.SaveButton.TabIndex = 5;
             this.SaveButton.Text = "Save";
             this.SaveButton.UseVisualStyleBackColor = true;
             this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
@@ -218,8 +218,9 @@
             this.KeyCombo.Location = new System.Drawing.Point(301, 98);
             this.KeyCombo.Name = "KeyCombo";
             this.KeyCombo.Size = new System.Drawing.Size(121, 24);
-            this.KeyCombo.TabIndex = 45;
+            this.KeyCombo.TabIndex = 2;
             this.KeyCombo.SelectedIndexChanged += new System.EventHandler(this.KeyCombo_SelectedIndexChanged);
+            this.KeyCombo.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyCombo_KeyDown);
             // 
             // label8
             // 
@@ -245,7 +246,7 @@
             this.InputCombo.Location = new System.Drawing.Point(62, 10);
             this.InputCombo.Name = "InputCombo";
             this.InputCombo.Size = new System.Drawing.Size(211, 24);
-            this.InputCombo.TabIndex = 48;
+            this.InputCombo.TabIndex = 0;
             this.InputCombo.SelectedIndexChanged += new System.EventHandler(this.InputCombo_SelectedIndexChanged);
             // 
             // SaveSound
@@ -276,6 +277,7 @@
             this.Controls.Add(this.SaveButton);
             this.Name = "SaveSound";
             this.Text = "SaveSound";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SaveSound_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SaveSound_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.EndTime)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.StartTime)).EndInit();

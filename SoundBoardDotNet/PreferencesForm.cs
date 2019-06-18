@@ -25,6 +25,7 @@ namespace SoundBoardDotNet
             {
                 recorder.Reset();
             }
+            SoundBoardData.SaveProperties();
             Close();
         }
     }

@@ -122,6 +122,7 @@
     <Compile Include="SelectSound.Designer.cs">
       <DependentUpon>SelectSound.cs</DependentUpon>
     </Compile>
+    <Compile Include="SoundBoardData.cs" />
     <Compile Include="SoundBoardProperties.cs" />
     <Compile Include="SoundButtonData.cs" />
     <Compile Include="SoundButtonMaker.cs" />

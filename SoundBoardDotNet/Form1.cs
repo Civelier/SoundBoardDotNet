@@ -9,6 +9,8 @@ using System.Threading;
 using System.Windows.Forms;
 using NAudio;
 using NAudio.Wave;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace SoundBoardDotNet
 {
@@ -24,9 +26,25 @@ namespace SoundBoardDotNet
 
         //ISound Sound;
         //ISoundEngine Engine;
+        public string SavePath = "";
 
+        private bool _hasChanged = false;
         
-
+        public bool HasChanged
+        {
+            get { return _hasChanged; }
+            set
+            {
+                if (value)
+                {
+                    Text = "*SoundBoradDotNet";
+                }
+                else
+                {
+                    Text = "SoundBoradDotNet";
+                }
+            }
+        }
 
         void PlaySound()
         {
@@ -36,6 +54,7 @@ namespace SoundBoardDotNet
         public Form1()
         {
             KeyPreview = true;
+            SoundBoardData.LoadProperties();
             InitializeComponent();
             var r = new AudioRecorder(0);
             Recorders.Add(r);
@@ -47,7 +66,9 @@ namespace SoundBoardDotNet
         {
             for (int i = 0; i < keys.Length; i++)
             {
-                Buttons.Add(new LetterKey(x, y, keys[i].ToString()));
+                var btn = new LetterKey(x, y, keys[i].ToString());
+                btn.Data.Index = Buttons.Count;
+                Buttons.Add(btn);
                 x += xIncrement;
             }
         }
@@ -66,7 +87,8 @@ namespace SoundBoardDotNet
             foreach (var line in keyboard)
             {
                 KeyboardLine(xincrement, x, y, line);
-                x += 1;
+                if (x != 0) x += 1;
+                else x += 8;
                 y += yincrement;
             }
 
@@ -148,7 +170,11 @@ namespace SoundBoardDotNet
 
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == ' ') SaveRecordingButton.Select();
+            if (e.KeyChar == ' ')
+            {
+                e.Handled = true;
+                SaveRecordingButton.Select();
+            }
             System.Diagnostics.Debug.WriteLine($"Key {e.KeyChar}");
         }
 
@@ -199,6 +225,63 @@ namespace SoundBoardDotNet
                 e.SuppressKeyPress = true;
                 new SaveSound().Show();
             }
+        }
+
+        private bool ChooseSavePath()
+        {
+            var save = new SaveFileDialog() { AddExtension = true, DefaultExt = "sbdn", OverwritePrompt = true, InitialDirectory = SoundBoardData.GetDefaultSaveDirectory().FullName, Filter = "SoundBoard files (*.sbdn)|*.sbdn;*.SBDN"};
+            if (save.ShowDialog() == DialogResult.Cancel) return false;
+            SavePath = save.FileName;
+            return true;
+        }
+
+        private bool Save()
+        {
+            if (SavePath == String.Empty)
+            {
+                if (!ChooseSavePath()) return false;
+            }
+
+            SoundBoardData.Save(SavePath);
+            HasChanged = false;
+            return true;
+        }
+
+        private void FileSaveAs_Click(object sender, EventArgs e)
+        {
+            ChooseSavePath();
+            Save();
+        }
+
+        private void FileSave_Click(object sender, EventArgs e)
+        {
+            Save();
+        }
+
+        private void FileOpen_Click(object sender, EventArgs e)
+        {
+            var file = new OpenFileDialog() { AddExtension = true, DefaultExt = "sbdn", CheckFileExists = true, InitialDirectory = SoundBoardData.GetDefaultSaveDirectory().FullName };
+            if (file.ShowDialog() == DialogResult.Cancel) return;
+            SavePath = file.FileName;
+            SoundBoardData.Load(SavePath);
+            foreach (var item in Buttons)
+            {
+                item.Data.Reset();
+                item.Data = SoundBoardData.AllData.Data[item.Data.Index];
+                item.Update();
+            }
+            HasChanged = false;
+        }
+
+        private void FileNew_Click(object sender, EventArgs e)
+        {
+            SavePath = String.Empty;
+            foreach (var item in Buttons)
+            {
+                item.Data.Reset();
+                item.Update();
+            }
+            HasChanged = true;
         }
     }
 }

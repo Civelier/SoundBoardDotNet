@@ -16,6 +16,7 @@ namespace SoundBoardDotNet
         QWERTY_EN
     }
 
+    [Serializable()]
     public class SoundBoardProperties
     {
         private static SoundBoardProperties _props = new SoundBoardProperties();
@@ -25,6 +26,10 @@ namespace SoundBoardDotNet
             get
             {
                 return _props;
+            }
+            set
+            {
+                _props = value;
             }
         }
 

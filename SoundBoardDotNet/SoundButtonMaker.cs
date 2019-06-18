@@ -118,6 +118,12 @@ namespace SoundBoardDotNet
             Parent.KeyPress += Form_KeyPress;
         }
 
+        public void Update()
+        {
+            SoundForm = new SelectSound(UpdateBtnText, Data);
+            Btn.Text = Name + "\n" + Data.Name;
+        }
+
         private void Form_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (char.TryParse(Name, out char c))
