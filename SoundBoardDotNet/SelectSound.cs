@@ -72,7 +72,7 @@ namespace SoundBoardDotNet
             Sound = new AudioSound(FileNameBox.Text, (double)StartTime.Value, (double)EndTime.Value, VolumeControl.Volume);
 
             WaveGraph.WaveStream = Sound.FileReader;
-            var temp = EndTime.Maximum;
+            var temp = EndTime.Value;
             EndTime.Maximum = (decimal)Sound.FileReader.TotalTime.TotalSeconds;
             if (temp == 0)
                 EndTime.Value = EndTime.Maximum;
