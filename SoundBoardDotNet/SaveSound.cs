@@ -130,8 +130,17 @@ namespace SoundBoardDotNet
                         return false;
                 }
             }
+            KeyCombo.SelectedItem = KeyCombo.Text;
+            if (KeyCombo.Text == "Select a key")
+            {
+                Recorder.Save(fileName);
+                _isSaved = true;
+                return true;
+            }
 
             var btn = GetButton();
+
+            
 
             if (btn.HasSound)
             {
@@ -200,8 +209,8 @@ namespace SoundBoardDotNet
         {
             foreach (var button in Form1.Buttons)
             {
-                if (KeyCombo.SelectedItem == null) return null;
-                if (button.Name == KeyCombo.SelectedItem.ToString())
+                if (KeyCombo.Text == "Select a key") return null;
+                if (button.Name == KeyCombo.Text)
                 {
                     return button;
                 }
@@ -379,6 +388,23 @@ namespace SoundBoardDotNet
                     KeyCombo.SelectedIndex = 0;
                 }
             }
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < Form1.MyKeyboard.Length; i++)
+            {
+                sb.Append(Form1.MyKeyboard[i]);
+            }
+            string s = sb.ToString();
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (s[i].ToString() == SoundButtonMaker.KeyToChar(e.KeyCode).ToString().ToLower())
+                {
+                    KeyCombo.SelectedIndex = i + 1;
+                    e.Handled = e.SuppressKeyPress = true;
+                    KeyCombo.Text = "";
+                    return;
+                }
+            }
+            e.Handled = e.SuppressKeyPress = true;
         }
     }
 }

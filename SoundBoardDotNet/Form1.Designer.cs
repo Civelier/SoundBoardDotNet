@@ -90,33 +90,33 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(221, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(138, 6);
             // 
             // FileNew
             // 
             this.FileNew.Name = "FileNew";
-            this.FileNew.Size = new System.Drawing.Size(224, 26);
+            this.FileNew.Size = new System.Drawing.Size(141, 26);
             this.FileNew.Text = "New";
             this.FileNew.Click += new System.EventHandler(this.FileNew_Click);
             // 
             // FileOpen
             // 
             this.FileOpen.Name = "FileOpen";
-            this.FileOpen.Size = new System.Drawing.Size(224, 26);
+            this.FileOpen.Size = new System.Drawing.Size(141, 26);
             this.FileOpen.Text = "Open";
             this.FileOpen.Click += new System.EventHandler(this.FileOpen_Click);
             // 
             // FileSave
             // 
             this.FileSave.Name = "FileSave";
-            this.FileSave.Size = new System.Drawing.Size(224, 26);
+            this.FileSave.Size = new System.Drawing.Size(141, 26);
             this.FileSave.Text = "Save";
             this.FileSave.Click += new System.EventHandler(this.FileSave_Click);
             // 
             // FileSaveAs
             // 
             this.FileSaveAs.Name = "FileSaveAs";
-            this.FileSaveAs.Size = new System.Drawing.Size(224, 26);
+            this.FileSaveAs.Size = new System.Drawing.Size(141, 26);
             this.FileSaveAs.Text = "Save as";
             this.FileSaveAs.Click += new System.EventHandler(this.FileSaveAs_Click);
             // 
@@ -176,6 +176,7 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "SoundBoardDotNet";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);

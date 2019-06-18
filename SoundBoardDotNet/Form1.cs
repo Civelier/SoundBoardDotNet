@@ -35,6 +35,7 @@ namespace SoundBoardDotNet
             get { return _hasChanged; }
             set
             {
+                _hasChanged = value;
                 if (value)
                 {
                     Text = "*SoundBoradDotNet";
@@ -235,6 +236,8 @@ namespace SoundBoardDotNet
             return true;
         }
 
+
+
         private bool Save()
         {
             if (SavePath == String.Empty)
@@ -260,6 +263,7 @@ namespace SoundBoardDotNet
 
         private void FileOpen_Click(object sender, EventArgs e)
         {
+            if (!CanOverwrite()) return;
             var file = new OpenFileDialog() { AddExtension = true, DefaultExt = "sbdn", CheckFileExists = true, InitialDirectory = SoundBoardData.GetDefaultSaveDirectory().FullName };
             if (file.ShowDialog() == DialogResult.Cancel) return;
             SavePath = file.FileName;
@@ -275,13 +279,42 @@ namespace SoundBoardDotNet
 
         private void FileNew_Click(object sender, EventArgs e)
         {
+            if (!CanOverwrite()) return;
             SavePath = String.Empty;
             foreach (var item in Buttons)
             {
                 item.Data.Reset();
                 item.Update();
             }
-            HasChanged = true;
+            HasChanged = false;
+        }
+
+        private bool CanOverwrite()
+        {
+            if (HasChanged)
+            {
+                var result = MessageBox.Show("Unsaved changes.\nContinue without saving?", "Unsaved changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button3);
+
+                switch (result)
+                {
+                    case DialogResult.None:
+                        return false;
+                    case DialogResult.Cancel:
+                        return false;
+                    case DialogResult.Yes:
+                        return Save();
+                    case DialogResult.No:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+            return true;
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = !CanOverwrite();
         }
     }
 }
