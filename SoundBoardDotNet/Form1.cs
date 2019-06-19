@@ -60,7 +60,24 @@ namespace SoundBoardDotNet
             var r = new AudioRecorder(0);
             Recorders.Add(r);
             r.StartRecording();
+            DeselectButton.KeyDown += DeselectButton_KeyDown;
+            KeyDown += DeselectButton_KeyDown;
             //SoundButtonMaker.Engine = Engine;
+        }
+
+        private void DeselectButton_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Space)
+            {
+                AudioSound.StopAll();
+                e.Handled = e.SuppressKeyPress = true;
+                //Stop sounds
+            }
+            if ((e.KeyData & Keys.Enter) == Keys.Enter)
+            {
+                e.Handled = e.SuppressKeyPress = true;
+                new SaveSound().Show();
+            }
         }
 
         private void KeyboardLine(int xIncrement, int x, int y, string keys)
@@ -76,7 +93,7 @@ namespace SoundBoardDotNet
 
         public static void SetFocus()
         {
-            MyForm.DeselectButton.Select();
+            MyForm.SaveRecordingButton.Select();
         }
 
         private void KeyboardBuilder(string[] keyboard, Point origin, int xincrement = 4, int yincrement = 4)
@@ -302,7 +319,7 @@ namespace SoundBoardDotNet
         {
             if (HasChanged)
             {
-                var result = MessageBox.Show("Unsaved changes.\nContinue without saving?", "Unsaved changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button3);
+                var result = MessageBox.Show("Unsaved changes.\nSave before continuing?", "Unsaved changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button3);
 
                 switch (result)
                 {

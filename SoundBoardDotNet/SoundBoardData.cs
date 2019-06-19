@@ -123,7 +123,7 @@ namespace SoundBoardDotNet
             {
                 Data.Clear();
                 Data = (List<SoundButtonData>)info.GetValue("Data", typeof(List<SoundButtonData>));
-                if (info.GetString("Version").Split('.')[0] != SoundBoardProperties.Props.Version.Split('.')[0])
+                if (info.GetString("Version").Split('.')[0] != SoundBoardProperties.Props.FileVersion.Split('.')[0])
                 {
                     System.Windows.Forms.MessageBox.Show("Wrong version!", "Version", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
                     throw new Exception("Wrong version!");
@@ -142,7 +142,7 @@ namespace SoundBoardDotNet
                 Data.Add(btn.Data);
             }
             info.AddValue("Data", Data);
-            info.AddValue("Version", SoundBoardProperties.Props.Version);
+            info.AddValue("Version", SoundBoardProperties.Props.FileVersion);
         }
     }
 }

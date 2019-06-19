@@ -20,11 +20,17 @@ namespace SoundBoardDotNet
     public class SoundBoardProperties
     {
         [ReadOnly(true)]
-        [Description("Version number.")]
-        public string Version
+        [Description("App version number.")]
+        [DisplayName("App version")]
+        public string AppVersion
         {
-            get { return "1.0.2"; }
+            get { return "1.0.3"; }
         }
+
+        [ReadOnly(true)]
+        [Description("File version number.")]
+        [DisplayName("File version")]
+        public string FileVersion { get { return "1.0"; } }
 
         private static SoundBoardProperties _props = new SoundBoardProperties();
 

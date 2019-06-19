@@ -115,7 +115,8 @@ namespace SoundBoardDotNet
             Btn.Text = name;
             Btn.TextAlign = ContentAlignment.TopCenter;
             Parent.Controls.Add(Btn);
-            Parent.KeyPress += Form_KeyPress;
+            Parent.KeyDown += Form_KeyDown;
+            Btn.KeyDown += Form_KeyDown;
         }
 
         public void Update()
@@ -124,19 +125,26 @@ namespace SoundBoardDotNet
             Btn.Text = Name + "\n" + Data.Name;
         }
 
-        private void Form_KeyPress(object sender, KeyPressEventArgs e)
+        private void Form_KeyDown(object sender, KeyEventArgs e)
         {
             if (char.TryParse(Name, out char c))
             {
-                if (e.KeyChar == c)
+                if (KeyToChar(e.KeyCode) == c)
                 {
                     SoundForm.PlaySoundAsync();
+                    e.Handled = e.SuppressKeyPress = true;
                 }
             }
-            if (e.KeyChar == ' ')
+            if (e.KeyCode == Keys.Space)
             {
                 AudioSound.StopAll();
+                e.Handled = e.SuppressKeyPress = true;
                 //Stop sounds
+            }
+            if ((e.KeyData & Keys.Enter) == Keys.Enter)
+            {
+                e.Handled = e.SuppressKeyPress = true;
+                new SaveSound().Show();
             }
         }
 
