@@ -129,13 +129,13 @@ namespace SoundBoardDotNet
         {
             if (char.TryParse(Name, out char c))
             {
-                if (KeyToChar(e.KeyCode) == c)
+                if (KeyToChar(e.KeyCode).ToString() == c.ToString().ToUpper())
                 {
                     SoundForm.PlaySoundAsync();
                     e.Handled = e.SuppressKeyPress = true;
                 }
             }
-            if (e.KeyCode == Keys.Space)
+            if ((e.KeyData & Keys.Space) == Keys.Space)
             {
                 AudioSound.StopAll();
                 e.Handled = e.SuppressKeyPress = true;

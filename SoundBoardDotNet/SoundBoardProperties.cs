@@ -24,7 +24,7 @@ namespace SoundBoardDotNet
         [DisplayName("App version")]
         public string AppVersion
         {
-            get { return "1.0.3"; }
+            get { return "1.0.4"; }
         }
 
         [ReadOnly(true)]

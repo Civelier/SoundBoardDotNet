@@ -91,6 +91,10 @@ namespace SoundBoardDotNet
             _out.Init(_fileReader);
         }
 
+        public AudioSound(AudioRecorder recorder, double startPos, double endPos, float volume) : this(recorder.GetWaveProvider(), startPos, endPos, volume)
+        {
+        }
+
         public AudioSound(IWaveProvider wave, double startPos, double endPos, float volume)
         {
             _out = new WaveOut();

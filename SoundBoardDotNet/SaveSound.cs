@@ -180,12 +180,13 @@ namespace SoundBoardDotNet
 
         private void PlayButton_Click(object sender, EventArgs e)
         {
-            Recorder.PlayRecorded();
+            AudioSound.StopAll();
+            new AudioSound(Recorder, (double)StartTime.Value, (double)EndTime.Value, VolumeControl.Volume);
         }
 
         private void StopButton_Click(object sender, EventArgs e)
         {
-            Recorder.StopReplay();
+            AudioSound.StopAll();
         }
 
         private void VolumeControl_VolumeChanged(object sender, EventArgs e)
