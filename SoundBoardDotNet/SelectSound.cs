@@ -39,8 +39,116 @@ namespace SoundBoardDotNet
             _fileDialog.Filter = "All playable files (*.wav,*.mp3)|*.wav;*.WAV;*.mp3;*.MP3";
             _fileDialog.FilterIndex = 0;
             InitializeComponent();
+            AddActionsForControlsOfTypes((Control c) => c.KeyDown += PlayStopOnKeys, typeof(Button), typeof(ComboBox), typeof(NumericUpDown));
+            AddActionsForControlsOfTypes((Control c) => c.KeyDown += SelectNextOnEnterKey, typeof(ComboBox), typeof(NumericUpDown), typeof(TextBox));
+            AddActionsForControlsOfTypes((Control c) => c.KeyDown += SpaceForNumUpDown, typeof(NumericUpDown));
+            AddArrowSelectForControls(StartTime, EndTime);
+            AddActionsForControlsOfTypes((Control c) => { c.KeyDown += CloseOnEsc; c.KeyDown += SupressKeys; }, typeof(Button), typeof(ComboBox), typeof(NumericUpDown), typeof(TextBox));
+
             LoadFromData();
             //Sound = new AudioSloaound(data.FilePath, data.Slider1, data.Slider2, data.Volume);
+        }
+
+        private void SupressKeys(object sender, KeyEventArgs e)
+        {
+            if ((e.KeyCode == Keys.Enter) || (e.KeyCode == Keys.Tab))
+            {
+                e.Handled = e.SuppressKeyPress = true;
+            }
+        }
+
+        private void AddActionsForControlsOfTypes(Action<Control> action, params Type[] types)
+        {
+            foreach (var control in Controls)
+            {
+                foreach (var type in types)
+                {
+                    if (control.GetType() == type)
+                    {
+                        action((Control)control);
+                    }
+                }
+            }
+        }
+
+        private void AddArrowSelectForControls(params Control[] controls)
+        {
+            foreach (var control in controls)
+            {
+                control.KeyDown += SelectWithArrows;
+            }
+        }
+
+        private void SpaceForNumUpDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Space)
+            {
+                e.Handled = e.SuppressKeyPress = true;
+                ((NumericUpDown)sender).Refresh();
+            }
+        }
+
+        private void SelectNextOnEnterKey(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                SelectNextControl(ActiveControl, true, false, false, true);
+                return;
+            }
+            e.Handled = false;
+            e.SuppressKeyPress = false;
+        }
+
+        private void PlayStopOnKeys(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Space)
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                if (e.Control)
+                {
+                    Stop();
+                }
+                else
+                {
+                    Play();
+                }
+                return;
+            }
+            e.Handled = true;
+            e.SuppressKeyPress = false;
+        }
+
+        private void CloseOnEsc(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                Close();
+                return;
+            }
+
+            e.SuppressKeyPress = false;
+        }
+
+        private void SelectWithArrows(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Right)
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                SelectNextControl(ActiveControl, true, false, false, true);
+                return;
+            }
+            if (e.KeyCode == Keys.Left)
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                SelectNextControl(ActiveControl, false, false, false, true);
+                return;
+            }
+            e.SuppressKeyPress = false;
         }
 
         private byte[] _soundWaves(string file)
@@ -126,7 +234,7 @@ namespace SoundBoardDotNet
             _updateGraph();
         }
 
-        private void PlayButton_Click(object sender, EventArgs e)
+        private void Play()
         {
             if (FileNameBox.Text == "")
             {
@@ -134,18 +242,21 @@ namespace SoundBoardDotNet
                 return;
             }
             AudioSound.PlaySound(Sound);
-            //if (!PlaySoundAsync())
-            //{
-            //    MessageBox.Show("Enter a valid File to play!");
-            //    return;
-            //}
+        }
+
+        private void PlayButton_Click(object sender, EventArgs e)
+        {
+            Play();
+        }
+
+        private void Stop()
+        {
+            AudioSound.StopAll();
         }
 
         private void StopButton_Click(object sender, EventArgs e)
         {
-            //Stop sounds
-            //if (Sound != null) Engine.Init(Sound);
-            AudioSound.StopAll();
+            Stop();
         }
 
         private void SelectSound_FormClosed(object sender, FormClosedEventArgs e)

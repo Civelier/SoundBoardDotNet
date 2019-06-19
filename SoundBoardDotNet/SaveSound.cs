@@ -97,6 +97,69 @@ namespace SoundBoardDotNet
             }
         }
 
+        private void SelectNextOnEnterKey(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                SelectNextControl(ActiveControl, true, false, false, true);
+                return;
+            }
+            e.Handled = false;
+            e.SuppressKeyPress = false;
+        }
+
+        private void PlayStopOnKeys(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Space)
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                if (e.Control)
+                {
+                    Play();
+                }
+                else
+                {
+                    Stop();
+                }
+                return;
+            }
+            e.Handled = true;
+            e.SuppressKeyPress = false;
+        }
+
+        private void CloseOnEsc(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                Close();
+                return;
+            }
+
+            e.SuppressKeyPress = false;
+        }
+
+        private void SelectWithArrows(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Right)
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                SelectNextControl(ActiveControl, true, false, false, true);
+                return;
+            }
+            if (e.KeyCode == Keys.Left)
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                SelectNextControl(ActiveControl, false, false, false, true);
+                return;
+            }
+            e.SuppressKeyPress = false;
+        }
+
         private bool _isSaved = false;
         private bool SaveFile()
         {
@@ -178,15 +241,25 @@ namespace SoundBoardDotNet
             Close();
         }
 
-        private void PlayButton_Click(object sender, EventArgs e)
+        private void Play()
         {
             AudioSound.StopAll();
             new AudioSound(Recorder, (double)StartTime.Value, (double)EndTime.Value, VolumeControl.Volume);
         }
 
-        private void StopButton_Click(object sender, EventArgs e)
+        private void PlayButton_Click(object sender, EventArgs e)
+        {
+            Play();
+        }
+
+        private void Stop()
         {
             AudioSound.StopAll();
+        }
+
+        private void StopButton_Click(object sender, EventArgs e)
+        {
+            Stop();
         }
 
         private void VolumeControl_VolumeChanged(object sender, EventArgs e)
@@ -283,68 +356,7 @@ namespace SoundBoardDotNet
             }
         }
 
-        private void SelectNextOnEnterKey(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                e.Handled = true;
-                e.SuppressKeyPress = true;
-                SelectNextControl(ActiveControl, true, false, false, true);
-                return;
-            }
-            e.Handled = false;
-            e.SuppressKeyPress = false;
-        }
-
-        private void PlayStopOnKeys(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Space)
-            {
-                e.Handled = true;
-                e.SuppressKeyPress = true;
-                if (e.Control)
-                {
-                    Recorder.StopReplay();
-                }
-                else
-                {
-                    Recorder.PlayRecorded();
-                }
-                return;
-            }
-            e.Handled = true;
-            e.SuppressKeyPress = false;
-        }
-
-        private void CloseOnEsc(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Escape)
-            {
-                Close();
-                return;
-            }
-
-            e.SuppressKeyPress = false;
-        }
-
-        private void SelectWithArrows(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Right)
-            {
-                e.Handled = true;
-                e.SuppressKeyPress = true;
-                SelectNextControl(ActiveControl, true, false, false, true);
-                return;
-            }
-            if (e.KeyCode == Keys.Left)
-            {
-                e.Handled = true;
-                e.SuppressKeyPress = true;
-                SelectNextControl(ActiveControl, false, false, false, true);
-                return;
-            }
-            e.SuppressKeyPress = false;
-        }
+        
 
         private void SaveSound_FormClosing(object sender, FormClosingEventArgs e)
         {

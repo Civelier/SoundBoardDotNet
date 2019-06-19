@@ -59,7 +59,7 @@
             this.SaveButton.Margin = new System.Windows.Forms.Padding(4);
             this.SaveButton.Name = "SaveButton";
             this.SaveButton.Size = new System.Drawing.Size(100, 28);
-            this.SaveButton.TabIndex = 0;
+            this.SaveButton.TabIndex = 4;
             this.SaveButton.Text = "Save";
             this.SaveButton.UseVisualStyleBackColor = true;
             this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
@@ -70,7 +70,8 @@
             this.FileNameBox.Margin = new System.Windows.Forms.Padding(4);
             this.FileNameBox.Name = "FileNameBox";
             this.FileNameBox.Size = new System.Drawing.Size(679, 22);
-            this.FileNameBox.TabIndex = 1;
+            this.FileNameBox.TabIndex = 10;
+            this.FileNameBox.TabStop = false;
             this.FileNameBox.TextChanged += new System.EventHandler(this.FileNameBox_TextChanged);
             // 
             // label1
@@ -89,7 +90,7 @@
             this.BrowseButton.Margin = new System.Windows.Forms.Padding(4);
             this.BrowseButton.Name = "BrowseButton";
             this.BrowseButton.Size = new System.Drawing.Size(78, 25);
-            this.BrowseButton.TabIndex = 3;
+            this.BrowseButton.TabIndex = 0;
             this.BrowseButton.Text = "Browse";
             this.BrowseButton.UseVisualStyleBackColor = true;
             this.BrowseButton.Click += new System.EventHandler(this.BrowseButton_Click);
@@ -100,7 +101,8 @@
             this.PlayButton.Margin = new System.Windows.Forms.Padding(4);
             this.PlayButton.Name = "PlayButton";
             this.PlayButton.Size = new System.Drawing.Size(100, 28);
-            this.PlayButton.TabIndex = 4;
+            this.PlayButton.TabIndex = 8;
+            this.PlayButton.TabStop = false;
             this.PlayButton.Text = "Play";
             this.PlayButton.UseVisualStyleBackColor = true;
             this.PlayButton.Click += new System.EventHandler(this.PlayButton_Click);
@@ -111,7 +113,8 @@
             this.StopButton.Margin = new System.Windows.Forms.Padding(4);
             this.StopButton.Name = "StopButton";
             this.StopButton.Size = new System.Drawing.Size(100, 28);
-            this.StopButton.TabIndex = 5;
+            this.StopButton.TabIndex = 9;
+            this.StopButton.TabStop = false;
             this.StopButton.Text = "Stop";
             this.StopButton.UseVisualStyleBackColor = true;
             this.StopButton.Click += new System.EventHandler(this.StopButton_Click);
@@ -132,7 +135,7 @@
             this.NameTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.NameTextBox.Name = "NameTextBox";
             this.NameTextBox.Size = new System.Drawing.Size(765, 22);
-            this.NameTextBox.TabIndex = 7;
+            this.NameTextBox.TabIndex = 1;
             // 
             // CancelButton
             // 
@@ -140,7 +143,7 @@
             this.CancelButton.Margin = new System.Windows.Forms.Padding(4);
             this.CancelButton.Name = "CancelButton";
             this.CancelButton.Size = new System.Drawing.Size(100, 28);
-            this.CancelButton.TabIndex = 8;
+            this.CancelButton.TabIndex = 5;
             this.CancelButton.Text = "Cancel";
             this.CancelButton.UseVisualStyleBackColor = true;
             this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
@@ -152,6 +155,7 @@
             this.ClearButton.Name = "ClearButton";
             this.ClearButton.Size = new System.Drawing.Size(100, 28);
             this.ClearButton.TabIndex = 12;
+            this.ClearButton.TabStop = false;
             this.ClearButton.Text = "Clear";
             this.ClearButton.UseVisualStyleBackColor = true;
             this.ClearButton.Click += new System.EventHandler(this.ClearButton_Click);
@@ -186,10 +190,15 @@
             // StartTime
             // 
             this.StartTime.DecimalPlaces = 3;
+            this.StartTime.Increment = new decimal(new int[] {
+            125,
+            0,
+            0,
+            196608});
             this.StartTime.Location = new System.Drawing.Point(97, 174);
             this.StartTime.Name = "StartTime";
             this.StartTime.Size = new System.Drawing.Size(120, 22);
-            this.StartTime.TabIndex = 16;
+            this.StartTime.TabIndex = 2;
             this.StartTime.ValueChanged += new System.EventHandler(this.StartTime_ValueChanged);
             // 
             // label3
@@ -222,10 +231,15 @@
             // EndTime
             // 
             this.EndTime.DecimalPlaces = 3;
+            this.EndTime.Increment = new decimal(new int[] {
+            125,
+            0,
+            0,
+            196608});
             this.EndTime.Location = new System.Drawing.Point(354, 177);
             this.EndTime.Name = "EndTime";
             this.EndTime.Size = new System.Drawing.Size(120, 22);
-            this.EndTime.TabIndex = 20;
+            this.EndTime.TabIndex = 3;
             this.EndTime.ValueChanged += new System.EventHandler(this.EndTime_ValueChanged);
             // 
             // label5

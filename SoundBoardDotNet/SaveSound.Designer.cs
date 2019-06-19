@@ -82,6 +82,11 @@
             // EndTime
             // 
             this.EndTime.DecimalPlaces = 3;
+            this.EndTime.Increment = new decimal(new int[] {
+            125,
+            0,
+            0,
+            196608});
             this.EndTime.Location = new System.Drawing.Point(349, 170);
             this.EndTime.Name = "EndTime";
             this.EndTime.Size = new System.Drawing.Size(120, 22);
@@ -117,6 +122,11 @@
             // StartTime
             // 
             this.StartTime.DecimalPlaces = 3;
+            this.StartTime.Increment = new decimal(new int[] {
+            125,
+            0,
+            0,
+            196608});
             this.StartTime.Location = new System.Drawing.Point(94, 170);
             this.StartTime.Name = "StartTime";
             this.StartTime.Size = new System.Drawing.Size(120, 22);
