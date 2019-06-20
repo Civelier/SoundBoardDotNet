@@ -35,8 +35,6 @@ namespace SoundBoardDotNet
 
         public static void RefreshOutputs()
         {
-            OutputDevice[] devices = new OutputDevice[OutputDevices.Count];
-            OutputDevices.CopyTo(devices);
             OutputDevices.Clear();
             OutputDevices.Add(Default);
             string mainOutputName = MainOutput.DeviceName;
@@ -47,7 +45,6 @@ namespace SoundBoardDotNet
                 if (mainOutputName == device.DeviceName)
                 {
                     MainOutput = device;
-                    break;
                 }
                 
                 OutputDevices.Add(device);
@@ -66,9 +63,9 @@ namespace SoundBoardDotNet
             {
                 if (_deviceName == "")
                 {
-                    _deviceName = Index == 0 ? "Default (" : "";
-                    _deviceName += WaveOut.GetCapabilities(Index).ProductName;
-                    _deviceName += Index == 0 ? ")" : "";
+                    //_deviceName = Index == 0 ? "Default (" : "";
+                    _deviceName = WaveOut.GetCapabilities(Index).ProductName;
+                    //_deviceName += Index == 0 ? ")" : "";
                 }
                 return _deviceName;
             }

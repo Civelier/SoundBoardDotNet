@@ -66,6 +66,7 @@ namespace SoundBoardDotNet
 
         private void OutputsCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
+            OutputDevice.RefreshOutputs();
             OutputDevice.MainOutput = OutputDevice.OutputDevices[OutputsCombo.SelectedIndex];
         }
 
