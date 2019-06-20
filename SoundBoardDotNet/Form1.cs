@@ -72,7 +72,7 @@ namespace SoundBoardDotNet
                 e.Handled = e.SuppressKeyPress = true;
                 //Stop sounds
             }
-            if ((e.KeyData & Keys.Enter) == Keys.Enter)
+            if (e.KeyCode == Keys.Enter)
             {
                 e.Handled = e.SuppressKeyPress = true;
                 new SaveSound().Show();

@@ -99,8 +99,34 @@ namespace SoundBoardDotNet
                     return 'Y';
                 case Keys.Z:
                     return 'Z';
-                default:
+                case Keys.OemMinus:
+                    return '-';
+                case Keys.Oem3:
+                    return '`';
+                case Keys.Oem7:
+                    if (SoundBoardProperties.Props.Keyboard == KeyboardType.QWERTY_FR)
+                        return '#';
+                    return '\'';
+                case Keys.Oemplus:
+                    return '=';
+                case Keys.Oem4:
+                    return '[';
+                case Keys.Oem6:
+                    return ']';
+                case Keys.Oem5:
+                    return '\\';
+                case Keys.Oemcomma:
+                    return ',';
+                case Keys.OemPeriod:
+                    return '.';
+                case Keys.Space:
                     return ' ';
+                case Keys.Oem1:
+                    return ';';
+                case Keys.Oem2:
+                    return '/';
+                default:
+                    return (char)0;
             }
         }
 
@@ -146,7 +172,7 @@ namespace SoundBoardDotNet
                 e.Handled = e.SuppressKeyPress = true;
                 //Stop sounds
             }
-            if ((e.KeyData & Keys.Enter) == Keys.Enter)
+            if (e.KeyData == Keys.Enter)
             {
                 e.Handled = e.SuppressKeyPress = true;
                 new SaveSound().Show();

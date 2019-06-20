@@ -303,8 +303,6 @@ namespace SoundBoardDotNet
                 VolumeControl.Volume = 1;
             }
 
-            
-
             NameTextBox.Text = Data.Name;
             StartTime.Value = (decimal)Data.StartTime;
             EndTime.Value = (decimal)Data.EndTime;

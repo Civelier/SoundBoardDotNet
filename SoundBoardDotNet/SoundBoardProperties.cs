@@ -24,7 +24,7 @@ namespace SoundBoardDotNet
         [DisplayName("App version")]
         public string AppVersion
         {
-            get { return "1.2.0"; }
+            get { return "1.2.1"; }
         }
 
         [ReadOnly(true)]
@@ -55,13 +55,13 @@ namespace SoundBoardDotNet
             set { _recordingSampleBufferTime = value; }
         }
 
-        //private KeyboardType _keyboard = KeyboardType.QWERTY_EN;
-        //[Description("Keyboard type to use.")]
-        //public KeyboardType Keyboard
-        //{
-        //    get { return _keyboard; }
-        //    set { _keyboard = value; }
-        //}
+        private KeyboardType _keyboard = KeyboardType.QWERTY_EN;
+        [Description("Keyboard type to use.")]
+        public KeyboardType Keyboard
+        {
+            get { return _keyboard; }
+            set { _keyboard = value; }
+        }
 
         private string _dir = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + "\\SoundBoardRecordedSounds";
         [Editor(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
