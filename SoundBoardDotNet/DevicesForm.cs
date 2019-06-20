@@ -20,7 +20,6 @@ namespace SoundBoardDotNet
             InitializeComponent();
             RefreshOut();
             RefreshIn();
-            InputsCombo.SelectedItem = 0;
         }
 
         private void RefreshOut()
@@ -31,6 +30,7 @@ namespace SoundBoardDotNet
             {
                 OutputsCombo.Items.Add(WaveOut.GetCapabilities(i).ProductName);
             }
+            if (WaveOut.DeviceCount <= OutputDevice.MainOutput.Index) OutputDevice.MainOutput = OutputDevice.Default;
             OutputsCombo.SelectedIndex = OutputDevice.MainOutput.Index;
         }
 

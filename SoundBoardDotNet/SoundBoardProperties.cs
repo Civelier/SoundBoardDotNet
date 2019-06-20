@@ -24,7 +24,7 @@ namespace SoundBoardDotNet
         [DisplayName("App version")]
         public string AppVersion
         {
-            get { return "1.2.1"; }
+            get { return "1.2.2"; }
         }
 
         [ReadOnly(true)]
@@ -65,7 +65,7 @@ namespace SoundBoardDotNet
 
         private string _dir = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + "\\SoundBoardRecordedSounds";
         [Editor(typeof(FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
-        [Description("Location where new files should be saved.")]
+        [Description("Location where recorded files should be saved.")]
         [DisplayName("File save location.")]
         public string SoundSaveLocation
         {

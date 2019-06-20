@@ -61,7 +61,7 @@ namespace SoundBoardDotNet
         {
             get
             {
-                if (_deviceName == "")
+                if (String.IsNullOrEmpty(_deviceName))
                 {
                     //_deviceName = Index == 0 ? "Default (" : "";
                     _deviceName = WaveOut.GetCapabilities(Index).ProductName;
