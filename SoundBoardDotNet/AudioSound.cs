@@ -8,6 +8,7 @@ using NAudio;
 using NAudio.Wave;
 using System.Timers;
 using System.IO;
+using Forms = System.Windows.Forms;
 
 namespace SoundBoardDotNet
 {
@@ -76,20 +77,44 @@ namespace SoundBoardDotNet
             }
             _timer.Elapsed += new ElapsedEventHandler(_stop);
             _timer.AutoReset = false;
+            
             while (true)
             {
                 try
                 {
-                    _fileReader = new AudioFileReader(fileName);
+                    _fileReader = new AudioFileReader(FileName);
                     break;
                 }
-                catch (System.IO.IOException)
+                catch (System.IO.IOException e)
                 {
+                    var result = Forms.MessageBox.Show(e.Message + "\nDo you want to try to find the file?", "Error", Forms.MessageBoxButtons.YesNo);
 
+                    if (result == Forms.DialogResult.Yes)
+                    {
+                        var file = new Forms.OpenFileDialog();
+                        var fileInfo = new FileInfo(fileName);
+                        file.InitialDirectory = fileInfo.DirectoryName;
+                        file.CheckFileExists = true;
+                        var result2 = file.ShowDialog();
+                        if (result2 != Forms.DialogResult.Cancel)
+                        {
+                            if (new AudioFileReader(file.FileName).TotalTime.TotalSeconds >= EndPos)
+                            {
+                                FileName = file.FileName;
+                            }
+                        }
+                    }
+                    if (result == Forms.DialogResult.No)
+                    {
+                        break;
+                    }
                 }
             }
             
-            _out.Init(_fileReader);
+            if (_fileReader != null)
+            {
+                _out.Init(_fileReader);
+            }
         }
 
         public AudioSound(AudioRecorder recorder, double startPos, double endPos, float volume)

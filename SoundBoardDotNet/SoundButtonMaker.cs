@@ -123,7 +123,11 @@ namespace SoundBoardDotNet
         public void Update()
         {
             SoundForm = new SelectSound(UpdateBtnText, Data);
-            Btn.Text = Name + "\n" + Data.Name;
+            Btn.Text = Name;
+            if (SoundForm.Sound != null)
+            {
+                if (SoundForm.Sound.FileReader != null) Btn.Text += "\n" + Data.Name;
+            }
         }
 
         private void Form_KeyDown(object sender, KeyEventArgs e)

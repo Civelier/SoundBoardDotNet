@@ -166,7 +166,7 @@ namespace SoundBoardDotNet
 
         private void _updateGraph(bool eraseIfEmpty = false)
         {
-            if (FileNameBox.Text == "")
+            if (FileNameBox.Text == "" || Sound.FileReader == null)
             {
                 if (eraseIfEmpty)
                 {
@@ -284,7 +284,6 @@ namespace SoundBoardDotNet
 
         public void LoadFromData()
         {
-            FileNameBox.Text = Data.FilePath;
             if (Data.FilePath != "")
             {
                 if (Sound == null) Sound = new AudioSound(Data.FilePath, Data.StartTime, Data.EndTime, Data.Volume);
@@ -292,6 +291,9 @@ namespace SoundBoardDotNet
                 {
                     if (Sound.FileName != Data.FilePath) Sound = new AudioSound(Data.FilePath, Data.StartTime, Data.EndTime, Data.Volume);
                 }
+                if (Sound.FileReader == null) return;
+                Data.FilePath = Sound.FileName;
+                FileNameBox.Text = Data.FilePath;
                 WaveGraph.WaveStream = Sound.FileReader;
                 var temp = EndTime.Maximum;
                 EndTime.Maximum = (decimal)Sound.FileReader.TotalTime.TotalSeconds;

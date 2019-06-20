@@ -222,6 +222,7 @@ namespace SoundBoardDotNet
             btn.Data.EndTime = (double)EndTime.Value;
             btn.Data.Name = NameTextBox.Text;
             btn.SoundForm.Sound = new AudioSound(btn.Data.FilePath, btn.Data.StartTime, btn.Data.EndTime, btn.Data.Volume);
+            btn.SoundForm.Data.FilePath = btn.Data.FilePath = btn.SoundForm.Sound.FileName;
             _isSaved = true;
             Form1.MyForm.HasChanged = true;
             return true;
