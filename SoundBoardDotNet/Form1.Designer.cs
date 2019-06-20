@@ -90,34 +90,34 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(138, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(245, 6);
             // 
             // FileNew
             // 
             this.FileNew.Name = "FileNew";
-            this.FileNew.Size = new System.Drawing.Size(141, 26);
-            this.FileNew.Text = "New";
+            this.FileNew.Size = new System.Drawing.Size(248, 26);
+            this.FileNew.Text = "New (ctrl + N)";
             this.FileNew.Click += new System.EventHandler(this.FileNew_Click);
             // 
             // FileOpen
             // 
             this.FileOpen.Name = "FileOpen";
-            this.FileOpen.Size = new System.Drawing.Size(141, 26);
-            this.FileOpen.Text = "Open";
+            this.FileOpen.Size = new System.Drawing.Size(248, 26);
+            this.FileOpen.Text = "Open (ctrl + O)";
             this.FileOpen.Click += new System.EventHandler(this.FileOpen_Click);
             // 
             // FileSave
             // 
             this.FileSave.Name = "FileSave";
-            this.FileSave.Size = new System.Drawing.Size(141, 26);
-            this.FileSave.Text = "Save";
+            this.FileSave.Size = new System.Drawing.Size(248, 26);
+            this.FileSave.Text = "Save (ctrl + S)";
             this.FileSave.Click += new System.EventHandler(this.FileSave_Click);
             // 
             // FileSaveAs
             // 
             this.FileSaveAs.Name = "FileSaveAs";
-            this.FileSaveAs.Size = new System.Drawing.Size(141, 26);
-            this.FileSaveAs.Text = "Save as";
+            this.FileSaveAs.Size = new System.Drawing.Size(248, 26);
+            this.FileSaveAs.Text = "Save as (ctrl + shift + S)";
             this.FileSaveAs.Click += new System.EventHandler(this.FileSaveAs_Click);
             // 
             // editToolStripMenuItem

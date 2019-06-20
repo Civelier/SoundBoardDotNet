@@ -80,14 +80,14 @@ namespace SoundBoardDotNet
             
             while (true)
             {
-                try
+                if (new FileInfo(FileName).Exists)
                 {
                     _fileReader = new AudioFileReader(FileName);
                     break;
                 }
-                catch (System.IO.IOException e)
+                else
                 {
-                    var result = Forms.MessageBox.Show(e.Message + "\nDo you want to try to find the file?", "Error", Forms.MessageBoxButtons.YesNo);
+                    var result = Forms.MessageBox.Show($"File {FileName} does not exist.\nDo you want to try to find the file?", "Error", Forms.MessageBoxButtons.YesNo, Forms.MessageBoxIcon.Error);
 
                     if (result == Forms.DialogResult.Yes)
                     {
@@ -164,8 +164,7 @@ namespace SoundBoardDotNet
 
         public static void PlaySound(AudioSound sound)
         {
-            if (Sounds.Contains(sound)) new AudioSound(sound).Play();
-            else sound.Play();
+            new AudioSound(sound).Play();
         }
 
         public void Play()
@@ -183,17 +182,24 @@ namespace SoundBoardDotNet
 
         public void Stop()
         {
+            _stop();
+            Sounds.Remove(this);
+        }
+
+        private void _stop()
+        {
             _out.Stop();
             _timer.Stop();
-            Sounds.Remove(this);
         }
 
         public static void StopAll()
         {
             foreach (var sound in Sounds)
             {
-                sound._out.Stop();
-                sound._timer.Stop();
+                sound._stop();
+                sound._out.Dispose();
+                if (sound._fileReader != null) sound._fileReader.Dispose();
+                sound._timer.Dispose();
             }
             Sounds.Clear();
         }

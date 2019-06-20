@@ -56,8 +56,7 @@ namespace SoundBoardDotNet
             KeyPreview = true;
             SoundBoardData.LoadProperties();
             InitializeComponent();
-            DeselectButton.KeyDown += DeselectButton_KeyDown;
-            KeyDown += DeselectButton_KeyDown;
+            //DeselectButton.KeyDown += DeselectButton_KeyDown;
             InputDevice.RefreshInputs();
             OutputDevice.RefreshOutputs();
             InputDevice.StartRecorders();
@@ -222,12 +221,80 @@ namespace SoundBoardDotNet
             new SaveSound().Show();
         }
 
+        //private void Form1_KeyDown(object sender, KeyEventArgs e)
+        //{
+        //    if (e.KeyCode == Keys.Enter)
+        //    {
+        //        e.SuppressKeyPress = true;
+        //        new SaveSound().Show();
+        //    }
+        //}
+
+        public static SoundButtonMaker GetButton(char key)
+        {
+            foreach (var button in Form1.Buttons)
+            {
+                if (key == (char)0) return null;
+                if (button.Name.ToUpper() == key.ToString())
+                {
+                    return button;
+                }
+            }
+            return null;
+        }
+
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
+            if (e.Control)
             {
-                e.SuppressKeyPress = true;
+                if (e.Shift)
+                {
+                    if (e.KeyCode == Keys.S)
+                    {
+                        FileSaveAs_Click(null, null);
+                        e.Handled = e.SuppressKeyPress = true;
+                    }
+                    return;
+                }
+                else
+                {
+                    if (e.KeyCode == Keys.S)
+                    {
+                        FileSave_Click(null, null);
+                        e.Handled = e.SuppressKeyPress = true;
+                    }
+                    if (e.KeyCode == Keys.O)
+                    {
+                        FileOpen_Click(null, null);
+                        e.Handled = e.SuppressKeyPress = true;
+                    }
+                    if (e.KeyCode == Keys.N)
+                    {
+                        FileNew_Click(null, null);
+                        e.Handled = e.SuppressKeyPress = true;
+                    }
+                }
+                return;
+            }
+            var btn = GetButton(SoundButtonMaker.KeyToChar(e.KeyCode));
+            if (btn != null)
+            {
+                btn.SoundForm.PlaySoundAsync();
+                e.Handled = e.SuppressKeyPress = true;
+                return;
+            }
+            if (e.KeyData == Keys.Space)
+            {
+                AudioSound.StopAll();
+                e.Handled = e.SuppressKeyPress = true;
+                return;
+                //Stop sounds
+            }
+            if (e.KeyData == Keys.Enter)
+            {
+                e.Handled = e.SuppressKeyPress = true;
                 new SaveSound().Show();
+                return;
             }
         }
 

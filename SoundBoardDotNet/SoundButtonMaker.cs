@@ -142,8 +142,8 @@ namespace SoundBoardDotNet
             Btn.Text = name;
             Btn.TextAlign = ContentAlignment.TopCenter;
             Parent.Controls.Add(Btn);
-            Parent.KeyDown += Form_KeyDown;
-            Btn.KeyDown += Form_KeyDown;
+            //Parent.KeyDown += Form_KeyDown;
+            //Btn.KeyDown += Form_KeyDown;
         }
 
         public void Update()
