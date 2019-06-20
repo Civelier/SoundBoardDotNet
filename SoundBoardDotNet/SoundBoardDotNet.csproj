@@ -80,6 +80,7 @@
   <ItemGroup>
     <Compile Include="AudioRecorder.cs" />
     <Compile Include="AudioSound.cs" />
+    <Compile Include="Devices.cs" />
     <Compile Include="DevicesForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -96,7 +97,9 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="InputDevice.cs" />
     <Compile Include="LetterKey.cs" />
+    <Compile Include="OutputDevice.cs" />
     <Compile Include="PreferencesForm.cs">
       <SubType>Form</SubType>
     </Compile>

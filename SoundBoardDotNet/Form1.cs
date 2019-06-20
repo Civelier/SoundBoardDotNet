@@ -17,7 +17,6 @@ namespace SoundBoardDotNet
     public partial class Form1 : Form
     {
         public static List<SoundButtonMaker> Buttons = new List<SoundButtonMaker>();
-        public static List<AudioRecorder> Recorders = new List<AudioRecorder>();
         public static Form1 MyForm;
 
         private static string[] englishKeyboard = { "`1234567890-=", "qwertyuiop[]\\", "asdfghjkl;'", "zxcvbnm,./" };
@@ -57,11 +56,11 @@ namespace SoundBoardDotNet
             KeyPreview = true;
             SoundBoardData.LoadProperties();
             InitializeComponent();
-            var r = new AudioRecorder(0);
-            Recorders.Add(r);
-            r.StartRecording();
             DeselectButton.KeyDown += DeselectButton_KeyDown;
             KeyDown += DeselectButton_KeyDown;
+            InputDevice.RefreshInputs();
+            OutputDevice.RefreshOutputs();
+            InputDevice.StartRecorders();
             //SoundButtonMaker.Engine = Engine;
         }
 
@@ -215,20 +214,7 @@ namespace SoundBoardDotNet
 
         private void DevicesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new DevicesForm((int[] devices) =>
-            {
-                foreach (var recorder in Recorders)
-                {
-                    recorder.Reset();
-                }
-                Recorders.Clear();
-                foreach (int i in devices)
-                {
-                    var r = new AudioRecorder(i);
-                    Recorders.Add(r);
-                    r.StartRecording();
-                }
-            }).Show();
+            new DevicesForm().Show();
         }
 
         private void SaveRecordingButton_Click(object sender, EventArgs e)
@@ -252,8 +238,6 @@ namespace SoundBoardDotNet
             SavePath = save.FileName;
             return true;
         }
-
-
 
         private bool Save()
         {

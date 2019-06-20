@@ -30,15 +30,15 @@
         {
             this.Tabs = new System.Windows.Forms.TabControl();
             this.InputTab = new System.Windows.Forms.TabPage();
-            this.OutputTab = new System.Windows.Forms.TabPage();
-            this.label1 = new System.Windows.Forms.Label();
-            this.RecordInputCheck = new System.Windows.Forms.CheckBox();
-            this.InputsCombo = new System.Windows.Forms.ComboBox();
-            this.SaveButton = new System.Windows.Forms.Button();
             this.RefreshInputsButton = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
-            this.OutputsCombo = new System.Windows.Forms.ComboBox();
+            this.InputsCombo = new System.Windows.Forms.ComboBox();
+            this.RecordInputCheck = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.OutputTab = new System.Windows.Forms.TabPage();
             this.RefreshOutputsButton = new System.Windows.Forms.Button();
+            this.OutputsCombo = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.SaveButton = new System.Windows.Forms.Button();
             this.Tabs.SuspendLayout();
             this.InputTab.SuspendLayout();
             this.OutputTab.SuspendLayout();
@@ -71,6 +71,46 @@
             this.InputTab.Text = "Inputs";
             this.InputTab.UseVisualStyleBackColor = true;
             // 
+            // RefreshInputsButton
+            // 
+            this.RefreshInputsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.RefreshInputsButton.Location = new System.Drawing.Point(6, 154);
+            this.RefreshInputsButton.Name = "RefreshInputsButton";
+            this.RefreshInputsButton.Size = new System.Drawing.Size(75, 23);
+            this.RefreshInputsButton.TabIndex = 5;
+            this.RefreshInputsButton.Text = "Refresh";
+            this.RefreshInputsButton.UseVisualStyleBackColor = true;
+            this.RefreshInputsButton.Click += new System.EventHandler(this.RefreshInputsButton_Click);
+            // 
+            // InputsCombo
+            // 
+            this.InputsCombo.FormattingEnabled = true;
+            this.InputsCombo.Location = new System.Drawing.Point(55, 6);
+            this.InputsCombo.Name = "InputsCombo";
+            this.InputsCombo.Size = new System.Drawing.Size(185, 24);
+            this.InputsCombo.TabIndex = 2;
+            this.InputsCombo.SelectedIndexChanged += new System.EventHandler(this.InputsCombo_SelectedIndexChanged);
+            // 
+            // RecordInputCheck
+            // 
+            this.RecordInputCheck.AutoSize = true;
+            this.RecordInputCheck.Location = new System.Drawing.Point(246, 6);
+            this.RecordInputCheck.Name = "RecordInputCheck";
+            this.RecordInputCheck.Size = new System.Drawing.Size(76, 21);
+            this.RecordInputCheck.TabIndex = 1;
+            this.RecordInputCheck.Text = "Record";
+            this.RecordInputCheck.UseVisualStyleBackColor = true;
+            this.RecordInputCheck.CheckedChanged += new System.EventHandler(this.RecordInputCheck_CheckedChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 10);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(43, 17);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Input:";
+            // 
             // OutputTab
             // 
             this.OutputTab.Controls.Add(this.RefreshOutputsButton);
@@ -84,34 +124,33 @@
             this.OutputTab.Text = "Outputs";
             this.OutputTab.UseVisualStyleBackColor = true;
             // 
-            // label1
+            // RefreshOutputsButton
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 10);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(43, 17);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Input:";
+            this.RefreshOutputsButton.Location = new System.Drawing.Point(7, 154);
+            this.RefreshOutputsButton.Name = "RefreshOutputsButton";
+            this.RefreshOutputsButton.Size = new System.Drawing.Size(75, 23);
+            this.RefreshOutputsButton.TabIndex = 2;
+            this.RefreshOutputsButton.Text = "Refresh";
+            this.RefreshOutputsButton.UseVisualStyleBackColor = true;
+            this.RefreshOutputsButton.Click += new System.EventHandler(this.RefreshOutputsButton_Click);
             // 
-            // RecordInputCheck
+            // OutputsCombo
             // 
-            this.RecordInputCheck.AutoSize = true;
-            this.RecordInputCheck.Location = new System.Drawing.Point(246, 6);
-            this.RecordInputCheck.Name = "RecordInputCheck";
-            this.RecordInputCheck.Size = new System.Drawing.Size(76, 21);
-            this.RecordInputCheck.TabIndex = 1;
-            this.RecordInputCheck.Text = "Record";
-            this.RecordInputCheck.UseVisualStyleBackColor = true;
-            this.RecordInputCheck.CheckedChanged += new System.EventHandler(this.RecordInputCheck_CheckedChanged);
+            this.OutputsCombo.FormattingEnabled = true;
+            this.OutputsCombo.Location = new System.Drawing.Point(69, 7);
+            this.OutputsCombo.Name = "OutputsCombo";
+            this.OutputsCombo.Size = new System.Drawing.Size(176, 24);
+            this.OutputsCombo.TabIndex = 1;
+            this.OutputsCombo.SelectedIndexChanged += new System.EventHandler(this.OutputsCombo_SelectedIndexChanged);
             // 
-            // InputsCombo
+            // label2
             // 
-            this.InputsCombo.FormattingEnabled = true;
-            this.InputsCombo.Location = new System.Drawing.Point(55, 6);
-            this.InputsCombo.Name = "InputsCombo";
-            this.InputsCombo.Size = new System.Drawing.Size(185, 24);
-            this.InputsCombo.TabIndex = 2;
-            this.InputsCombo.SelectedIndexChanged += new System.EventHandler(this.InputsCombo_SelectedIndexChanged);
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(7, 7);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(55, 17);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Output:";
             // 
             // SaveButton
             // 
@@ -124,45 +163,6 @@
             this.SaveButton.UseVisualStyleBackColor = true;
             this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
-            // RefreshInputsButton
-            // 
-            this.RefreshInputsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.RefreshInputsButton.Location = new System.Drawing.Point(6, 154);
-            this.RefreshInputsButton.Name = "RefreshInputsButton";
-            this.RefreshInputsButton.Size = new System.Drawing.Size(75, 23);
-            this.RefreshInputsButton.TabIndex = 5;
-            this.RefreshInputsButton.Text = "Refresh";
-            this.RefreshInputsButton.UseVisualStyleBackColor = true;
-            this.RefreshInputsButton.Click += new System.EventHandler(this.RefreshInputsButton_Click);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 7);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(55, 17);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Output:";
-            // 
-            // OutputsCombo
-            // 
-            this.OutputsCombo.FormattingEnabled = true;
-            this.OutputsCombo.Location = new System.Drawing.Point(69, 7);
-            this.OutputsCombo.Name = "OutputsCombo";
-            this.OutputsCombo.Size = new System.Drawing.Size(176, 24);
-            this.OutputsCombo.TabIndex = 1;
-            this.OutputsCombo.SelectedIndexChanged += new System.EventHandler(this.OutputsCombo_SelectedIndexChanged);
-            // 
-            // RefreshOutputsButton
-            // 
-            this.RefreshOutputsButton.Location = new System.Drawing.Point(7, 154);
-            this.RefreshOutputsButton.Name = "RefreshOutputsButton";
-            this.RefreshOutputsButton.Size = new System.Drawing.Size(75, 23);
-            this.RefreshOutputsButton.TabIndex = 2;
-            this.RefreshOutputsButton.Text = "Refresh";
-            this.RefreshOutputsButton.UseVisualStyleBackColor = true;
-            this.RefreshOutputsButton.Click += new System.EventHandler(this.RefreshOutputsButton_Click);
-            // 
             // DevicesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -172,6 +172,7 @@
             this.Controls.Add(this.Tabs);
             this.Name = "DevicesForm";
             this.Text = "DevicesForm";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.DevicesForm_FormClosed);
             this.Tabs.ResumeLayout(false);
             this.InputTab.ResumeLayout(false);
             this.InputTab.PerformLayout();

@@ -13,6 +13,8 @@ namespace SoundBoardDotNet
     class SoundBoardData : ISerializable
     {
         private static IFormatter _formater = new BinaryFormatter();
+        private static string _devicesFileName = "SoundBoardDevices.txt";
+        private static string _preferencesFileName = "SoundBoardPreferences.txt";
 
         public List<SoundButtonData> Data = new List<SoundButtonData>();
         public SoundBoardData()
@@ -52,14 +54,7 @@ namespace SoundBoardDotNet
         public static void Load(string filePath)
         {
             FileStream stream = new FileStream(filePath, FileMode.Open);
-            try
-            {
-                _allData = (SoundBoardData)_formater.Deserialize(stream);
-            }
-            catch (Exception e)
-            {
-                throw e.InnerException;
-            }
+            _allData = (SoundBoardData)_formater.Deserialize(stream);
         }
 
         public static DirectoryInfo GetDefaultSaveDirectory()
@@ -91,30 +86,70 @@ namespace SoundBoardDotNet
         {
             var dir = GetPropDirectory();
             var files = dir.GetFiles();
-            FileInfo propertyFile = null;
+            FileInfo preferencesFile = null, devicesFile = null;
             foreach (var file in files)
             {
-                if (file.Name == "SoundBoardProperties.txt")
+                if (file.Name == _preferencesFileName)
                 {
-                    propertyFile = file;
+                    preferencesFile = file;
+                }
+                if (file.Name == _devicesFileName)
+                {
+                    devicesFile = file;
                 }
             }
 
-            if (propertyFile == null)
+            if (preferencesFile == null)
             {
-                SaveProperties();
-                return;
+                SavePreferences();
             }
-            FileStream stream = new FileStream(propertyFile.FullName, FileMode.Open);
-            SoundBoardProperties.Props = (SoundBoardProperties)_formater.Deserialize(stream);
+            if (devicesFile == null)
+            {
+                SaveDevices();
+            }
+
+            FileStream stream = preferencesFile.Open(FileMode.Open);
+            try
+            {
+                SoundBoardProperties.Props = (SoundBoardProperties)_formater.Deserialize(stream);
+                stream.Close();
+            }
+            catch (SerializationException x)
+            {
+                stream.Close();
+                preferencesFile.Delete();
+                SavePreferences();
+            }
+            stream = devicesFile.Open(FileMode.Open);
+            try
+            {
+                Devices.DevicesInfo = (Devices)_formater.Deserialize(stream);
+                stream.Close();
+            }
+            catch (SerializationException x)
+            {
+                stream.Close();
+                devicesFile.Delete();
+                SaveDevices();
+            }
         }
 
-        public static void SaveProperties()
+        public static void SaveDevices()
         {
             var dir = GetPropDirectory();
-            var file = new FileInfo(dir.FullName + "//SoundBoardProperties.txt");
+            var file = new FileInfo(dir.FullName + $"//{_devicesFileName}");
+            FileStream stream = new FileStream(file.FullName, FileMode.Create);
+            _formater.Serialize(stream, Devices.DevicesInfo);
+            stream.Close();
+        }
+
+        public static void SavePreferences()
+        {
+            var dir = GetPropDirectory();
+            var file = new FileInfo(dir.FullName + $"//{_preferencesFileName}");
             FileStream stream = new FileStream(file.FullName, FileMode.Create);
             _formater.Serialize(stream, SoundBoardProperties.Props);
+            stream.Close();
         }
 
         public SoundBoardData(SerializationInfo info, StreamingContext context)
@@ -129,7 +164,7 @@ namespace SoundBoardDotNet
                     throw new Exception("Wrong version!");
                 }
             }
-            catch (SerializationException)
+            catch (SerializationException x)
             {
                 throw new Exception("File corrupted or incompatible!");
             }

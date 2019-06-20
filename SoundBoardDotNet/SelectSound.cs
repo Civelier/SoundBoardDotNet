@@ -42,7 +42,7 @@ namespace SoundBoardDotNet
             AddActionsForControlsOfTypes((Control c) => c.KeyDown += PlayStopOnKeys, typeof(Button), typeof(ComboBox), typeof(NumericUpDown));
             AddActionsForControlsOfTypes((Control c) => c.KeyDown += SelectNextOnEnterKey, typeof(ComboBox), typeof(NumericUpDown), typeof(TextBox));
             AddActionsForControlsOfTypes((Control c) => c.KeyDown += SpaceForNumUpDown, typeof(NumericUpDown));
-            AddArrowSelectForControls(StartTime, EndTime);
+            AddArrowSelectForControls(StartTime, EndTime, SaveButton, CancelButton);
             AddActionsForControlsOfTypes((Control c) => { c.KeyDown += CloseOnEsc; c.KeyDown += SupressKeys; }, typeof(Button), typeof(ComboBox), typeof(NumericUpDown), typeof(TextBox));
 
             LoadFromData();

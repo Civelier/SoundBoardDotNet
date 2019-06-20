@@ -72,7 +72,7 @@ namespace SoundBoardDotNet
         public IWaveProvider GetWaveProvider()
         {
             var buff = new BufferedWaveProvider(MyWaveIn.WaveFormat);
-            buff.BufferDuration = TimeSpan.FromSeconds(SoundBoardProperties.Props.RecordingSampleTime);
+            buff.BufferDuration = TimeSpan.FromSeconds(RecordTime);
             var bytes = GetBytesToSave();
             buff.AddSamples(bytes, 0, bytes.Length);
             return buff;
@@ -83,8 +83,8 @@ namespace SoundBoardDotNet
         /// </summary>
         public void StopRecording()
         {
-            MyWaveIn.StopRecording();
             _isRecording = false;
+            MyWaveIn.StopRecording();
         }
 
         /// <summary>
@@ -116,8 +116,7 @@ namespace SoundBoardDotNet
             var writer = new WaveFileWriter(fileName, MyWaveIn.WaveFormat);
             var buff = GetBytesToSave();
             writer.Write(buff, 0, buff.Length);
-            writer.Flush();
-            writer.Dispose();
+            writer.Close();
         }
 
 
@@ -164,7 +163,14 @@ namespace SoundBoardDotNet
             if (e.Exception != null) Debug.WriteLine(e.Exception.Message);
             if (_isRecording)
             {
-                MyWaveIn.StartRecording();
+                try
+                {
+                    MyWaveIn.StartRecording();
+                }
+                catch (InvalidOperationException)
+                {
+
+                }
             }
         }
     }

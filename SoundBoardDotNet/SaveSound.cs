@@ -26,14 +26,14 @@ namespace SoundBoardDotNet
             AddActionsForControlsOfTypes((Control c) => c.KeyDown += PlayStopOnKeys, typeof(Button), typeof(ComboBox), typeof(NumericUpDown));
             AddActionsForControlsOfTypes((Control c) => c.KeyDown += SelectNextOnEnterKey, typeof(ComboBox), typeof(NumericUpDown), typeof(TextBox));
             AddActionsForControlsOfTypes((Control c) => c.KeyDown += SpaceForNumUpDown, typeof(NumericUpDown));
-            AddArrowSelectForControls(StartTime, EndTime);
+            AddArrowSelectForControls(StartTime, EndTime, SaveButton, CancelButton);
             AddActionsForControlsOfTypes((Control c) => { c.KeyDown += CloseOnEsc; c.KeyDown += SupressKeys; }, typeof(Button), typeof(ComboBox), typeof(NumericUpDown), typeof(TextBox));
 
-            Recorder = Form1.Recorders[0];
-            foreach (var recorder in Form1.Recorders)
+            InputDevice.StopRecorders();
+            Recorder = InputDevice.GetRecordedDevices()[0].Recorder;
+            foreach (var inputDevice in InputDevice.GetRecordedDevices())
             {
-                recorder.StopRecording();
-                InputCombo.Items.Add(WaveIn.GetCapabilities(recorder.Device).ProductName);
+                InputCombo.Items.Add(inputDevice.DeviceName);
             }
             InputCombo.SelectedIndex = 0;
             var prov = Recorder.GetWaveProvider();
@@ -118,11 +118,11 @@ namespace SoundBoardDotNet
                 e.SuppressKeyPress = true;
                 if (e.Control)
                 {
-                    Play();
+                    Stop();
                 }
                 else
                 {
-                    Stop();
+                    Play();
                 }
                 return;
             }
@@ -216,13 +216,12 @@ namespace SoundBoardDotNet
             }
 
             Recorder.Save(fileName);
-            System.Threading.Thread.Sleep(2000);
             btn.Btn.Text = btn.Name + "\n" + NameTextBox.Text;
             btn.Data.FilePath = fileName;
-            btn.HasSound = true;
             btn.Data.StartTime = (double)StartTime.Value;
             btn.Data.EndTime = (double)EndTime.Value;
             btn.Data.Name = NameTextBox.Text;
+            btn.SoundForm.Sound = new AudioSound(btn.Data.FilePath, btn.Data.StartTime, btn.Data.EndTime, btn.Data.Volume);
             _isSaved = true;
             Form1.MyForm.HasChanged = true;
             return true;
@@ -244,7 +243,7 @@ namespace SoundBoardDotNet
         private void Play()
         {
             AudioSound.StopAll();
-            new AudioSound(Recorder, (double)StartTime.Value, (double)EndTime.Value, VolumeControl.Volume);
+            AudioSound.PlaySound(new AudioSound(Recorder, (double)StartTime.Value, (double)EndTime.Value, VolumeControl.Volume));
         }
 
         private void PlayButton_Click(object sender, EventArgs e)
@@ -334,9 +333,10 @@ namespace SoundBoardDotNet
 
         private void InputCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
+            Recorder = InputDevice.GetRecordedDevices()[InputCombo.SelectedIndex].Recorder;
             var prov = Recorder.GetWaveProvider();
             VolumeControl.Volume = 1;
-            Sound = new AudioSound(prov, 0, 0, VolumeControl.Volume);
+            Sound = new AudioSound(Recorder, 0, 0, VolumeControl.Volume);
             Sound.EndPos = Recorder.RecordedTime;
             StartTime.Minimum = 0;
             StartTime.Maximum = (decimal)Sound.EndPos;
@@ -349,11 +349,7 @@ namespace SoundBoardDotNet
 
         private void SaveSound_FormClosed(object sender, FormClosedEventArgs e)
         {
-            foreach (var recorder in Form1.Recorders)
-            {
-                recorder.Reset();
-                recorder.StartRecording();
-            }
+            InputDevice.StartRecorders();
         }
 
         

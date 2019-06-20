@@ -15,6 +15,7 @@ namespace SoundBoardDotNet
     {
         public static List<AudioSound> Sounds = new List<AudioSound>();
         private AudioFileReader _fileReader;
+        private BufferedWaveProvider _buffWaveProvider;
         private WaveOut _out;
 
         public string FileName;
@@ -63,7 +64,7 @@ namespace SoundBoardDotNet
         public AudioSound(string fileName, double startPos, double endPos, float volume, bool loop = false)
         {
             _out = new WaveOut();
-            _out.DeviceNumber = DevicesForm.OutDevice;
+            _out.DeviceNumber = OutputDevice.MainOutput.Index;
             FileName = fileName;
             _startPos = startPos;
             _endPos = endPos;
@@ -91,14 +92,29 @@ namespace SoundBoardDotNet
             _out.Init(_fileReader);
         }
 
-        public AudioSound(AudioRecorder recorder, double startPos, double endPos, float volume) : this(recorder.GetWaveProvider(), startPos, endPos, volume)
+        public AudioSound(AudioRecorder recorder, double startPos, double endPos, float volume)
         {
+            _buffWaveProvider = (BufferedWaveProvider)recorder.GetWaveProvider();
+            _out = new WaveOut();
+            _out.DeviceNumber = OutputDevice.MainOutput.Index;
+            _startPos = startPos;
+            _endPos = endPos;
+            Volume = volume;
+            try { _timer = new Timer((_endPos - _startPos) * 1000); }
+            catch (ArgumentException)
+            {
+                _timer = new Timer(0.001);
+            }
+            _timer.Elapsed += new ElapsedEventHandler(_stop);
+            _timer.AutoReset = false;
+
+            _out.Init(_buffWaveProvider.ToSampleProvider().Skip(TimeSpan.FromSeconds(_startPos)));
         }
 
         public AudioSound(IWaveProvider wave, double startPos, double endPos, float volume)
         {
             _out = new WaveOut();
-            _out.DeviceNumber = DevicesForm.OutDevice;
+            _out.DeviceNumber = OutputDevice.MainOutput.Index;
             _startPos = startPos;
             _endPos = endPos;
             Volume = volume;
@@ -129,8 +145,12 @@ namespace SoundBoardDotNet
 
         public void Play()
         {
-            _fileReader.Volume = Volume;
-            _fileReader.CurrentTime = TimeSpan.FromSeconds(_startPos);
+            if (_fileReader != null)
+            {
+                _fileReader.CurrentTime = TimeSpan.FromSeconds(_startPos);
+            }
+
+            _out.Volume = Volume;
             _out.Play();
             _timer.Start();
             Sounds.Add(this);

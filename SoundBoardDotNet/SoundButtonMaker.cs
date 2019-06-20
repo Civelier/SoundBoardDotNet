@@ -12,7 +12,7 @@ namespace SoundBoardDotNet
     public class SoundButtonMaker
     {
         public SelectSound SoundForm;
-        public bool HasSound = false;
+        public bool HasSound => Data.FilePath != "";
         public Button Btn;
         public SoundButtonData Data;
 
@@ -24,6 +24,7 @@ namespace SoundBoardDotNet
 
         public static char KeyToChar(Keys k)
         {
+            
             switch (k)
             {
                 case Keys.D0:
@@ -135,7 +136,7 @@ namespace SoundBoardDotNet
                     e.Handled = e.SuppressKeyPress = true;
                 }
             }
-            if ((e.KeyData & Keys.Space) == Keys.Space)
+            if (e.KeyData == Keys.Space)
             {
                 AudioSound.StopAll();
                 e.Handled = e.SuppressKeyPress = true;
