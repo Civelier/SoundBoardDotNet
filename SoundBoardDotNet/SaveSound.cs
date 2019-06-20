@@ -244,7 +244,7 @@ namespace SoundBoardDotNet
         private void Play()
         {
             AudioSound.StopAll();
-            AudioSound.PlaySound(new AudioSound(Recorder, (double)StartTime.Value, (double)EndTime.Value, VolumeControl.Volume));
+            AudioSound.PlayRecordedSound(new AudioSound(Recorder, (double)StartTime.Value, (double)EndTime.Value, VolumeControl.Volume));
         }
 
         private void PlayButton_Click(object sender, EventArgs e)

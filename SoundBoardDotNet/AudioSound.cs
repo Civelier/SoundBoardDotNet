@@ -78,6 +78,13 @@ namespace SoundBoardDotNet
             _timer.Elapsed += new ElapsedEventHandler(_stop);
             _timer.AutoReset = false;
             
+            if (FileName == null)
+            {
+                if (_buffWaveProvider == null) return;
+                _out.Init(_buffWaveProvider);
+                return;
+            }
+
             while (true)
             {
                 if (new FileInfo(FileName).Exists)
@@ -154,7 +161,13 @@ namespace SoundBoardDotNet
             _out.Init(wave);
         }
 
-        private AudioSound(AudioSound sound) : this(sound.FileName, sound._startPos, sound._endPos, sound.Volume) { }
+        private AudioSound(AudioSound sound) : this(sound.FileName, sound._startPos, sound._endPos, sound.Volume)
+        {
+            if (sound._buffWaveProvider != null)
+            {
+                _buffWaveProvider = sound._buffWaveProvider;
+            }
+        }
 
         public void _stop(object sender, ElapsedEventArgs e)
         {
@@ -165,6 +178,11 @@ namespace SoundBoardDotNet
         public static void PlaySound(AudioSound sound)
         {
             new AudioSound(sound).Play();
+        }
+
+        public static void PlayRecordedSound(AudioSound sound)
+        {
+            sound.Play();
         }
 
         public void Play()
