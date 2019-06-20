@@ -273,6 +273,11 @@ namespace SoundBoardDotNet
                         FileNew_Click(null, null);
                         e.Handled = e.SuppressKeyPress = true;
                     }
+                    if (e.KeyCode == Keys.K)
+                    {
+                        PreferencesToolStripMenuItem_Click(null, null);
+                        e.Handled = e.SuppressKeyPress = true;
+                    }
                 }
                 return;
             }
