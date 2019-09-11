@@ -16,6 +16,10 @@ namespace SoundBoardDotNet
         private static string _devicesFileName = "SoundBoardDevices.txt";
         private static string _preferencesFileName = "SoundBoardPreferences.txt";
 
+        public static FileVersion DevicesFileVersion = new FileVersion(1, 1);
+        public static FileVersion PreferencesFileVersion = new FileVersion(1, 1);
+        public static FileVersion ProjectFileVersion = new FileVersion(1, 1);
+
         public List<SoundButtonData> Data = new List<SoundButtonData>();
         public SoundBoardData()
         {
@@ -158,13 +162,13 @@ namespace SoundBoardDotNet
             {
                 Data.Clear();
                 Data = (List<SoundButtonData>)info.GetValue("Data", typeof(List<SoundButtonData>));
-                if (info.GetString("Version").Split('.')[0] != SoundBoardProperties.Props.FileVersion.Split('.')[0])
+                if (ProjectFileVersion.Upgrade((FileVersion)info.GetValue("Version", typeof(FileVersion))))
                 {
                     System.Windows.Forms.MessageBox.Show("Wrong version!", "Version", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
                     throw new Exception("Wrong version!");
                 }
             }
-            catch (SerializationException x)
+            catch (SerializationException)
             {
                 throw new Exception("File corrupted or incompatible!");
             }
@@ -177,7 +181,7 @@ namespace SoundBoardDotNet
                 Data.Add(btn.Data);
             }
             info.AddValue("Data", Data);
-            info.AddValue("Version", SoundBoardProperties.Props.FileVersion);
+            info.AddValue("Version", ProjectFileVersion);
         }
     }
 }

@@ -33,6 +33,15 @@ namespace SoundBoardDotNet
             }
         }
 
+        private OutputDevice _previewOutputDevice;
+
+        public OutputDevice PreviewOutputDevice
+        {
+            get { return _previewOutputDevice; }
+            set { _previewOutputDevice = value; }
+        }
+
+
         public static void RefreshOutputs()
         {
             OutputDevices.Clear();
@@ -61,7 +70,7 @@ namespace SoundBoardDotNet
         {
             get
             {
-                if (String.IsNullOrEmpty(_deviceName))
+                if (string.IsNullOrEmpty(_deviceName))
                 {
                     //_deviceName = Index == 0 ? "Default (" : "";
                     _deviceName = WaveOut.GetCapabilities(Index).ProductName;

@@ -19,18 +19,14 @@ namespace SoundBoardDotNet
     [Serializable()]
     public class SoundBoardProperties
     {
+        private SemanticVersion _appVersion = new SemanticVersion(1, 5, 1);
         [ReadOnly(true)]
         [Description("App version number.")]
         [DisplayName("App version")]
-        public string AppVersion
+        public SemanticVersion AppVersion
         {
-            get { return "1.4.1"; }
+            get { return _appVersion; }
         }
-
-        [ReadOnly(true)]
-        [Description("File version number.")]
-        [DisplayName("File version")]
-        public string FileVersion { get { return "1.0"; } }
 
         private static SoundBoardProperties _props = new SoundBoardProperties();
 
