@@ -28,31 +28,51 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.ListContainer = new System.Windows.Forms.Panel();
+            this.Content = new System.Windows.Forms.Panel();
+            this.ListContainer.SuspendLayout();
             this.SuspendLayout();
             // 
-            // listView1
+            // ListContainer
             // 
-            this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(0, 0);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(387, 150);
-            this.listView1.TabIndex = 0;
-            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.ListContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ListContainer.AutoScroll = true;
+            this.ListContainer.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.ListContainer.Controls.Add(this.Content);
+            this.ListContainer.Location = new System.Drawing.Point(0, 0);
+            this.ListContainer.Name = "ListContainer";
+            this.ListContainer.Size = new System.Drawing.Size(434, 188);
+            this.ListContainer.TabIndex = 0;
+            // 
+            // Content
+            // 
+            this.Content.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Content.BackColor = System.Drawing.SystemColors.Control;
+            this.Content.Location = new System.Drawing.Point(3, 3);
+            this.Content.Name = "Content";
+            this.Content.Size = new System.Drawing.Size(470, 182);
+            this.Content.TabIndex = 0;
+            this.Content.ControlAdded += new System.Windows.Forms.ControlEventHandler(this.Content_ControlAdded);
+            this.Content.Paint += new System.Windows.Forms.PaintEventHandler(this.Content_Paint);
             // 
             // AudioList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.listView1);
+            this.Controls.Add(this.ListContainer);
             this.Name = "AudioList";
-            this.Size = new System.Drawing.Size(387, 150);
+            this.Size = new System.Drawing.Size(434, 188);
+            this.ListContainer.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.Panel ListContainer;
+        private System.Windows.Forms.Panel Content;
     }
 }

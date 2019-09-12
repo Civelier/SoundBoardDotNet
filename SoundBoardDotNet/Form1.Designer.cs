@@ -84,7 +84,7 @@
             this.FileSave,
             this.FileSaveAs});
             this.File.Name = "File";
-            this.File.Size = new System.Drawing.Size(46, 24);
+            this.File.Size = new System.Drawing.Size(46, 26);
             this.File.Text = "File";
             // 
             // toolStripSeparator1
@@ -126,7 +126,7 @@
             this.preferencesToolStripMenuItem,
             this.devicesToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(49, 24);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(49, 26);
             this.editToolStripMenuItem.Text = "Edit";
             // 
             // preferencesToolStripMenuItem
@@ -139,7 +139,7 @@
             // devicesToolStripMenuItem
             // 
             this.devicesToolStripMenuItem.Name = "devicesToolStripMenuItem";
-            this.devicesToolStripMenuItem.Size = new System.Drawing.Size(168, 26);
+            this.devicesToolStripMenuItem.Size = new System.Drawing.Size(230, 26);
             this.devicesToolStripMenuItem.Text = "Devices";
             this.devicesToolStripMenuItem.Click += new System.EventHandler(this.DevicesToolStripMenuItem_Click);
             // 

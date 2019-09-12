@@ -42,7 +42,7 @@ namespace SoundBoardDotNet
         }
 
 
-        public static void RefreshOutputs()
+        public static void RefreshOutputs(bool notify = true)
         {
             OutputDevices.Clear();
             OutputDevices.Add(Default);
@@ -58,6 +58,7 @@ namespace SoundBoardDotNet
                 
                 OutputDevices.Add(device);
             }
+            if (notify) Devices.DevicesInfo.DevicesRefreshed();
         }
 
         public OutputDevice() { }

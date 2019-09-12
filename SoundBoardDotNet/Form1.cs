@@ -18,6 +18,7 @@ namespace SoundBoardDotNet
     {
         public static List<SoundButtonMaker> Buttons = new List<SoundButtonMaker>();
         public static Form1 MyForm;
+        public static NAudio.Gui.VolumeMeter InputMeter, OutputMeter;
 
         private static string[] englishKeyboard = { "`1234567890-=", "qwertyuiop[]\\", "asdfghjkl;'", "zxcvbnm,./" };
         private static string[] frenchKeyboard = { "#1234567890-=", "qwertyuiop^¸<", "asdfghjkl;`", "zxcvbnm,.é" };
@@ -57,9 +58,10 @@ namespace SoundBoardDotNet
             SoundBoardData.LoadProperties();
             InitializeComponent();
             //DeselectButton.KeyDown += DeselectButton_KeyDown;
-            InputDevice.RefreshInputs();
-            OutputDevice.RefreshOutputs();
+            Devices.RefreshAll();
             InputDevice.StartRecorders();
+            InputMeter = InputVolumeMeter;
+            OutputMeter = OutputVolumeMeter;
             //SoundButtonMaker.Engine = Engine;
         }
 

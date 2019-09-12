@@ -18,6 +18,26 @@ namespace SoundBoardDotNet
         [NonSerialized]
         public OutputDevice MainOutputDevice = null;
 
+        public event EventHandler DevicesReloaded;
+
+        private void OnDevicesReloaded(EventArgs e)
+        {
+            EventHandler handler = DevicesReloaded;
+            handler?.Invoke(this, e);
+        }
+
+        public void DevicesRefreshed()
+        {
+            OnDevicesReloaded(new EventArgs());
+        }
+
+        public static void RefreshAll()
+        {
+            InputDevice.RefreshInputs(false);
+            OutputDevice.RefreshOutputs(false);
+            DevicesInfo.DevicesRefreshed();
+        }
+
         public Devices(SerializationInfo info, StreamingContext context)
         {
             RecordedDevices = (List<InputDevice>)info.GetValue("RecordedInputs", typeof(List<InputDevice>));
@@ -38,6 +58,7 @@ namespace SoundBoardDotNet
                 InputDevice.InputDevices[0].IsRecorded = true;
             }
             OutputDevice.MainOutput = MainOutputDevice;
+            OnDevicesReloaded(new EventArgs());
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)

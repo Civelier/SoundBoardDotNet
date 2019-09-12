@@ -17,7 +17,7 @@ namespace SoundBoardDotNet
         [NonSerialized]
         public static List<InputDevice> InputDevices = new List<InputDevice>();
 
-        public static void RefreshInputs()
+        public static void RefreshInputs(bool notify = true)
         {
             InputDevice[] devices = new InputDevice[InputDevices.Count];
             InputDevices.CopyTo(devices);
@@ -36,6 +36,7 @@ namespace SoundBoardDotNet
                 }
                 InputDevices.Add(device);
             }
+            if (notify) Devices.DevicesInfo.DevicesRefreshed();
         }
 
         private bool _isRecorded = false;
