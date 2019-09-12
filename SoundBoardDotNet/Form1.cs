@@ -18,7 +18,6 @@ namespace SoundBoardDotNet
     {
         public static List<SoundButtonMaker> Buttons = new List<SoundButtonMaker>();
         public static Form1 MyForm;
-        public static NAudio.Gui.VolumeMeter InputMeter, OutputMeter;
 
         private static string[] englishKeyboard = { "`1234567890-=", "qwertyuiop[]\\", "asdfghjkl;'", "zxcvbnm,./" };
         private static string[] frenchKeyboard = { "#1234567890-=", "qwertyuiop^¸<", "asdfghjkl;`", "zxcvbnm,.é" };
@@ -60,8 +59,6 @@ namespace SoundBoardDotNet
             //DeselectButton.KeyDown += DeselectButton_KeyDown;
             Devices.RefreshAll();
             InputDevice.StartRecorders();
-            InputMeter = InputVolumeMeter;
-            OutputMeter = OutputVolumeMeter;
             //SoundButtonMaker.Engine = Engine;
         }
 
@@ -348,7 +345,8 @@ namespace SoundBoardDotNet
             }
             catch (Exception x)
             {
-                MessageBox.Show(x.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //MessageBox.Show(x.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //message boxes are now being shown from the root of the exception
                 SavePath = "";
                 return;
             }

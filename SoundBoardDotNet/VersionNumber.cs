@@ -9,13 +9,12 @@ using System.Threading.Tasks;
 namespace SoundBoardDotNet
 {
     [Serializable]
-    public struct VersionNumber : ISerializable
+    public struct VersionNumber : ISerializable, IEquatable<VersionNumber>
     {
         public static VersionNumber Empty = new VersionNumber();
 
         public readonly int[] Number;
-
-        public int Count => Number.Length;
+        public int Count { get { return Number.Length; } }
 
         public VersionNumber(params int[] version)
         {
@@ -63,6 +62,11 @@ namespace SoundBoardDotNet
                 sb.Append(Number[i]);
             }
             return sb.ToString();
+        }
+
+        public bool Equals(VersionNumber other)
+        {
+            return this == other;
         }
 
         public static bool operator ==(VersionNumber v1, VersionNumber v2)

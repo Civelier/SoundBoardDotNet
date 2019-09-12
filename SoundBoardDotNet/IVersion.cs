@@ -17,6 +17,11 @@ namespace SoundBoardDotNet
 
         protected bool VerifyVersionFormat(VersionNumber version, bool throwException = false, string parameterName = "version")
         {
+            if (version.Number == null)
+            {
+                if (throwException) throw new InvalidVersionException($"Version number was null");
+                return false;
+            }
             if (Count != version.Count)
             {
                 if (throwException) throw new InvalidVersionException($"Version format was invalid! " +

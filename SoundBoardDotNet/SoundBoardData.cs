@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SoundBoardDotNet
@@ -106,35 +107,73 @@ namespace SoundBoardDotNet
             if (preferencesFile == null)
             {
                 SavePreferences();
+                files = dir.GetFiles();
+                foreach (var file in files)
+                {
+                    if (file.Name == _preferencesFileName)
+                    {
+                        preferencesFile = file;
+                    }
+                }
             }
             if (devicesFile == null)
             {
                 SaveDevices();
+                files = dir.GetFiles();
+                Thread.Sleep(100);
+                foreach (var file in files)
+                {
+                    if (file.Name == _devicesFileName)
+                    {
+                        devicesFile = file;
+                    }
+                }
             }
+            
 
-            FileStream stream = preferencesFile.Open(FileMode.Open);
-            try
+            using (FileStream stream = preferencesFile.Open(FileMode.Open))
             {
-                SoundBoardProperties.Props = (SoundBoardProperties)_formater.Deserialize(stream);
-                stream.Close();
+                try
+                {
+                    SoundBoardProperties.Props = (SoundBoardProperties)_formater.Deserialize(stream);
+                    stream.Close();
+                }
+                catch (SerializationException x)
+                {
+                    stream.Close();
+                    preferencesFile.Delete();
+                    SavePreferences();
+                }
             }
-            catch (SerializationException x)
+            using (FileStream stream = devicesFile.Open(FileMode.Open))
             {
-                stream.Close();
-                preferencesFile.Delete();
-                SavePreferences();
+                try
+                {
+                    Devices.DevicesInfo = (Devices)_formater.Deserialize(stream);
+                    stream.Close();
+                }
+                catch (SerializationException x)
+                {
+                    stream.Close();
+                    devicesFile.Delete();
+                    SaveDevices();
+                }
             }
-            stream = devicesFile.Open(FileMode.Open);
-            try
+        }
+
+        public static void DeletePropertyFiles()
+        {
+            var dir = GetPropDirectory();
+            foreach (var file in dir.GetFiles())
             {
-                Devices.DevicesInfo = (Devices)_formater.Deserialize(stream);
-                stream.Close();
-            }
-            catch (SerializationException x)
-            {
-                stream.Close();
-                devicesFile.Delete();
-                SaveDevices();
+                if (file.Name == _devicesFileName)
+                {
+                    file.Delete();
+                }
+                if (file.Name == _preferencesFileName)
+                {
+                    file.Delete();
+                }
             }
         }
 
@@ -142,18 +181,20 @@ namespace SoundBoardDotNet
         {
             var dir = GetPropDirectory();
             var file = new FileInfo(dir.FullName + $"//{_devicesFileName}");
-            FileStream stream = new FileStream(file.FullName, FileMode.Create);
-            _formater.Serialize(stream, Devices.DevicesInfo);
-            stream.Close();
+            using (FileStream stream = new FileStream(file.FullName, FileMode.Create))
+            {
+                _formater.Serialize(stream, Devices.DevicesInfo);
+            }
         }
 
         public static void SavePreferences()
         {
             var dir = GetPropDirectory();
             var file = new FileInfo(dir.FullName + $"//{_preferencesFileName}");
-            FileStream stream = new FileStream(file.FullName, FileMode.Create);
-            _formater.Serialize(stream, SoundBoardProperties.Props);
-            stream.Close();
+            using (FileStream stream = new FileStream(file.FullName, FileMode.Create))
+            {
+                _formater.Serialize(stream, SoundBoardProperties.Props);
+            }
         }
 
         public SoundBoardData(SerializationInfo info, StreamingContext context)
@@ -162,14 +203,23 @@ namespace SoundBoardDotNet
             {
                 Data.Clear();
                 Data = (List<SoundButtonData>)info.GetValue("Data", typeof(List<SoundButtonData>));
-                if (ProjectFileVersion.Upgrade((FileVersion)info.GetValue("Version", typeof(FileVersion))))
+                try
                 {
-                    System.Windows.Forms.MessageBox.Show("Wrong version!", "Version", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-                    throw new Exception("Wrong version!");
+                    if (ProjectFileVersion.Upgrade((FileVersion)info.GetValue("Version", typeof(FileVersion))))
+                    {
+                        System.Windows.Forms.MessageBox.Show("Wrong version!", "Version", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                        throw new Exception("Wrong version!");
+                    }
+                }
+                catch (InvalidCastException)
+                {
+                    System.Windows.Forms.MessageBox.Show("File corrupted or invalid!", "Invalid file", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                    throw new Exception("File corrupted!");
                 }
             }
             catch (SerializationException)
             {
+                System.Windows.Forms.MessageBox.Show("File corrupted or incompatible!", "Loading failed", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
                 throw new Exception("File corrupted or incompatible!");
             }
         }

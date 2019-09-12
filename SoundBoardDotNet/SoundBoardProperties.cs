@@ -16,10 +16,10 @@ namespace SoundBoardDotNet
         QWERTY_EN
     }
 
-    [Serializable()]
+    [Serializable]
     public class SoundBoardProperties
     {
-        private SemanticVersion _appVersion = new SemanticVersion(1, 5, 2);
+        private SemanticVersion _appVersion = new SemanticVersion(1, 5, 3);
         [ReadOnly(true)]
         [Description("App version number.")]
         [DisplayName("App version")]

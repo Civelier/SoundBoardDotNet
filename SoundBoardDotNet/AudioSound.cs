@@ -31,6 +31,7 @@ namespace SoundBoardDotNet
                 try { _timer.Interval = (_endPos - _startPos) * 1000; }
                 catch (ArgumentException)
                 {
+                    Debug.Print("Timer interval was less or equal to 0");
                     _timer.Interval = 0.001;
                 }
             }
@@ -45,6 +46,7 @@ namespace SoundBoardDotNet
                 try { _timer.Interval = (_endPos - _startPos) * 1000; }
                 catch (ArgumentException)
                 {
+                    Debug.Print("Timer interval was less or equal to 0");
                     _timer.Interval = 0.001;
                 }
             }
@@ -73,6 +75,7 @@ namespace SoundBoardDotNet
             try { _timer = new Timer((_endPos - _startPos) * 1000); }
             catch (ArgumentException)
             {
+                Debug.Print("Timer interval was less or equal to 0");
                 _timer = new Timer(0.001);
             }
             _timer.Elapsed += new ElapsedEventHandler(_stop);
@@ -135,6 +138,7 @@ namespace SoundBoardDotNet
             try { _timer = new Timer((_endPos - _startPos) * 1000); }
             catch (ArgumentException)
             {
+                Debug.Print("Timer interval was less or equal to 0");
                 _timer = new Timer(0.001);
             }
             _timer.Elapsed += new ElapsedEventHandler(_stop);
@@ -153,6 +157,7 @@ namespace SoundBoardDotNet
             try { _timer = new Timer((_endPos - _startPos) * 1000); }
             catch (ArgumentException)
             {
+                Debug.Print("Timer interval was less or equal to 0");
                 _timer = new Timer(0.001);
             }
             _timer.Elapsed += new ElapsedEventHandler(_stop);

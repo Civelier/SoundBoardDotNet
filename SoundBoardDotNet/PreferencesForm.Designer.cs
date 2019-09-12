@@ -30,6 +30,7 @@
         {
             this.PreferenceProps = new System.Windows.Forms.PropertyGrid();
             this.SaveButton = new System.Windows.Forms.Button();
+            this.ResetAllButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // PreferenceProps
@@ -51,11 +52,22 @@
             this.SaveButton.UseVisualStyleBackColor = true;
             this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
+            // ResetAllButton
+            // 
+            this.ResetAllButton.Location = new System.Drawing.Point(103, 442);
+            this.ResetAllButton.Name = "ResetAllButton";
+            this.ResetAllButton.Size = new System.Drawing.Size(75, 23);
+            this.ResetAllButton.TabIndex = 2;
+            this.ResetAllButton.Text = "Reset all";
+            this.ResetAllButton.UseVisualStyleBackColor = true;
+            this.ResetAllButton.Click += new System.EventHandler(this.ResetAllButton_Click);
+            // 
             // PreferencesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(444, 502);
+            this.Controls.Add(this.ResetAllButton);
             this.Controls.Add(this.SaveButton);
             this.Controls.Add(this.PreferenceProps);
             this.Name = "PreferencesForm";
@@ -68,5 +80,6 @@
 
         private System.Windows.Forms.PropertyGrid PreferenceProps;
         private System.Windows.Forms.Button SaveButton;
+        private System.Windows.Forms.Button ResetAllButton;
     }
 }
