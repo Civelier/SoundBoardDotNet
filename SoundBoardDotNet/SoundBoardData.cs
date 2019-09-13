@@ -64,12 +64,12 @@ namespace SoundBoardDotNet
 
         public static DirectoryInfo GetDefaultSaveDirectory()
         {
-            DirectoryInfo dir = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\SoundBoardDotNet");
+            DirectoryInfo dir = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\SoundBoardDotNet");
             if (!dir.Exists)
             {
                 dir.Create();
             }
-            dir = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\SoundBoardDotNet\\Projects");
+            dir = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\SoundBoardDotNet\Projects");
             if (!dir.Exists)
             {
                 dir.Create();
@@ -79,7 +79,7 @@ namespace SoundBoardDotNet
 
         private static DirectoryInfo GetPropDirectory()
         {
-            DirectoryInfo dir = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SoundBoardDotNet");
+            DirectoryInfo dir = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\SoundBoardDotNet");
             if (!dir.Exists)
             {
                 dir.Create();
