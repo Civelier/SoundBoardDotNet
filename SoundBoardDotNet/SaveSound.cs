@@ -194,7 +194,10 @@ namespace SoundBoardDotNet
                 }
             }
             KeyCombo.SelectedItem = KeyCombo.Text;
-            if (KeyCombo.Text == "Select a key")
+
+
+
+            if (!KeyComboValidSelection())
             {
                 Recorder.Save(fileName);
                 _isSaved = true;
@@ -226,6 +229,18 @@ namespace SoundBoardDotNet
             _isSaved = true;
             Form1.MyForm.HasChanged = true;
             return true;
+        }
+
+        private bool KeyComboValidSelection()
+        {
+            foreach (var key in Form1.MyKeyboard)
+            {
+                if (KeyCombo.Text == key)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private void SaveButton_Click(object sender, EventArgs e)

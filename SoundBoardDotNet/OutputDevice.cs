@@ -74,6 +74,14 @@ namespace SoundBoardDotNet
                 if (string.IsNullOrEmpty(_deviceName))
                 {
                     //_deviceName = Index == 0 ? "Default (" : "";
+                    int count = WaveOut.DeviceCount;
+                    if (count == 0)
+                    {
+                        System.Windows.Forms.MessageBox.Show("No outputs detected", "Output error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                        return "";
+                    }
+                    if (Index >= count) Index = count - 1;
+
                     _deviceName = WaveOut.GetCapabilities(Index).ProductName;
                     //_deviceName += Index == 0 ? ")" : "";
                 }
