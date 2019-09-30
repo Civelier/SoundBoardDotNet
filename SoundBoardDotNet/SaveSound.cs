@@ -235,9 +235,12 @@ namespace SoundBoardDotNet
         {
             foreach (var key in Form1.MyKeyboard)
             {
-                if (KeyCombo.Text == key)
+                foreach (var c in key)
                 {
-                    return true;
+                    if (KeyCombo.Text == c.ToString())
+                    {
+                        return true;
+                    }
                 }
             }
             return false;
