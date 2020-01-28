@@ -144,6 +144,7 @@
             // 
             // WaveGraph
             // 
+            this.WaveGraph.AutoScroll = true;
             this.WaveGraph.Location = new System.Drawing.Point(9, 198);
             this.WaveGraph.Name = "WaveGraph";
             this.WaveGraph.SamplesPerPixel = 128;

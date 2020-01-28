@@ -70,7 +70,6 @@
             this.editToolStripMenuItem});
             this.Menu.Location = new System.Drawing.Point(0, 0);
             this.Menu.Name = "Menu";
-            this.Menu.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
             this.Menu.Size = new System.Drawing.Size(1385, 28);
             this.Menu.TabIndex = 3;
             this.Menu.Text = "menuStrip1";
@@ -84,7 +83,7 @@
             this.FileSave,
             this.FileSaveAs});
             this.File.Name = "File";
-            this.File.Size = new System.Drawing.Size(46, 26);
+            this.File.Size = new System.Drawing.Size(46, 24);
             this.File.Text = "File";
             // 
             // toolStripSeparator1
@@ -126,7 +125,7 @@
             this.preferencesToolStripMenuItem,
             this.devicesToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(49, 26);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(49, 24);
             this.editToolStripMenuItem.Text = "Edit";
             // 
             // preferencesToolStripMenuItem

@@ -108,7 +108,19 @@
     <Compile Include="GeneralVersion.cs" />
     <Compile Include="InvalidVersionException.cs" />
     <Compile Include="IVersion.cs" />
+    <Compile Include="PlayHead.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PlayHead.Designer.cs">
+      <DependentUpon>PlayHead.cs</DependentUpon>
+    </Compile>
     <Compile Include="SemanticVersion.cs" />
+    <Compile Include="SoundWaveViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SoundWaveViewer.Designer.cs">
+      <DependentUpon>SoundWaveViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="VersionNumber.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -158,6 +170,9 @@
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="PlayHead.resx">
+      <DependentUpon>PlayHead.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="PreferencesForm.resx">
       <DependentUpon>PreferencesForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -180,6 +195,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SelectSound.resx">
       <DependentUpon>SelectSound.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SoundWaveViewer.resx">
+      <DependentUpon>SoundWaveViewer.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -206,6 +224,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Alan Walker - Spectre.mp3" />
+    <Content Include="Resources\PlayheadGreen.png" />
+    <Content Include="Resources\PlayheadGreenRev.png" />
+    <Content Include="Resources\PlayheadRed.png" />
+    <Content Include="Resources\PlayheadRedRev.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

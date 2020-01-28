@@ -41,20 +41,18 @@
             this.VolumeControl = new NAudio.Gui.VolumeSlider();
             this.WaveGraph = new NAudio.Gui.WaveViewer();
             this.VolumeLabel = new System.Windows.Forms.Label();
-            this.StartTime = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.EndTime = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.TotalTimeLabel = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.StartTime)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.EndTime)).BeginInit();
+            this.SoundWaveGraph = new SoundBoardDotNet.SoundWaveViewer();
             this.SuspendLayout();
             // 
             // SaveButton
             // 
+            this.SaveButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.SaveButton.Location = new System.Drawing.Point(298, 518);
             this.SaveButton.Margin = new System.Windows.Forms.Padding(4);
             this.SaveButton.Name = "SaveButton";
@@ -66,6 +64,8 @@
             // 
             // FileNameBox
             // 
+            this.FileNameBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.FileNameBox.Location = new System.Drawing.Point(20, 31);
             this.FileNameBox.Margin = new System.Windows.Forms.Padding(4);
             this.FileNameBox.Name = "FileNameBox";
@@ -80,16 +80,17 @@
             this.label1.Location = new System.Drawing.Point(16, 11);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(75, 17);
+            this.label1.Size = new System.Drawing.Size(70, 16);
             this.label1.TabIndex = 2;
             this.label1.Text = "Sound file:";
             // 
             // BrowseButton
             // 
+            this.BrowseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.BrowseButton.Location = new System.Drawing.Point(707, 30);
             this.BrowseButton.Margin = new System.Windows.Forms.Padding(4);
             this.BrowseButton.Name = "BrowseButton";
-            this.BrowseButton.Size = new System.Drawing.Size(78, 25);
+            this.BrowseButton.Size = new System.Drawing.Size(85, 25);
             this.BrowseButton.TabIndex = 0;
             this.BrowseButton.Text = "Browse";
             this.BrowseButton.UseVisualStyleBackColor = true;
@@ -125,20 +126,23 @@
             this.label2.Location = new System.Drawing.Point(16, 95);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(49, 17);
+            this.label2.Size = new System.Drawing.Size(48, 16);
             this.label2.TabIndex = 6;
             this.label2.Text = "Name:";
             // 
             // NameTextBox
             // 
+            this.NameTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.NameTextBox.Location = new System.Drawing.Point(20, 114);
             this.NameTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.NameTextBox.Name = "NameTextBox";
-            this.NameTextBox.Size = new System.Drawing.Size(765, 22);
+            this.NameTextBox.Size = new System.Drawing.Size(772, 22);
             this.NameTextBox.TabIndex = 1;
             // 
             // CancelButton
             // 
+            this.CancelButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.CancelButton.Location = new System.Drawing.Point(406, 518);
             this.CancelButton.Margin = new System.Windows.Forms.Padding(4);
             this.CancelButton.Name = "CancelButton";
@@ -162,9 +166,11 @@
             // 
             // VolumeControl
             // 
+            this.VolumeControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.VolumeControl.Location = new System.Drawing.Point(84, 143);
             this.VolumeControl.Name = "VolumeControl";
-            this.VolumeControl.Size = new System.Drawing.Size(702, 26);
+            this.VolumeControl.Size = new System.Drawing.Size(708, 26);
             this.VolumeControl.TabIndex = 13;
             this.VolumeControl.VolumeChanged += new System.EventHandler(this.Volume_VolumeChanged);
             // 
@@ -183,30 +189,16 @@
             this.VolumeLabel.AutoSize = true;
             this.VolumeLabel.Location = new System.Drawing.Point(19, 151);
             this.VolumeLabel.Name = "VolumeLabel";
-            this.VolumeLabel.Size = new System.Drawing.Size(59, 17);
+            this.VolumeLabel.Size = new System.Drawing.Size(57, 16);
             this.VolumeLabel.TabIndex = 15;
             this.VolumeLabel.Text = "Volume:";
-            // 
-            // StartTime
-            // 
-            this.StartTime.DecimalPlaces = 3;
-            this.StartTime.Increment = new decimal(new int[] {
-            125,
-            0,
-            0,
-            196608});
-            this.StartTime.Location = new System.Drawing.Point(97, 174);
-            this.StartTime.Name = "StartTime";
-            this.StartTime.Size = new System.Drawing.Size(120, 22);
-            this.StartTime.TabIndex = 2;
-            this.StartTime.ValueChanged += new System.EventHandler(this.StartTime_ValueChanged);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(19, 177);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(72, 17);
+            this.label3.Size = new System.Drawing.Size(66, 16);
             this.label3.TabIndex = 17;
             this.label3.Text = "Start time:";
             // 
@@ -215,7 +207,7 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(223, 177);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(15, 17);
+            this.label4.Size = new System.Drawing.Size(15, 16);
             this.label4.TabIndex = 18;
             this.label4.Text = "s";
             // 
@@ -224,30 +216,16 @@
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(281, 176);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(67, 17);
+            this.label7.Size = new System.Drawing.Size(63, 16);
             this.label7.TabIndex = 19;
             this.label7.Text = "End time:";
-            // 
-            // EndTime
-            // 
-            this.EndTime.DecimalPlaces = 3;
-            this.EndTime.Increment = new decimal(new int[] {
-            125,
-            0,
-            0,
-            196608});
-            this.EndTime.Location = new System.Drawing.Point(354, 177);
-            this.EndTime.Name = "EndTime";
-            this.EndTime.Size = new System.Drawing.Size(120, 22);
-            this.EndTime.TabIndex = 3;
-            this.EndTime.ValueChanged += new System.EventHandler(this.EndTime_ValueChanged);
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(480, 177);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(15, 17);
+            this.label5.Size = new System.Drawing.Size(15, 16);
             this.label5.TabIndex = 21;
             this.label5.Text = "s";
             // 
@@ -256,7 +234,7 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(512, 176);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(74, 17);
+            this.label6.Size = new System.Drawing.Size(70, 16);
             this.label6.TabIndex = 22;
             this.label6.Text = "Total time:";
             // 
@@ -265,22 +243,35 @@
             this.TotalTimeLabel.AutoSize = true;
             this.TotalTimeLabel.Location = new System.Drawing.Point(592, 177);
             this.TotalTimeLabel.Name = "TotalTimeLabel";
-            this.TotalTimeLabel.Size = new System.Drawing.Size(0, 17);
+            this.TotalTimeLabel.Size = new System.Drawing.Size(0, 16);
             this.TotalTimeLabel.TabIndex = 23;
+            // 
+            // SoundWaveGraph
+            // 
+            this.SoundWaveGraph.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.SoundWaveGraph.EndTime = 0D;
+            this.SoundWaveGraph.Location = new System.Drawing.Point(12, 223);
+            this.SoundWaveGraph.Name = "SoundWaveGraph";
+            this.SoundWaveGraph.Size = new System.Drawing.Size(780, 288);
+            this.SoundWaveGraph.Sound = null;
+            this.SoundWaveGraph.StartTime = 0D;
+            this.SoundWaveGraph.TabIndex = 24;
+            this.SoundWaveGraph.Zoom = 100D;
             // 
             // SelectSound
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(804, 559);
+            this.Controls.Add(this.SoundWaveGraph);
             this.Controls.Add(this.TotalTimeLabel);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.EndTime);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.StartTime);
             this.Controls.Add(this.VolumeLabel);
             this.Controls.Add(this.WaveGraph);
             this.Controls.Add(this.VolumeControl);
@@ -300,8 +291,6 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SelectSound_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SelectSound_FormClosed);
             this.Shown += new System.EventHandler(this.SelectSound_Shown);
-            ((System.ComponentModel.ISupportInitialize)(this.StartTime)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.EndTime)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -322,13 +311,12 @@
         private NAudio.Gui.VolumeSlider VolumeControl;
         private NAudio.Gui.WaveViewer WaveGraph;
         private System.Windows.Forms.Label VolumeLabel;
-        private System.Windows.Forms.NumericUpDown StartTime;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.NumericUpDown EndTime;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label TotalTimeLabel;
+        private SoundWaveViewer SoundWaveGraph;
     }
 }

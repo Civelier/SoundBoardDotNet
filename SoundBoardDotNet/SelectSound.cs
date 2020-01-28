@@ -42,12 +42,15 @@ namespace SoundBoardDotNet
             AddActionsForControlsOfTypes((Control c) => c.KeyDown += PlayStopOnKeys, typeof(Button), typeof(ComboBox), typeof(NumericUpDown));
             AddActionsForControlsOfTypes((Control c) => c.KeyDown += SelectNextOnEnterKey, typeof(ComboBox), typeof(NumericUpDown), typeof(TextBox));
             AddActionsForControlsOfTypes((Control c) => c.KeyDown += SpaceForNumUpDown, typeof(NumericUpDown));
-            AddArrowSelectForControls(StartTime, EndTime, SaveButton, CancelButton);
+            AddArrowSelectForControls(SoundWaveGraph.StartUpDown, SoundWaveGraph.EndUpDown, SaveButton, CancelButton);
             AddActionsForControlsOfTypes((Control c) => { c.KeyDown += CloseOnEsc; c.KeyDown += SupressKeys; }, typeof(Button), typeof(ComboBox), typeof(NumericUpDown), typeof(TextBox));
+
 
             LoadFromData();
             //Sound = new AudioSloaound(data.FilePath, data.Slider1, data.Slider2, data.Volume);
         }
+
+        
 
         private void SupressKeys(object sender, KeyEventArgs e)
         {
@@ -171,8 +174,9 @@ namespace SoundBoardDotNet
                 if (eraseIfEmpty)
                 {
                     TotalTimeLabel.Text = "";
-                    EndTime.Maximum = 0;
+                    SoundWaveGraph.EndUpDown.Maximum = 0;
                     WaveGraph.WaveStream = null;
+                    SoundWaveGraph.Sound = null;
                 }
                 return;
             }
@@ -183,21 +187,23 @@ namespace SoundBoardDotNet
                     if (eraseIfEmpty)
                     {
                         TotalTimeLabel.Text = "";
-                        EndTime.Maximum = 0;
+                        SoundWaveGraph.EndUpDown.Maximum = 0;
                         WaveGraph.WaveStream = null;
+                        SoundWaveGraph.Sound = null;
                     }
                     return;
                 }
             }
 
-            Sound = new AudioSound(FileNameBox.Text, (double)StartTime.Value, (double)EndTime.Value, VolumeControl.Volume);
+            Sound = new AudioSound(FileNameBox.Text, (double)SoundWaveGraph.StartUpDown.Value, (double)SoundWaveGraph.EndUpDown.Value, VolumeControl.Volume);
 
             WaveGraph.WaveStream = Sound.FileReader;
-            var temp = EndTime.Value;
-            EndTime.Maximum = (decimal)Sound.FileReader.TotalTime.TotalSeconds;
+            SoundWaveGraph.Sound = Sound;
+            var temp = SoundWaveGraph.EndUpDown.Value;
+            SoundWaveGraph.EndUpDown.Maximum = (decimal)Sound.FileReader.TotalTime.TotalSeconds;
             if (temp == 0)
-                EndTime.Value = EndTime.Maximum;
-            TotalTimeLabel.Text = $"{EndTime.Maximum} s";
+                SoundWaveGraph.EndUpDown.Value = SoundWaveGraph.EndUpDown.Maximum;
+            TotalTimeLabel.Text = $"{SoundWaveGraph.EndUpDown.Maximum} s";
             VolumeControl.Volume = 1;
         }
 
@@ -211,8 +217,8 @@ namespace SoundBoardDotNet
             Data.FilePath = FileNameBox.Text;
             Data.Name = NameTextBox.Text;
             Data.Volume = VolumeControl.Volume;
-            Data.StartTime = (double)StartTime.Value;
-            Data.EndTime = (double)EndTime.Value;
+            Data.StartTime = (double)SoundWaveGraph.StartUpDown.Value;
+            Data.EndTime = (double)SoundWaveGraph.EndUpDown.Value;
         }
 
         private uint _percentToTime(double percent, uint time)
@@ -308,17 +314,17 @@ namespace SoundBoardDotNet
                 Data.FilePath = Sound.FileName;
                 FileNameBox.Text = Data.FilePath;
                 WaveGraph.WaveStream = Sound.FileReader;
-                var temp = EndTime.Maximum;
-                EndTime.Maximum = (decimal)Sound.FileReader.TotalTime.TotalSeconds;
+                var temp = SoundWaveGraph.EndUpDown.Maximum;
+                SoundWaveGraph.EndUpDown.Maximum = (decimal)Sound.FileReader.TotalTime.TotalSeconds;
                 if (temp == 0)
-                    EndTime.Value = EndTime.Maximum;
-                TotalTimeLabel.Text = $"{EndTime.Maximum} s";
+                    SoundWaveGraph.EndUpDown.Value = SoundWaveGraph.EndUpDown.Maximum;
+                TotalTimeLabel.Text = $"{SoundWaveGraph.EndUpDown.Maximum} s";
                 VolumeControl.Volume = 1;
             }
 
             NameTextBox.Text = Data.Name;
-            StartTime.Value = (decimal)Data.StartTime;
-            EndTime.Value = (decimal)Data.EndTime;
+            SoundWaveGraph.StartUpDown.Value = (decimal)Data.StartTime;
+            SoundWaveGraph.EndUpDown.Value = (decimal)Data.EndTime;
             VolumeControl.Volume = Data.Volume;
         }
 
@@ -358,14 +364,16 @@ namespace SoundBoardDotNet
 
         private void StartTime_ValueChanged(object sender, EventArgs e)
         {
-            EndTime.Minimum = StartTime.Value;
-            Sound.StartPos = (double)StartTime.Value;
+            SoundWaveGraph.EndUpDown.Minimum = SoundWaveGraph.StartUpDown.Value;
+            if (Sound == null) return;
+            Sound.StartPos = (double)SoundWaveGraph.StartUpDown.Value;
         }
 
         private void EndTime_ValueChanged(object sender, EventArgs e)
         {
-            StartTime.Maximum = EndTime.Value;
-            Sound.EndPos = (double)EndTime.Value;
+            SoundWaveGraph.StartUpDown.Maximum = SoundWaveGraph.EndUpDown.Value;
+            if (Sound == null) return;
+            Sound.EndPos = (double)SoundWaveGraph.EndUpDown.Value;
         }
     }
 }
