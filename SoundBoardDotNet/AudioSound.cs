@@ -12,7 +12,7 @@ using Forms = System.Windows.Forms;
 
 namespace SoundBoardDotNet
 {
-    public class AudioSound
+    public class AudioSound : IDisposable
     {
         public static List<AudioSound> Sounds = new List<AudioSound>();
         private AudioFileReader _fileReader;
@@ -28,12 +28,8 @@ namespace SoundBoardDotNet
             set
             {
                 _startPos = value;
-                try { _timer.Interval = (_endPos - _startPos) * 1000; }
-                catch (ArgumentException)
-                {
-                    Debug.Print("Timer interval was less or equal to 0");
-                    _timer.Interval = 0.001;
-                }
+                if (_endPos - _startPos != 0) _timer = new Timer((_endPos - _startPos) * 1000);
+                else _timer = new Timer(0.001);
             }
         }
 
@@ -43,12 +39,8 @@ namespace SoundBoardDotNet
             set
             {
                 _endPos = value;
-                try { _timer.Interval = (_endPos - _startPos) * 1000; }
-                catch (ArgumentException)
-                {
-                    Debug.Print("Timer interval was less or equal to 0");
-                    _timer.Interval = 0.001;
-                }
+                if (_endPos - _startPos != 0) _timer = new Timer((_endPos - _startPos) * 1000);
+                else _timer = new Timer(0.001);
             }
         }
 
@@ -72,13 +64,9 @@ namespace SoundBoardDotNet
             _startPos = startPos;
             _endPos = endPos;
             Volume = volume;
-            try { _timer = new Timer((_endPos - _startPos) * 1000); }
-            catch (ArgumentException)
-            {
-                Debug.Print("Timer interval was less or equal to 0");
-                _timer = new Timer(0.001);
-            }
-            _timer.Elapsed += new ElapsedEventHandler(_stop);
+            if (_endPos - _startPos != 0) _timer = new Timer((_endPos - _startPos) * 1000);
+            else _timer = new Timer(0.001);
+            _timer.Elapsed += new ElapsedEventHandler(OnStop);
             _timer.AutoReset = false;
 
             if (FileName == null)
@@ -108,7 +96,8 @@ namespace SoundBoardDotNet
                         var result2 = file.ShowDialog();
                         if (result2 != Forms.DialogResult.Cancel)
                         {
-                            if (new AudioFileReader(file.FileName).TotalTime.TotalSeconds >= EndPos)
+                            using (var r = new AudioFileReader(file.FileName))
+                            if (r.TotalTime.TotalSeconds >= EndPos)
                             {
                                 FileName = file.FileName;
                             }
@@ -142,13 +131,9 @@ namespace SoundBoardDotNet
             _startPos = startPos;
             _endPos = endPos;
             Volume = volume;
-            try { _timer = new Timer((_endPos - _startPos) * 1000); }
-            catch (ArgumentException)
-            {
-                Debug.Print("Timer interval was less or equal to 0");
-                _timer = new Timer(0.001);
-            }
-            _timer.Elapsed += new ElapsedEventHandler(_stop);
+            if (_endPos - _startPos != 0) _timer = new Timer((_endPos - _startPos) * 1000);
+            else _timer = new Timer(0.001);
+            _timer.Elapsed += new ElapsedEventHandler(OnStop);
             _timer.AutoReset = false;
 
             _out.Init(_buffWaveProvider.ToSampleProvider().Skip(TimeSpan.FromSeconds(_startPos)));
@@ -161,13 +146,9 @@ namespace SoundBoardDotNet
             _startPos = startPos;
             _endPos = endPos;
             Volume = volume;
-            try { _timer = new Timer((_endPos - _startPos) * 1000); }
-            catch (ArgumentException)
-            {
-                Debug.Print("Timer interval was less or equal to 0");
-                _timer = new Timer(0.001);
-            }
-            _timer.Elapsed += new ElapsedEventHandler(_stop);
+            if (_endPos - _startPos != 0) _timer = new Timer((_endPos - _startPos) * 1000);
+            else _timer = new Timer(0.001);
+            _timer.Elapsed += new ElapsedEventHandler(OnStop);
             _timer.AutoReset = false;
 
             _out.Init(wave);
@@ -181,7 +162,7 @@ namespace SoundBoardDotNet
             }
         }
 
-        public void _stop(object sender, ElapsedEventArgs e)
+        public void OnStop(object sender, ElapsedEventArgs e)
         {
             Debug.WriteLine(e.SignalTime.ToString() + " stop raised");
             Stop();
@@ -226,20 +207,17 @@ namespace SoundBoardDotNet
         {
             foreach (var sound in Sounds)
             {
-                sound._stop();
-                sound._out.Dispose();
-                if (sound._fileReader != null) sound._fileReader.Dispose();
-                sound._timer.Dispose();
+                sound.Dispose();
             }
             Sounds.Clear();
         }
 
-        private uint _percentToTime(double percent)
+        public void Dispose()
         {
-            //if (Sound == null) return uint.MaxValue;
-            //var output = Convert.ToUInt32(Math.Round(percent * Sound.PlayLength / 100, 0));
-
-            return 0;
+            _stop();
+            _out.Dispose();
+            if (_fileReader != null) _fileReader.Dispose();
+            _timer.Dispose();
         }
     }
 }

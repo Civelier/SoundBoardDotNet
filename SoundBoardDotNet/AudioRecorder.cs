@@ -1,6 +1,7 @@
 ﻿using System;
 using NAudio.Wave;
 using System.Diagnostics;
+using System.IO;
 
 namespace SoundBoardDotNet
 {
@@ -17,6 +18,8 @@ namespace SoundBoardDotNet
         private byte[] _buffer;
         private bool _isRecording = false;
         private int _deviceIndex;
+
+        private WaveStream _waveStream;
 
         /// <summary>
         /// Creates a new recorder with a buffer
@@ -52,6 +55,23 @@ namespace SoundBoardDotNet
             _isRecording = true;
         }
 
+        public WaveStream GetWaveStream()
+        {
+            if (_waveStream == null)
+            {
+                var b = GetBytesToSave();
+                _waveStream = new RawSourceWaveStream(b, 0, b.Length, MyWaveIn.WaveFormat);
+            }
+            return _waveStream;
+        }
+
+        public void CloseWaveStream()
+        {
+            _waveStream?.Close();
+            _waveStream?.Dispose();
+            _waveStream = null;
+        }
+        
         public void Reset()
         {
             MyWaveIn.StopRecording();

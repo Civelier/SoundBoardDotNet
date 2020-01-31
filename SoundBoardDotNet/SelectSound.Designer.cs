@@ -41,10 +41,6 @@
             this.VolumeControl = new NAudio.Gui.VolumeSlider();
             this.WaveGraph = new NAudio.Gui.WaveViewer();
             this.VolumeLabel = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.TotalTimeLabel = new System.Windows.Forms.Label();
             this.SoundWaveGraph = new SoundBoardDotNet.SoundWaveViewer();
@@ -193,42 +189,6 @@
             this.VolumeLabel.TabIndex = 15;
             this.VolumeLabel.Text = "Volume:";
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(19, 177);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(66, 16);
-            this.label3.TabIndex = 17;
-            this.label3.Text = "Start time:";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(223, 177);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(15, 16);
-            this.label4.TabIndex = 18;
-            this.label4.Text = "s";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(281, 176);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(63, 16);
-            this.label7.TabIndex = 19;
-            this.label7.Text = "End time:";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(480, 177);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(15, 16);
-            this.label5.TabIndex = 21;
-            this.label5.Text = "s";
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -268,10 +228,6 @@
             this.Controls.Add(this.SoundWaveGraph);
             this.Controls.Add(this.TotalTimeLabel);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.VolumeLabel);
             this.Controls.Add(this.WaveGraph);
             this.Controls.Add(this.VolumeControl);
@@ -311,10 +267,6 @@
         private NAudio.Gui.VolumeSlider VolumeControl;
         private NAudio.Gui.WaveViewer WaveGraph;
         private System.Windows.Forms.Label VolumeLabel;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label TotalTimeLabel;
         private SoundWaveViewer SoundWaveGraph;

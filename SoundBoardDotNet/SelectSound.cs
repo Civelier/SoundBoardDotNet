@@ -44,13 +44,11 @@ namespace SoundBoardDotNet
             AddActionsForControlsOfTypes((Control c) => c.KeyDown += SpaceForNumUpDown, typeof(NumericUpDown));
             AddArrowSelectForControls(SoundWaveGraph.StartUpDown, SoundWaveGraph.EndUpDown, SaveButton, CancelButton);
             AddActionsForControlsOfTypes((Control c) => { c.KeyDown += CloseOnEsc; c.KeyDown += SupressKeys; }, typeof(Button), typeof(ComboBox), typeof(NumericUpDown), typeof(TextBox));
-
+            SoundWaveGraph.StartUpDown.ValueChanged += StartTime_ValueChanged;
+            SoundWaveGraph.EndUpDown.ValueChanged += EndTime_ValueChanged;
 
             LoadFromData();
-            //Sound = new AudioSloaound(data.FilePath, data.Slider1, data.Slider2, data.Volume);
         }
-
-        
 
         private void SupressKeys(object sender, KeyEventArgs e)
         {
@@ -335,16 +333,18 @@ namespace SoundBoardDotNet
 
         private void SelectSound_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Hide();
             LoadFromData();
             _updateGraph(true);
 
-            e.Cancel = true;
+            //Hide();
+            //e.Cancel = true;
+            e.Cancel = false;
         }
 
         private void CancelButton_Click(object sender, EventArgs e)
         {
             Hide();
+            Stop();
             LoadFromData();
             _updateGraph(true);
         }
@@ -364,14 +364,12 @@ namespace SoundBoardDotNet
 
         private void StartTime_ValueChanged(object sender, EventArgs e)
         {
-            SoundWaveGraph.EndUpDown.Minimum = SoundWaveGraph.StartUpDown.Value;
             if (Sound == null) return;
             Sound.StartPos = (double)SoundWaveGraph.StartUpDown.Value;
         }
 
         private void EndTime_ValueChanged(object sender, EventArgs e)
         {
-            SoundWaveGraph.StartUpDown.Maximum = SoundWaveGraph.EndUpDown.Value;
             if (Sound == null) return;
             Sound.EndPos = (double)SoundWaveGraph.EndUpDown.Value;
         }

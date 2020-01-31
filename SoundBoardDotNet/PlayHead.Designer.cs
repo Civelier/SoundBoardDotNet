@@ -40,19 +40,19 @@
             // BarGreen
             // 
             this.BarGreen.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.BarGreen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(27)))), ((int)(((byte)(215)))), ((int)(((byte)(0)))));
-            this.BarGreen.Location = new System.Drawing.Point(30, 2);
-            this.BarGreen.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.BarGreen.Location = new System.Drawing.Point(30, 0);
+            this.BarGreen.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.BarGreen.Name = "BarGreen";
-            this.BarGreen.Size = new System.Drawing.Size(2, 43);
+            this.BarGreen.Size = new System.Drawing.Size(2, 38);
             this.BarGreen.TabIndex = 1;
             // 
             // HeadGreen
             // 
             this.HeadGreen.Image = ((System.Drawing.Image)(resources.GetObject("HeadGreen.Image")));
             this.HeadGreen.Location = new System.Drawing.Point(0, 0);
-            this.HeadGreen.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.HeadGreen.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.HeadGreen.Name = "HeadGreen";
             this.HeadGreen.Size = new System.Drawing.Size(32, 32);
             this.HeadGreen.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -63,7 +63,7 @@
             // 
             this.HeadRed.Image = ((System.Drawing.Image)(resources.GetObject("HeadRed.Image")));
             this.HeadRed.Location = new System.Drawing.Point(0, 0);
-            this.HeadRed.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.HeadRed.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.HeadRed.Name = "HeadRed";
             this.HeadRed.Size = new System.Drawing.Size(32, 32);
             this.HeadRed.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -76,26 +76,26 @@
             this.BarRed.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.BarRed.BackColor = System.Drawing.Color.Red;
-            this.BarRed.Location = new System.Drawing.Point(0, 2);
-            this.BarRed.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.BarRed.Location = new System.Drawing.Point(0, 0);
+            this.BarRed.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.BarRed.Name = "BarRed";
-            this.BarRed.Size = new System.Drawing.Size(2, 43);
+            this.BarRed.Size = new System.Drawing.Size(3, 38);
             this.BarRed.TabIndex = 2;
             this.BarRed.Visible = false;
             // 
             // PlayHead
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.BackColor = System.Drawing.Color.Transparent;
             this.Controls.Add(this.BarRed);
             this.Controls.Add(this.BarGreen);
             this.Controls.Add(this.HeadGreen);
             this.Controls.Add(this.HeadRed);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "PlayHead";
-            this.Size = new System.Drawing.Size(34, 43);
+            this.Size = new System.Drawing.Size(51, 42);
             ((System.ComponentModel.ISupportInitialize)(this.HeadGreen)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.HeadRed)).EndInit();
             this.ResumeLayout(false);

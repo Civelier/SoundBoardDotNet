@@ -30,12 +30,6 @@
         {
             this.TotalTimeLabel = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.EndTime = new System.Windows.Forms.NumericUpDown();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.StartTime = new System.Windows.Forms.NumericUpDown();
             this.VolumeLabel = new System.Windows.Forms.Label();
             this.WaveGraph = new NAudio.Gui.WaveViewer();
             this.VolumeControl = new NAudio.Gui.VolumeSlider();
@@ -49,8 +43,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.InputCombo = new System.Windows.Forms.ComboBox();
-            ((System.ComponentModel.ISupportInitialize)(this.EndTime)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.StartTime)).BeginInit();
+            this.SoundWaveGraph = new SoundBoardDotNet.SoundWaveViewer();
             this.SuspendLayout();
             // 
             // TotalTimeLabel
@@ -58,7 +51,7 @@
             this.TotalTimeLabel.AutoSize = true;
             this.TotalTimeLabel.Location = new System.Drawing.Point(589, 172);
             this.TotalTimeLabel.Name = "TotalTimeLabel";
-            this.TotalTimeLabel.Size = new System.Drawing.Size(0, 17);
+            this.TotalTimeLabel.Size = new System.Drawing.Size(0, 16);
             this.TotalTimeLabel.TabIndex = 44;
             // 
             // label6
@@ -66,79 +59,16 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(515, 172);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(74, 17);
+            this.label6.Size = new System.Drawing.Size(70, 16);
             this.label6.TabIndex = 43;
             this.label6.Text = "Total time:";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(475, 175);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(15, 17);
-            this.label5.TabIndex = 42;
-            this.label5.Text = "s";
-            // 
-            // EndTime
-            // 
-            this.EndTime.DecimalPlaces = 3;
-            this.EndTime.Increment = new decimal(new int[] {
-            125,
-            0,
-            0,
-            196608});
-            this.EndTime.Location = new System.Drawing.Point(349, 170);
-            this.EndTime.Name = "EndTime";
-            this.EndTime.Size = new System.Drawing.Size(120, 22);
-            this.EndTime.TabIndex = 4;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(276, 170);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(67, 17);
-            this.label7.TabIndex = 40;
-            this.label7.Text = "End time:";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(220, 175);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(15, 17);
-            this.label4.TabIndex = 39;
-            this.label4.Text = "s";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(16, 170);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(72, 17);
-            this.label3.TabIndex = 38;
-            this.label3.Text = "Start time:";
-            // 
-            // StartTime
-            // 
-            this.StartTime.DecimalPlaces = 3;
-            this.StartTime.Increment = new decimal(new int[] {
-            125,
-            0,
-            0,
-            196608});
-            this.StartTime.Location = new System.Drawing.Point(94, 170);
-            this.StartTime.Name = "StartTime";
-            this.StartTime.Size = new System.Drawing.Size(120, 22);
-            this.StartTime.TabIndex = 3;
-            this.StartTime.ValueChanged += new System.EventHandler(this.StartTime_ValueChanged);
             // 
             // VolumeLabel
             // 
             this.VolumeLabel.AutoSize = true;
             this.VolumeLabel.Location = new System.Drawing.Point(12, 140);
             this.VolumeLabel.Name = "VolumeLabel";
-            this.VolumeLabel.Size = new System.Drawing.Size(59, 17);
+            this.VolumeLabel.Size = new System.Drawing.Size(57, 16);
             this.VolumeLabel.TabIndex = 36;
             this.VolumeLabel.Text = "Volume:";
             // 
@@ -186,7 +116,7 @@
             this.label2.Location = new System.Drawing.Point(13, 44);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(49, 17);
+            this.label2.Size = new System.Drawing.Size(48, 16);
             this.label2.TabIndex = 30;
             this.label2.Text = "Name:";
             // 
@@ -238,7 +168,7 @@
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(220, 101);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(75, 17);
+            this.label8.Size = new System.Drawing.Size(70, 16);
             this.label8.TabIndex = 46;
             this.label8.Text = "Set to key:";
             // 
@@ -247,7 +177,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(13, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(43, 17);
+            this.label1.Size = new System.Drawing.Size(39, 16);
             this.label1.TabIndex = 47;
             this.label1.Text = "Input:";
             // 
@@ -260,23 +190,30 @@
             this.InputCombo.TabIndex = 0;
             this.InputCombo.SelectedIndexChanged += new System.EventHandler(this.InputCombo_SelectedIndexChanged);
             // 
+            // SoundWaveGraph
+            // 
+            this.SoundWaveGraph.EndTime = 0D;
+            this.SoundWaveGraph.Location = new System.Drawing.Point(9, 198);
+            this.SoundWaveGraph.Name = "SoundWaveGraph";
+            this.SoundWaveGraph.ScrollSpeed = 0.25D;
+            this.SoundWaveGraph.Size = new System.Drawing.Size(730, 258);
+            this.SoundWaveGraph.Sound = null;
+            this.SoundWaveGraph.StartTime = 0D;
+            this.SoundWaveGraph.TabIndex = 48;
+            this.SoundWaveGraph.Zoom = 100D;
+            // 
             // SaveSound
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(804, 505);
+            this.Controls.Add(this.SoundWaveGraph);
             this.Controls.Add(this.InputCombo);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.KeyCombo);
             this.Controls.Add(this.TotalTimeLabel);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.EndTime);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.StartTime);
             this.Controls.Add(this.VolumeLabel);
             this.Controls.Add(this.WaveGraph);
             this.Controls.Add(this.VolumeControl);
@@ -290,8 +227,6 @@
             this.Text = "SaveSound";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SaveSound_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SaveSound_FormClosed);
-            ((System.ComponentModel.ISupportInitialize)(this.EndTime)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.StartTime)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -301,12 +236,6 @@
 
         private System.Windows.Forms.Label TotalTimeLabel;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.NumericUpDown EndTime;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.NumericUpDown StartTime;
         private System.Windows.Forms.Label VolumeLabel;
         private NAudio.Gui.WaveViewer WaveGraph;
         private NAudio.Gui.VolumeSlider VolumeControl;
@@ -320,5 +249,6 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox InputCombo;
+        private SoundWaveViewer SoundWaveGraph;
     }
 }

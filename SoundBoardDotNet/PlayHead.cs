@@ -57,10 +57,10 @@ namespace SoundBoardDotNet
         /// </summary>
         public double Progression
         {
-            get => (double)XLocation / ParentWidth;
+            get => (double)(PointingX - ParentOffset) / (ParentWidth - 2 * ParentOffset);
             set
             {
-                XLocation = (int)(value * ParentWidth);
+                PointingX = (int)(value * (ParentWidth - 2 * ParentOffset)) + ParentOffset;
             }
         }
 
@@ -78,17 +78,51 @@ namespace SoundBoardDotNet
 
         public int XLocation
         {
-            get => Location.X;
+            get
+            {
+                if (HeadType == PlayHeadType.End) return Left;
+                else return Left;
+            }
             set
             {
                 if (Other == null) return;
                 if (HeadType == PlayHeadType.End)
                 {
-                    Left = Math.Max(Other.Right, Math.Min(ParentWidth + ParentOffset, value));
+                    //Left = Math.Max(Other.Right, Math.Min(ParentWidth + ParentOffset, value));
+                    Left = value;
                 }
                 else
                 {
-                    Left = Math.Max(ParentOffset - Width, Math.Min(value, Other.Left - Width));
+                    //Left = Math.Max(ParentOffset - Width, Math.Min(value, Other.Left - Width));
+                    Left = value;
+                }
+            }
+        }
+
+        public Panel ParentPanel { get; set; }
+
+        public int ScrollX
+        {
+            get => (ParentPanel?.HorizontalScroll?.Value ?? 0) + XLocation;
+            set => XLocation = value - (ParentPanel?.HorizontalScroll?.Value ?? 0);
+        }
+
+        public int PointingX
+        {
+            get
+            {
+                if (HeadType == PlayHeadType.End) return ScrollX;
+                return ScrollX + Width;
+            }
+            set
+            {
+                if (HeadType == PlayHeadType.End)
+                {
+                    ScrollX = value;
+                }
+                else
+                {
+                    ScrollX = value - Width;
                 }
             }
         }

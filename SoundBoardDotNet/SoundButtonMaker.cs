@@ -142,8 +142,6 @@ namespace SoundBoardDotNet
             Btn.Text = name;
             Btn.TextAlign = ContentAlignment.TopCenter;
             Parent.Controls.Add(Btn);
-            //Parent.KeyDown += Form_KeyDown;
-            //Btn.KeyDown += Form_KeyDown;
         }
 
         public void Update()
@@ -156,29 +154,6 @@ namespace SoundBoardDotNet
             }
         }
 
-        private void Form_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (char.TryParse(Name, out char c))
-            {
-                if (KeyToChar(e.KeyCode).ToString() == c.ToString().ToUpper())
-                {
-                    SoundForm.PlaySoundAsync();
-                    e.Handled = e.SuppressKeyPress = true;
-                }
-            }
-            if (e.KeyData == Keys.Space)
-            {
-                AudioSound.StopAll();
-                e.Handled = e.SuppressKeyPress = true;
-                //Stop sounds
-            }
-            if (e.KeyData == Keys.Enter)
-            {
-                e.Handled = e.SuppressKeyPress = true;
-                new SaveSound().Show();
-            }
-        }
-
         private void UpdateBtnText()
         {
             Btn.Text = $"{Name}\n{SoundForm.GetNameTextBox.Text}";
@@ -187,12 +162,12 @@ namespace SoundBoardDotNet
         virtual protected void Btn_Click(object sender, EventArgs e)
         {
             if (SoundForm == null) SoundForm = new SelectSound(UpdateBtnText, Data);
-            try
+            if (!SoundForm.IsDisposed)
             {
                 SoundForm.LoadFromData();
                 SoundForm.Show();
             }
-            catch (ObjectDisposedException)
+            else
             {
                 SoundForm = new SelectSound(UpdateBtnText, Data);
                 SoundForm.Show();

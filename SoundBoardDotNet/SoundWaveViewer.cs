@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NAudio.Wave;
 
 namespace SoundBoardDotNet
 {
@@ -30,16 +31,26 @@ namespace SoundBoardDotNet
             }
         }
 
+        public WaveStream WaveStream
+        {
+            get => WaveGraph.WaveStream;
+            set
+            {
+                WaveGraph.WaveStream = value;
+                _updateWidth();
+            }
+        }
+
         public double StartTime
         {
-            get;
-            set;
+            get => (double)StartPositionUpDown.Value;
+            set => StartPositionUpDown.Value = (decimal)value;
         }
 
         public double EndTime
         {
-            get;
-            set;
+            get => (double)EndPositionUpDown.Value;
+            set => EndPositionUpDown.Value = (decimal)value;
         }
 
         public AudioSound Sound
@@ -48,15 +59,14 @@ namespace SoundBoardDotNet
             set
             {
                 _sound = value;
-                WaveGraph.WaveStream = _sound?.FileReader;
-                _updateWidth();
+                WaveStream = _sound?.FileReader;
             }
         }
 
-        private bool _outOfboundDragging = false;
-
         public NumericUpDown StartUpDown => StartPositionUpDown;
         public NumericUpDown EndUpDown => EndPositionUpDown;
+
+        public double ScrollSpeed { get; set; }
 
         public SoundWaveViewer()
         {
@@ -65,14 +75,14 @@ namespace SoundBoardDotNet
             ZoomUpDown.ValueChanged += OnZoomChanged;
             HeadEnd.Other = HeadStart;
             HeadStart.Other = HeadEnd;
-            HeadEnd.ParentOffset = HeadStart.ParentOffset = 40;
-            HeadEnd.ParentWidth = HeadStart.ParentWidth = Width;
             HeadEnd.MouseDown += Head_MouseDown;
             HeadEnd.MouseMove += HeadEnd_MouseMove;
             HeadStart.MouseDown += Head_MouseDown;
             HeadStart.MouseMove += HeadStart_MouseMove;
             StartPositionUpDown.ValueChanged += StartPositionUpDown_ValueChanged;
             EndPositionUpDown.ValueChanged += EndPositionUpDown_ValueChanged;
+            ScrollSpeed = 0.25;
+            _updateWidth();
         }
 
         private void EndPositionUpDown_ValueChanged(object sender, EventArgs e)
@@ -92,6 +102,8 @@ namespace SoundBoardDotNet
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
                 MouseDownLocation = e.Location;
+                PlayHead p = (PlayHead)(sender);
+                GlidePanel(OutOfBoundDistance(p));
             }
         }
 
@@ -99,14 +111,18 @@ namespace SoundBoardDotNet
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
-                HeadEnd.XLocation = e.X + HeadEnd.Left - MouseDownLocation.X;
+                SuspendLayout();
+                HeadEnd.PointingX = e.X + HeadEnd.PointingX - MouseDownLocation.X;
                 var v = (decimal)HeadEnd.Seconds;
                 if (v > EndPositionUpDown.Maximum || v < EndPositionUpDown.Minimum)
                 {
                     v = Math.Max(EndPositionUpDown.Minimum, Math.Min(EndPositionUpDown.Maximum, v));
                     HeadEnd.Seconds = (double)v;
                 }
+                StartPositionUpDown.Maximum = v;
                 EndPositionUpDown.Value = v;
+                GlidePanel(OutOfBoundDistance(HeadEnd));
+                ResumeLayout();
             }
         }
 
@@ -114,15 +130,44 @@ namespace SoundBoardDotNet
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
-                HeadStart.XLocation = e.X + HeadStart.Left - MouseDownLocation.X;
+                SuspendLayout();
+                HeadStart.PointingX = e.X + HeadStart.PointingX - MouseDownLocation.X;
                 var v = (decimal)HeadStart.Seconds;
                 if (v > StartPositionUpDown.Maximum || v < StartPositionUpDown.Minimum)
                 {
                     v = Math.Max(StartPositionUpDown.Minimum, Math.Min(StartPositionUpDown.Maximum, v));
                     HeadStart.Seconds = (double)v;
                 }
+                if (v == EndPositionUpDown.Value) v = EndPositionUpDown.Value - 0.00001m;
+                EndPositionUpDown.Minimum = v;
                 StartPositionUpDown.Value = v;
+                GlidePanel(OutOfBoundDistance(HeadStart));
+                ResumeLayout();
             }
+        }
+
+        private bool IsOutOfBounds(PlayHead head)
+        {
+            return head.XLocation > WaveGraphPanel.Width + WaveGraphPanel.HorizontalScroll.Value || 
+                head.XLocation < WaveGraphPanel.HorizontalScroll.Value;
+        }
+
+        private int OutOfBoundDistance(PlayHead head)
+        {
+            if (head.XLocation > WaveGraphPanel.Width)
+            {
+                return head.XLocation - WaveGraphPanel.Width;
+            }
+            if (head.XLocation < 0)
+            {
+                return head.XLocation;
+            }
+            return 0;
+        }
+
+        private void GlidePanel(int distance)
+        {
+            WaveGraphPanel.HorizontalScroll.Value += (int)Math.Round(ScrollSpeed * distance);
         }
 
         void OnZoomChanged(object sender, EventArgs e)
@@ -144,21 +189,26 @@ namespace SoundBoardDotNet
 
         void _updateWidth()
         {
-            HeadEnd.Height = HeadStart.Height = WaveGraph.Height = WaveGraphPanel.Height - 20;
-            if (Sound?.FileReader == null)
+            if (Sound?.FileReader != null)
+                WaveGraph.WaveStream = Sound?.FileReader;
+            HeadEnd.Height = HeadStart.Height = WaveGraph.Height = SpacingPanel.Height = WaveGraphPanel.Height - 20;
+            if (WaveStream == null)
             {
-                WaveGraph.Width = WaveGraphPanel.Width;
+                WaveGraph.Width = WaveGraphPanel.Width - 2 * 40;
                 return;
             }
-            int bps = Sound.FileReader.WaveFormat.AverageBytesPerSecond;
-            long totalBytes = Sound.FileReader.Length;
+            int bps = WaveStream.WaveFormat.AverageBytesPerSecond;
+            long totalBytes = WaveStream.Length;
             WaveGraph.SamplesPerPixel = (int)Math.Round(Zoom * bps / 10000);
+            WaveGraph.Left = 40;
             WaveGraph.Width = (int)Math.Round((double)totalBytes / (WaveGraph.SamplesPerPixel * 8));
-            HeadEnd.ParentOffset = HeadStart.ParentOffset = 40;
-            HeadEnd.ParentWidth = HeadStart.ParentWidth = Width;
-            HeadEnd.TotalSeconds = HeadStart.TotalSeconds = Sound.FileReader.TotalTime.TotalSeconds;
-            HeadStart.Seconds = Sound.StartPos;
-            HeadEnd.Seconds = Sound.EndPos;
+            HeadEnd.ParentWidth = HeadStart.ParentWidth = WaveGraph.Width + 2 * WaveGraph.Left;
+            SpacingPanel.Left = WaveGraph.Right;
+            HeadEnd.ParentOffset = HeadStart.ParentOffset = WaveGraph.Left;
+            HeadEnd.ParentPanel = HeadStart.ParentPanel = WaveGraphPanel;
+            HeadEnd.TotalSeconds = HeadStart.TotalSeconds = WaveStream.TotalTime.TotalSeconds;
+            HeadStart.Seconds = Sound?.StartPos ?? 0;
+            HeadEnd.Seconds = Sound?.EndPos ?? WaveStream.TotalTime.TotalSeconds;
         }
     }
 }

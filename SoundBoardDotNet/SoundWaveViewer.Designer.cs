@@ -40,6 +40,7 @@
             this.WaveGraphPanel = new System.Windows.Forms.Panel();
             this.HeadEnd = new SoundBoardDotNet.PlayHead();
             this.HeadStart = new SoundBoardDotNet.PlayHead();
+            this.SpacingPanel = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.EndPositionUpDown)).BeginInit();
@@ -51,10 +52,10 @@
             // WaveGraph
             // 
             this.WaveGraph.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.WaveGraph.Location = new System.Drawing.Point(45, 0);
+            this.WaveGraph.Location = new System.Drawing.Point(37, 0);
             this.WaveGraph.Name = "WaveGraph";
             this.WaveGraph.SamplesPerPixel = 128;
-            this.WaveGraph.Size = new System.Drawing.Size(537, 175);
+            this.WaveGraph.Size = new System.Drawing.Size(545, 175);
             this.WaveGraph.StartPosition = ((long)(0));
             this.WaveGraph.TabIndex = 0;
             this.WaveGraph.WaveStream = null;
@@ -174,6 +175,7 @@
             this.WaveGraphPanel.Controls.Add(this.HeadEnd);
             this.WaveGraphPanel.Controls.Add(this.HeadStart);
             this.WaveGraphPanel.Controls.Add(this.WaveGraph);
+            this.WaveGraphPanel.Controls.Add(this.SpacingPanel);
             this.WaveGraphPanel.Location = new System.Drawing.Point(0, 0);
             this.WaveGraphPanel.Name = "WaveGraphPanel";
             this.WaveGraphPanel.Size = new System.Drawing.Size(623, 175);
@@ -182,38 +184,52 @@
             // HeadEnd
             // 
             this.HeadEnd.AutoSize = true;
-            this.HeadEnd.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.HeadEnd.BackColor = System.Drawing.Color.Transparent;
             this.HeadEnd.HeadType = SoundBoardDotNet.PlayHeadType.End;
-            this.HeadEnd.Location = new System.Drawing.Point(588, -2);
+            this.HeadEnd.Location = new System.Drawing.Point(522, -2);
             this.HeadEnd.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.HeadEnd.Name = "HeadEnd";
             this.HeadEnd.Other = null;
             this.HeadEnd.ParentOffset = 0;
-            this.HeadEnd.ParentWidth = 0;
+            this.HeadEnd.ParentPanel = null;
+            this.HeadEnd.PointingX = 522;
             this.HeadEnd.Progression = double.PositiveInfinity;
+            this.HeadEnd.ScrollX = 522;
             this.HeadEnd.Seconds = double.NaN;
             this.HeadEnd.Size = new System.Drawing.Size(35, 175);
             this.HeadEnd.TabIndex = 1;
             this.HeadEnd.TotalSeconds = 0D;
-            this.HeadEnd.XLocation = 588;
+            this.HeadEnd.XLocation = 522;
             // 
             // HeadStart
             // 
             this.HeadStart.AutoSize = true;
-            this.HeadStart.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.HeadStart.BackColor = System.Drawing.Color.Transparent;
             this.HeadStart.HeadType = SoundBoardDotNet.PlayHeadType.Start;
             this.HeadStart.Location = new System.Drawing.Point(0, 0);
             this.HeadStart.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.HeadStart.Name = "HeadStart";
             this.HeadStart.Other = null;
             this.HeadStart.ParentOffset = 0;
-            this.HeadStart.ParentWidth = 0;
-            this.HeadStart.Progression = double.NaN;
+            this.HeadStart.ParentPanel = null;
+            this.HeadStart.PointingX = 46;
+            this.HeadStart.Progression = double.PositiveInfinity;
+            this.HeadStart.ScrollX = 46;
             this.HeadStart.Seconds = double.NaN;
             this.HeadStart.Size = new System.Drawing.Size(46, 175);
             this.HeadStart.TabIndex = 2;
             this.HeadStart.TotalSeconds = 0D;
-            this.HeadStart.XLocation = 0;
+            this.HeadStart.XLocation = 46;
+            // 
+            // SpacingPanel
+            // 
+            this.SpacingPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.SpacingPanel.BackColor = System.Drawing.Color.Transparent;
+            this.SpacingPanel.Location = new System.Drawing.Point(583, 0);
+            this.SpacingPanel.Name = "SpacingPanel";
+            this.SpacingPanel.Size = new System.Drawing.Size(40, 175);
+            this.SpacingPanel.TabIndex = 2;
             // 
             // SoundWaveViewer
             // 
@@ -247,5 +263,6 @@
         private System.Windows.Forms.Panel WaveGraphPanel;
         private PlayHead HeadEnd;
         private PlayHead HeadStart;
+        private System.Windows.Forms.Panel SpacingPanel;
     }
 }
