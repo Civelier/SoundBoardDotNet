@@ -215,7 +215,14 @@ namespace SoundBoardDotNet
             }
 
             _out.Volume = Volume;
-            _out.Play();
+            try
+            {
+                _out.Play();
+            }
+            catch (NullReferenceException)
+            {
+                Forms.MessageBox.Show("A problem occured with Windows waveOut api. You may need to restart your device if this issue persists.", "WaveOut api error");
+            }
             _timer.Start();
             Sounds.Add(this);
         }
