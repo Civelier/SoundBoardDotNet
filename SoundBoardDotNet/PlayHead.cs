@@ -13,6 +13,7 @@ namespace SoundBoardDotNet
     public enum PlayHeadType
     {
         Start,
+        Current,
         End
     }
     public partial class PlayHead : UserControl
@@ -28,29 +29,44 @@ namespace SoundBoardDotNet
             {
                 _headType = value;
                 SuspendLayout();
-                if (_headType == PlayHeadType.End)
+                switch (_headType)
                 {
-                    HeadGreen.Visible = false;
-                    HeadRed.Visible = true;
-                    BarGreen.Visible = false;
-                    BarRed.Visible = true;
-                }
-                else
-                {
-                    HeadGreen.Visible = true;
-                    HeadRed.Visible = false;
-                    BarGreen.Visible = true;
-                    BarRed.Visible = false;
+                    case PlayHeadType.Start:
+                        HeadGreen.Visible = true;
+                        HeadRed.Visible = false;
+                        HeadCurrent.Visible = false;
+                        BarGreen.Visible = true;
+                        BarRed.Visible = false;
+                        BarCurrent.Visible = false;
+                        break;
+                    case PlayHeadType.Current:
+                        HeadGreen.Visible = false;
+                        HeadRed.Visible = false;
+                        HeadCurrent.Visible = true;
+                        BarGreen.Visible = false;
+                        BarRed.Visible = false;
+                        BarCurrent.Visible = true;
+                        break;
+                    case PlayHeadType.End:
+                        HeadGreen.Visible = false;
+                        HeadRed.Visible = true;
+                        HeadCurrent.Visible = false;
+                        BarGreen.Visible = false;
+                        BarRed.Visible = true;
+                        BarCurrent.Visible = false;
+                        break;
+                    default:
+                        break;
                 }
                 ResumeLayout();
             }
         }
 
-        public PlayHead Other
-        {
-            get;
-            set;
-        }
+        //public PlayHead Other
+        //{
+        //    get;
+        //    set;
+        //}
 
         /// <summary>
         /// From 0 to 1 how far into the the audio it is
@@ -80,22 +96,21 @@ namespace SoundBoardDotNet
         {
             get
             {
-                if (HeadType == PlayHeadType.End) return Left;
-                else return Left;
+                switch (_headType)
+                {
+                    case PlayHeadType.Start:
+                        return Left;
+                    case PlayHeadType.Current:
+                        return Left;
+                    case PlayHeadType.End:
+                        return Left;
+                    default:
+                        return 0;
+                }
             }
             set
             {
-                if (Other == null) return;
-                if (HeadType == PlayHeadType.End)
-                {
-                    //Left = Math.Max(Other.Right, Math.Min(ParentWidth + ParentOffset, value));
-                    Left = value;
-                }
-                else
-                {
-                    //Left = Math.Max(ParentOffset - Width, Math.Min(value, Other.Left - Width));
-                    Left = value;
-                }
+                Left = value;
             }
         }
 
@@ -111,18 +126,33 @@ namespace SoundBoardDotNet
         {
             get
             {
-                if (HeadType == PlayHeadType.End) return ScrollX;
-                return ScrollX + Width;
+                switch (HeadType)
+                {
+                    case PlayHeadType.Start:
+                        return ScrollX + Width;
+                    case PlayHeadType.Current:
+                        return ScrollX + Width / 2;
+                    case PlayHeadType.End:
+                        return ScrollX;
+                    default:
+                        return 0;
+                }
             }
             set
             {
-                if (HeadType == PlayHeadType.End)
+                switch (HeadType)
                 {
-                    ScrollX = value;
-                }
-                else
-                {
-                    ScrollX = value - Width;
+                    case PlayHeadType.Start:
+                        ScrollX = value - Width;
+                        break;
+                    case PlayHeadType.Current:
+                        ScrollX = value - Width / 2;
+                        break;
+                    case PlayHeadType.End:
+                        ScrollX = value;
+                        break;
+                    default:
+                        break;
                 }
             }
         }
@@ -146,6 +176,8 @@ namespace SoundBoardDotNet
             HeadGreen.MouseMove += Head_MouseMove;
             HeadRed.MouseDown += Head_MouseDown;
             HeadRed.MouseMove += Head_MouseMove;
+            HeadCurrent.MouseMove += Head_MouseMove;
+            HeadCurrent.MouseDown += Head_MouseDown;
         }
 
         private void Head_MouseDown(object sender, MouseEventArgs e)

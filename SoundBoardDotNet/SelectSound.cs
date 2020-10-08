@@ -322,6 +322,7 @@ namespace SoundBoardDotNet
 
             NameTextBox.Text = Data.Name;
             SoundWaveGraph.StartUpDown.Value = (decimal)Data.StartTime;
+            SoundWaveGraph.EndUpDown.Minimum = 0;
             SoundWaveGraph.EndUpDown.Value = (decimal)Data.EndTime;
             VolumeControl.Volume = Data.Volume;
         }

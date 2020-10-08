@@ -33,6 +33,33 @@ namespace SoundBoardDotNet
             }
         }
 
+        public double Time
+        {
+            get
+            {
+                if (_fileReader == null) return 0;
+                return _fileReader.CurrentTime.TotalSeconds;
+            }
+            set
+            {
+                if (_fileReader != null)
+                {
+                    if (_endPos - value > 0)
+                    {
+                        if (IsPlaying)
+                        {
+                            Stop();
+                        }
+                        _timer.Interval = (_endPos - value) * 1000;
+                        if (!IsPlaying)
+                        {
+                            Play(value);
+                        }
+                    }
+                }
+            }
+        }
+
         public double EndPos
         {
             get { return _endPos; }
@@ -43,6 +70,8 @@ namespace SoundBoardDotNet
                 else _timer = new Timer(0.001);
             }
         }
+
+        public bool IsPlaying => _out.PlaybackState == PlaybackState.Playing;
 
         public float Volume
         {
@@ -178,11 +207,11 @@ namespace SoundBoardDotNet
             sound.Play();
         }
 
-        public void Play()
+        public void Play(double? time = null)
         {
             if (_fileReader != null)
             {
-                _fileReader.CurrentTime = TimeSpan.FromSeconds(_startPos);
+                _fileReader.CurrentTime = TimeSpan.FromSeconds(time.HasValue ? time.Value : _startPos);
             }
 
             _out.Volume = Volume;

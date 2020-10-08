@@ -224,6 +224,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Alan Walker - Spectre.mp3" />
+    <Content Include="Resources\PlayHead.png" />
     <Content Include="Resources\PlayheadGreen.png" />
     <Content Include="Resources\PlayheadGreenRev.png" />
     <Content Include="Resources\PlayheadRed.png" />

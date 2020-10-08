@@ -7,7 +7,7 @@ namespace SoundBoardDotNet
 {
     public class AudioRecorder
     {
-        public WaveInEvent MyWaveIn;
+        public WaveIn MyWaveIn;
         public double RecordTime => SoundBoardProperties.Props.RecordingSampleTime;
         public double RecordedTime => _isFull ? RecordTime : _pos == 0 ? 0 : 1.0 / MyWaveIn.WaveFormat.AverageBytesPerSecond * _pos;
         public int Device = 0;
@@ -29,10 +29,18 @@ namespace SoundBoardDotNet
         {
             Device = deviceIndex;
             _deviceIndex = deviceIndex;
-            MyWaveIn = new WaveInEvent();
+            SetupWaveIn();
+            //MyWaveIn = new WaveInEvent();
             MyWaveIn.DataAvailable += DataAvailable;
             MyWaveIn.RecordingStopped += Stopped;
             _buffer = new byte[(int)(MyWaveIn.WaveFormat.AverageBytesPerSecond * RecordTime)];
+        }
+
+        private void SetupWaveIn()
+        {
+            //var cb = WaveCallbackInfo.ExistingWindow(Form1.MyForm.Handle);
+            var cb = WaveCallbackInfo.FunctionCallback();
+            MyWaveIn = new WaveIn(cb);
         }
 
         /// <summary>
@@ -82,7 +90,9 @@ namespace SoundBoardDotNet
             _isRecording = false;
             _pos = 0;
             MyWaveIn.Dispose();
-            MyWaveIn = new WaveInEvent();
+            SetupWaveIn();
+            //MyWaveIn = new WaveInEvent();
+            //MyWaveIn.BufferMilliseconds = 200;
             MyWaveIn.DeviceNumber = Device;
             MyWaveIn.DataAvailable += DataAvailable;
             MyWaveIn.RecordingStopped += Stopped;
@@ -142,7 +152,7 @@ namespace SoundBoardDotNet
 
         private void DataAvailable(object sender, WaveInEventArgs e)
         {
-
+            Console.WriteLine($"Buffer length : {e.BytesRecorded}");
             for (int i = 0; i < e.BytesRecorded; ++i)
             {
                 // save the data
