@@ -23,6 +23,9 @@ namespace SoundBoardDotNet
 
         public TextBox GetNameTextBox { get { return NameTextBox; } }
         public TextBox GetFileTextBox { get { return FileNameBox; } }
+
+        public AudioSound CurrentSound { get; private set; }
+
         //public WaveForm MyWaveForm { get { return WaveGraph; } }
 
         private OpenFileDialog _fileDialog = new OpenFileDialog();
@@ -258,7 +261,7 @@ namespace SoundBoardDotNet
                 MessageBox.Show("Enter a valid File to play!");
                 return;
             }
-            AudioSound.PlaySound(Sound);
+            CurrentSound = AudioSound.PlaySound(Sound);
         }
 
         private void PlayButton_Click(object sender, EventArgs e)

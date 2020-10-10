@@ -93,6 +93,7 @@
     </Compile>
     <Compile Include="AudioRecorder.cs" />
     <Compile Include="AudioSound.cs" />
+    <Compile Include="AudioSoundInfo.cs" />
     <Compile Include="Devices.cs" />
     <Compile Include="DevicesForm.cs">
       <SubType>Form</SubType>
@@ -115,6 +116,9 @@
       <DependentUpon>PlayHead.cs</DependentUpon>
     </Compile>
     <Compile Include="SemanticVersion.cs" />
+    <Compile Include="SoundEvents\SoundDisposedEventArgs.cs" />
+    <Compile Include="SoundEvents\SoundStartedOnAnotherInstanceEventArgs.cs" />
+    <Compile Include="SoundEvents\SoundStoppedEventArgs.cs" />
     <Compile Include="SoundWaveViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>

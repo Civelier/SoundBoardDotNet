@@ -41,6 +41,8 @@
             this.WaveGraphPanel = new System.Windows.Forms.Panel();
             this.SpacingPanel = new System.Windows.Forms.Panel();
             this.HeadMove = new System.Windows.Forms.Timer(this.components);
+            this.CurrentPositionLable = new System.Windows.Forms.Label();
+            this.CurrentPositionValueLabel = new System.Windows.Forms.Label();
             this.HeadCurrent = new SoundBoardDotNet.PlayHead();
             this.HeadEnd = new SoundBoardDotNet.PlayHead();
             this.HeadStart = new SoundBoardDotNet.PlayHead();
@@ -69,6 +71,8 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.panel1.Controls.Add(this.CurrentPositionValueLabel);
+            this.panel1.Controls.Add(this.CurrentPositionLable);
             this.panel1.Controls.Add(this.ZoomUpDown);
             this.panel1.Controls.Add(this.ZoomLabel);
             this.panel1.Controls.Add(this.EndPositionUpDown);
@@ -151,7 +155,7 @@
             // EndPositionLabel
             // 
             this.EndPositionLabel.AutoSize = true;
-            this.EndPositionLabel.Location = new System.Drawing.Point(97, 3);
+            this.EndPositionLabel.Location = new System.Drawing.Point(92, 3);
             this.EndPositionLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.EndPositionLabel.Name = "EndPositionLabel";
             this.EndPositionLabel.Size = new System.Drawing.Size(68, 13);
@@ -210,6 +214,24 @@
             // 
             this.HeadMove.Tick += new System.EventHandler(this.HeadMove_Tick);
             // 
+            // CurrentPositionLable
+            // 
+            this.CurrentPositionLable.AutoSize = true;
+            this.CurrentPositionLable.Location = new System.Drawing.Point(301, 3);
+            this.CurrentPositionLable.Name = "CurrentPositionLable";
+            this.CurrentPositionLable.Size = new System.Drawing.Size(83, 13);
+            this.CurrentPositionLable.TabIndex = 2;
+            this.CurrentPositionLable.Text = "Current position:";
+            // 
+            // CurrentPositionValueLabel
+            // 
+            this.CurrentPositionValueLabel.AutoSize = true;
+            this.CurrentPositionValueLabel.Location = new System.Drawing.Point(301, 22);
+            this.CurrentPositionValueLabel.Name = "CurrentPositionValueLabel";
+            this.CurrentPositionValueLabel.Size = new System.Drawing.Size(61, 13);
+            this.CurrentPositionValueLabel.TabIndex = 6;
+            this.CurrentPositionValueLabel.Text = "00:00.0000";
+            // 
             // HeadCurrent
             // 
             this.HeadCurrent.AutoSize = true;
@@ -219,7 +241,7 @@
             this.HeadCurrent.Margin = new System.Windows.Forms.Padding(0);
             this.HeadCurrent.Name = "HeadCurrent";
             this.HeadCurrent.ParentOffset = 0;
-            this.HeadCurrent.ParentPanel = null;
+            this.HeadCurrent.ParentPanel = this.WaveGraphPanel;
             this.HeadCurrent.ParentWidth = 0;
             this.HeadCurrent.PointingX = 340;
             this.HeadCurrent.Progression = double.PositiveInfinity;
@@ -240,7 +262,7 @@
             this.HeadEnd.Margin = new System.Windows.Forms.Padding(2);
             this.HeadEnd.Name = "HeadEnd";
             this.HeadEnd.ParentOffset = 0;
-            this.HeadEnd.ParentPanel = null;
+            this.HeadEnd.ParentPanel = this.WaveGraphPanel;
             this.HeadEnd.ParentWidth = 0;
             this.HeadEnd.PointingX = 392;
             this.HeadEnd.Progression = double.PositiveInfinity;
@@ -260,7 +282,7 @@
             this.HeadStart.Margin = new System.Windows.Forms.Padding(2);
             this.HeadStart.Name = "HeadStart";
             this.HeadStart.ParentOffset = 0;
-            this.HeadStart.ParentPanel = null;
+            this.HeadStart.ParentPanel = this.WaveGraphPanel;
             this.HeadStart.ParentWidth = 0;
             this.HeadStart.PointingX = 34;
             this.HeadStart.Progression = double.PositiveInfinity;
@@ -307,5 +329,7 @@
         private System.Windows.Forms.Panel SpacingPanel;
         private PlayHead HeadCurrent;
         private System.Windows.Forms.Timer HeadMove;
+        private System.Windows.Forms.Label CurrentPositionValueLabel;
+        private System.Windows.Forms.Label CurrentPositionLable;
     }
 }

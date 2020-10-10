@@ -73,7 +73,10 @@ namespace SoundBoardDotNet
         /// </summary>
         public double Progression
         {
-            get => (double)(PointingX - ParentOffset) / (ParentWidth - 2 * ParentOffset);
+            get
+            {
+                return (double)(PointingX - ParentOffset) / (ParentWidth - 2 * ParentOffset);
+            }
             set
             {
                 PointingX = (int)(value * (ParentWidth - 2 * ParentOffset)) + ParentOffset;

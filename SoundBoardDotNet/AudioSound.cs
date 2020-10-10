@@ -9,6 +9,7 @@ using NAudio.Wave;
 using System.Timers;
 using System.IO;
 using Forms = System.Windows.Forms;
+using SoundBoardDotNet.SoundEvents;
 
 namespace SoundBoardDotNet
 {
@@ -84,6 +85,10 @@ namespace SoundBoardDotNet
         public AudioFileReader FileReader => _fileReader;
 
         private Timer _timer;
+
+        public event SoundStoppedEventHandler Stopped;
+        public event SoundDisposedEventHandler Disposed;
+        public event SoundStartedOnAnotherInstanceEventHandler StartedOnAnotherInstance;
 
         public AudioSound(string fileName, double startPos, double endPos, float volume, bool loop = false)
         {
@@ -191,15 +196,37 @@ namespace SoundBoardDotNet
             }
         }
 
+        private void OnStopMethodCalled()
+        {
+            SoundStoppedEventHandler handler = Stopped;
+            handler?.Invoke(this, SoundStoppedEventArgs.StoppedManually());
+        }
+
+        private void OnEndReached()
+        {
+            SoundStoppedEventHandler handler = Stopped;
+            handler?.Invoke(this, SoundStoppedEventArgs.ReachedEnd());
+        }
+
         public void OnStop(object sender, ElapsedEventArgs e)
         {
             Debug.WriteLine(e.SignalTime.ToString() + " stop raised");
-            Stop();
+            StopProcedure();
+            OnEndReached();
         }
 
-        public static void PlaySound(AudioSound sound)
+        private void OnSoundStarted(AudioSound newInstance)
         {
-            new AudioSound(sound).Play();
+            SoundStartedOnAnotherInstanceEventHandler handler = StartedOnAnotherInstance;
+            handler?.Invoke(this, newInstance);
+        }
+
+        public static AudioSound PlaySound(AudioSound sound)
+        {
+            var s = new AudioSound(sound);
+            s.Play();
+            sound.OnSoundStarted(s);
+            return s;
         }
 
         public static void PlayRecordedSound(AudioSound sound)
@@ -213,24 +240,40 @@ namespace SoundBoardDotNet
             {
                 _fileReader.CurrentTime = TimeSpan.FromSeconds(time.HasValue ? time.Value : _startPos);
             }
+            try
+            {
+                _out.Volume = Volume;
 
-            _out.Volume = Volume;
+            }
+            catch (MmException e)
+            {
+                Forms.MessageBox.Show($"An error occured trying to set the output volume.\n" +
+                    $"This might be a problem with the audio driver and could have occured if the audio configuration changed.\n" +
+                    $"Try restarting the app.\n" +
+                    $"Exception message: {e}", "Error setting volume");
+            }
             try
             {
                 _out.Play();
+                _timer.Start();
+                Sounds.Add(this);
             }
             catch (NullReferenceException)
             {
                 Forms.MessageBox.Show("A problem occured with Windows waveOut api. You may need to restart your device if this issue persists.", "WaveOut api error");
             }
-            _timer.Start();
-            Sounds.Add(this);
+        }
+
+        private void StopProcedure()
+        {
+            _stop();
+            Sounds.Remove(this);
         }
 
         public void Stop()
         {
-            _stop();
-            Sounds.Remove(this);
+            StopProcedure();
+            OnStopMethodCalled();
         }
 
         private void _stop()
@@ -254,6 +297,8 @@ namespace SoundBoardDotNet
             _out.Dispose();
             if (_fileReader != null) _fileReader.Dispose();
             _timer.Dispose();
+            SoundDisposedEventHandler handler = Disposed;
+            Disposed?.Invoke(this);
         }
     }
 }
