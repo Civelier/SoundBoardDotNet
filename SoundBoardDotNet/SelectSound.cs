@@ -177,20 +177,20 @@ namespace SoundBoardDotNet
                     TotalTimeLabel.Text = "";
                     SoundWaveGraph.EndUpDown.Maximum = 0;
                     WaveGraph.WaveStream = null;
-                    SoundWaveGraph.Sound = null;
+                    SoundWaveGraph.SoundInfo = null;
                 }
                 return;
             }
             if (Sound != null)
             {
-                if (Sound.FileReader == null)
+                if (Sound.WaveStream == null)
                 {
                     if (eraseIfEmpty)
                     {
                         TotalTimeLabel.Text = "";
                         SoundWaveGraph.EndUpDown.Maximum = 0;
                         WaveGraph.WaveStream = null;
-                        SoundWaveGraph.Sound = null;
+                        SoundWaveGraph.SoundInfo = null;
                     }
                     return;
                 }
@@ -198,10 +198,10 @@ namespace SoundBoardDotNet
 
             Sound = new AudioSound(FileNameBox.Text, (double)SoundWaveGraph.StartUpDown.Value, (double)SoundWaveGraph.EndUpDown.Value, VolumeControl.Volume);
 
-            WaveGraph.WaveStream = Sound.FileReader;
-            SoundWaveGraph.Sound = Sound;
+            WaveGraph.WaveStream = Sound.WaveStream;
+            SoundWaveGraph.SoundInfo = Sound;
             var temp = SoundWaveGraph.EndUpDown.Value;
-            SoundWaveGraph.EndUpDown.Maximum = (decimal)Sound.FileReader.TotalTime.TotalSeconds;
+            SoundWaveGraph.EndUpDown.Maximum = (decimal)Sound.WaveStream.TotalTime.TotalSeconds;
             if (temp == 0)
                 SoundWaveGraph.EndUpDown.Value = SoundWaveGraph.EndUpDown.Maximum;
             TotalTimeLabel.Text = $"{SoundWaveGraph.EndUpDown.Maximum} s";
@@ -311,12 +311,12 @@ namespace SoundBoardDotNet
                 {
                     if (Sound.FileName != Data.FilePath) Sound = new AudioSound(Data.FilePath, Data.StartTime, Data.EndTime, Data.Volume);
                 }
-                if (Sound.FileReader == null) return;
+                if (Sound.WaveStream == null) return;
                 Data.FilePath = Sound.FileName;
                 FileNameBox.Text = Data.FilePath;
-                WaveGraph.WaveStream = Sound.FileReader;
+                WaveGraph.WaveStream = Sound.WaveStream;
                 var temp = SoundWaveGraph.EndUpDown.Maximum;
-                SoundWaveGraph.EndUpDown.Maximum = (decimal)Sound.FileReader.TotalTime.TotalSeconds;
+                SoundWaveGraph.EndUpDown.Maximum = (decimal)Sound.WaveStream.TotalTime.TotalSeconds;
                 if (temp == 0)
                     SoundWaveGraph.EndUpDown.Value = SoundWaveGraph.EndUpDown.Maximum;
                 TotalTimeLabel.Text = $"{SoundWaveGraph.EndUpDown.Maximum} s";

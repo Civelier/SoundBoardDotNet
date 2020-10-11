@@ -150,7 +150,7 @@ namespace SoundBoardDotNet
             Btn.Text = Name;
             if (SoundForm.Sound != null)
             {
-                if (SoundForm.Sound.FileReader != null) Btn.Text += "\n" + Data.Name;
+                if (SoundForm.Sound.WaveStream != null) Btn.Text += "\n" + Data.Name;
             }
         }
 

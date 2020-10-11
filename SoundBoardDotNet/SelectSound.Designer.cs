@@ -215,7 +215,7 @@
             this.SoundWaveGraph.Location = new System.Drawing.Point(12, 223);
             this.SoundWaveGraph.Name = "SoundWaveGraph";
             this.SoundWaveGraph.Size = new System.Drawing.Size(780, 288);
-            this.SoundWaveGraph.Sound = null;
+            this.SoundWaveGraph.SoundInfo = null;
             this.SoundWaveGraph.StartTime = 0D;
             this.SoundWaveGraph.TabIndex = 24;
             this.SoundWaveGraph.Zoom = 100D;

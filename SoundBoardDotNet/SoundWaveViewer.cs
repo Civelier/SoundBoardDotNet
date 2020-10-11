@@ -8,12 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using NAudio.Wave;
+using NAudio.Gui;
 
 namespace SoundBoardDotNet
 {
-    public partial class SoundWaveViewer : UserControl
+    public partial class SoundWaveViewer : UserControl, INotifyPropertyChanged
     {
-        private AudioSound _sound;
+        private AudioSoundInfo _soundInfo;
 
         /// <summary>
         /// Seconds per pixels
@@ -96,38 +97,39 @@ namespace SoundBoardDotNet
             set => EndPositionUpDown.Value = (decimal)value;
         }
 
-        public AudioSound Sound
+        public AudioSoundInfo SoundInfo
         {
-            get => _sound;
+            get => _soundInfo;
             set
             {
-                if (_sound != value)
+                if (!_soundInfo.Equals(value))
                 {
-                    if (_sound != null)
+                    if (_soundInfo != null)
                     {
-                        _sound.StartedOnAnotherInstance -= _sound_StartedOnAnotherInstance;
-                        _sound.Disposed -= _sound_Disposed;
+                        _soundInfo.SoundInstanceStarted -= _soundInfo_SoundInstanceStarted;
+                        _soundInfo.Disposed -= _soundInfo_Disposed;
+                        _soundInfo.Dispose();
                     }
-                    _sound = value;
-                    WaveStream = _sound?.FileReader;
-                    if (_sound != null)
+                    _soundInfo = value;
+                    WaveStream = _soundInfo?.WaveStream;
+                    if (_soundInfo != null)
                     {
-                        _sound.StartedOnAnotherInstance += _sound_StartedOnAnotherInstance;
-                        _sound.Disposed += _sound_Disposed;
+                        _soundInfo.SoundInstanceStarted += _soundInfo_SoundInstanceStarted;
+                        _soundInfo.Disposed += _soundInfo_Disposed;
                     }
                 }
                 
             }
         }
 
-        private void _sound_Disposed(AudioSound sender)
-        {
-            Sound = null;
-        }
-
-        private void _sound_StartedOnAnotherInstance(AudioSound sender, AudioSound newInstance)
+        private void _soundInfo_SoundInstanceStarted(AudioSoundInfo sender, AudioSound newInstance)
         {
             PlayingSound = newInstance;
+        }
+
+        private void _soundInfo_Disposed(AudioSoundInfo sender)
+        {
+            SoundInfo = null;
         }
 
         public NumericUpDown StartUpDown => StartPositionUpDown;
@@ -157,7 +159,7 @@ namespace SoundBoardDotNet
 
         private void HeadCurrent_MouseMove(object sender, MouseEventArgs e)
         {
-            if (Sound == null) return;
+            if (SoundInfo == null) return;
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
                 SuspendLayout();
@@ -189,9 +191,11 @@ namespace SoundBoardDotNet
 
         private Point MouseDownLocation;
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private void Head_MouseDown(object sender, MouseEventArgs e)
         {
-            if (Sound == null) return;
+            if (SoundInfo == null) return;
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
                 MouseDownLocation = e.Location;
@@ -202,7 +206,7 @@ namespace SoundBoardDotNet
 
         private void HeadEnd_MouseMove(object sender, MouseEventArgs e)
         {
-            if (Sound == null) return;
+            if (SoundInfo == null) return;
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
                 SuspendLayout();
@@ -223,7 +227,7 @@ namespace SoundBoardDotNet
 
         private void HeadStart_MouseMove(object sender, MouseEventArgs e)
         {
-            if (Sound == null) return;
+            if (SoundInfo == null) return;
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
                 SuspendLayout();
@@ -288,8 +292,8 @@ namespace SoundBoardDotNet
         void _updateWidth()
         {
             SuspendLayout();
-            if (Sound?.FileReader != null)
-                WaveGraph.WaveStream = Sound?.FileReader;
+            if (SoundInfo?.WaveStream != null)
+                WaveGraph.WaveStream = SoundInfo?.WaveStream;
             HeadEnd.Height = HeadStart.Height = HeadCurrent.Height = WaveGraph.Height = SpacingPanel.Height = WaveGraphPanel.Height - 20;
             if (WaveStream == null)
             {
@@ -306,8 +310,8 @@ namespace SoundBoardDotNet
             HeadEnd.ParentOffset = HeadStart.ParentOffset = HeadCurrent.ParentOffset = WaveGraph.Left;
             HeadEnd.ParentPanel = HeadStart.ParentPanel = HeadCurrent.ParentPanel = WaveGraphPanel;
             HeadEnd.TotalSeconds = HeadStart.TotalSeconds = HeadCurrent.TotalSeconds = WaveStream.TotalTime.TotalSeconds;
-            HeadStart.Seconds = HeadCurrent.Seconds = Sound?.StartPos ?? 0;
-            HeadEnd.Seconds = Sound?.EndPos ?? WaveStream.TotalTime.TotalSeconds;
+            HeadStart.Seconds = HeadCurrent.Seconds = SoundInfo?.StartPos ?? 0;
+            HeadEnd.Seconds = SoundInfo?.EndPos ?? WaveStream.TotalTime.TotalSeconds;
             ResumeLayout();
         }
 
@@ -323,10 +327,10 @@ namespace SoundBoardDotNet
 
         private void HeadCurrent_MouseUp(object sender, MouseEventArgs e)
         {
-            if (Sound != null)
+            if (SoundInfo != null)
             {
                 PlaySeconds = Math.Max(HeadStart.Seconds, Math.Min(HeadEnd.Seconds, HeadCurrent.Seconds));
-                Sound.Play(PlaySeconds);
+                SoundInfo.GetAudioSound().Play();
             }
         }
 

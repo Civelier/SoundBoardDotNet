@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace SoundBoardDotNet.SoundEvents
 {
-    public delegate void SoundStartedOnAnotherInstanceEventHandler(AudioSoundInfo sender, AudioSound newInstance);
+    public delegate void SoundStartedEventHandler(AudioSound sender);
 }

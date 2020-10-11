@@ -115,8 +115,17 @@
     <Compile Include="PlayHead.Designer.cs">
       <DependentUpon>PlayHead.cs</DependentUpon>
     </Compile>
+    <Compile Include="PlayHeads\IPlayHead.cs" />
+    <Compile Include="PlayHeads\StartPlayHead.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PlayHeads\StartPlayHead.Designer.cs">
+      <DependentUpon>StartPlayHead.cs</DependentUpon>
+    </Compile>
     <Compile Include="SemanticVersion.cs" />
     <Compile Include="SoundEvents\SoundDisposedEventArgs.cs" />
+    <Compile Include="SoundEvents\SoundInfoDisposedEventHandler.cs" />
+    <Compile Include="SoundEvents\SoundStartedEventHandler.cs" />
     <Compile Include="SoundEvents\SoundStartedOnAnotherInstanceEventArgs.cs" />
     <Compile Include="SoundEvents\SoundStoppedEventArgs.cs" />
     <Compile Include="SoundWaveViewer.cs">
@@ -176,6 +185,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PlayHead.resx">
       <DependentUpon>PlayHead.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PlayHeads\StartPlayHead.resx">
+      <DependentUpon>StartPlayHead.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PreferencesForm.resx">
       <DependentUpon>PreferencesForm.cs</DependentUpon>

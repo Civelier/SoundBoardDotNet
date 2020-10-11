@@ -16,34 +16,22 @@ namespace SoundBoardDotNet
     public class AudioSound : IDisposable
     {
         public static List<AudioSound> Sounds = new List<AudioSound>();
-        private AudioFileReader _fileReader;
-        private BufferedWaveProvider _buffWaveProvider;
         private WaveOut _out;
 
-        public string FileName;
         private double _startPos, _endPos;
 
-        public double StartPos
-        {
-            get { return _startPos; }
-            set
-            {
-                _startPos = value;
-                if (_endPos - _startPos != 0) _timer = new Timer((_endPos - _startPos) * 1000);
-                else _timer = new Timer(0.001);
-            }
-        }
+        public double StartPos => _startPos;
 
         public double Time
         {
             get
             {
-                if (_fileReader == null) return 0;
-                return _fileReader.CurrentTime.TotalSeconds;
+                if (WaveStream == null) return 0;
+                return WaveStream.CurrentTime.TotalSeconds;
             }
             set
             {
-                if (_fileReader != null)
+                if (WaveStream != null)
                 {
                     if (_endPos - value > 0)
                     {
@@ -51,7 +39,6 @@ namespace SoundBoardDotNet
                         {
                             Stop();
                         }
-                        _timer.Interval = (_endPos - value) * 1000;
                         if (!IsPlaying)
                         {
                             Play(value);
@@ -61,16 +48,7 @@ namespace SoundBoardDotNet
             }
         }
 
-        public double EndPos
-        {
-            get { return _endPos; }
-            set
-            {
-                _endPos = value;
-                if (_endPos - _startPos != 0) _timer = new Timer((_endPos - _startPos) * 1000);
-                else _timer = new Timer(0.001);
-            }
-        }
+        public double EndPos => _endPos;
 
         public bool IsPlaying => _out.PlaybackState == PlaybackState.Playing;
 
@@ -82,118 +60,111 @@ namespace SoundBoardDotNet
                 _out.Volume = value;
             }
         }
-        public AudioFileReader FileReader => _fileReader;
 
-        private Timer _timer;
+        private bool _disposeAtEnd;
+        private WaveStream _waveStream;
+
+        public WaveStream WaveStream => _waveStream;
 
         public event SoundStoppedEventHandler Stopped;
         public event SoundDisposedEventHandler Disposed;
-        public event SoundStartedOnAnotherInstanceEventHandler StartedOnAnotherInstance;
+        public event SoundStartedEventHandler Started;
 
-        public AudioSound(string fileName, double startPos, double endPos, float volume, bool loop = false)
-        {
-            if (_out == null) _out = new WaveOut();
-            _out.DeviceNumber = OutputDevice.MainOutput.Index;
-            FileName = fileName;
-            _startPos = startPos;
-            _endPos = endPos;
-            Volume = volume;
-            if (_endPos - _startPos != 0) _timer = new Timer((_endPos - _startPos) * 1000);
-            else _timer = new Timer(0.001);
-            _timer.Elapsed += new ElapsedEventHandler(OnStop);
-            _timer.AutoReset = false;
+        //public AudioSound(string fileName, double startPos, double endPos, float volume, bool disposeAtEnd = true, bool loop = false)
+        //{
+        //    if (_out == null) _out = new WaveOut();
+        //    _out.DeviceNumber = OutputDevice.MainOutput.Index;
+        //    FileName = fileName;
+        //    _startPos = startPos;
+        //    _endPos = endPos;
+        //    Volume = volume;
 
-            if (FileName == null)
-            {
-                if (_buffWaveProvider == null) return;
-                _out.Init(_buffWaveProvider);
-                return;
-            }
+        //    if (FileName == null)
+        //    {
+        //        if (_buffWaveProvider == null) return;
+        //        _out.Init(_buffWaveProvider);
+        //        return;
+        //    }
 
-            while (true)
-            {
-                if (new FileInfo(FileName).Exists)
-                {
-                    _fileReader = new AudioFileReader(FileName);
-                    break;
-                }
-                else
-                {
-                    var result = Forms.MessageBox.Show($"File {FileName} does not exist.\nDo you want to try to find the file?", "Error", Forms.MessageBoxButtons.YesNo, Forms.MessageBoxIcon.Error);
+        //    while (true)
+        //    {
+        //        if (new FileInfo(FileName).Exists)
+        //        {
+        //            _fileReader = new AudioFileReader(FileName);
+        //            break;
+        //        }
+        //        else
+        //        {
+        //            var result = Forms.MessageBox.Show($"File {FileName} does not exist.\nDo you want to try to find the file?", "Error", Forms.MessageBoxButtons.YesNo, Forms.MessageBoxIcon.Error);
 
-                    if (result == Forms.DialogResult.Yes)
-                    {
-                        var file = new Forms.OpenFileDialog();
-                        var fileInfo = new FileInfo(fileName);
-                        file.InitialDirectory = fileInfo.DirectoryName;
-                        file.CheckFileExists = true;
-                        var result2 = file.ShowDialog();
-                        if (result2 != Forms.DialogResult.Cancel)
-                        {
-                            using (var r = new AudioFileReader(file.FileName))
-                            if (r.TotalTime.TotalSeconds >= EndPos)
-                            {
-                                FileName = file.FileName;
-                            }
-                        }
-                    }
-                    if (result == Forms.DialogResult.No)
-                    {
-                        break;
-                    }
-                }
-            }
+        //            if (result == Forms.DialogResult.Yes)
+        //            {
+        //                var file = new Forms.OpenFileDialog();
+        //                var fileInfo = new FileInfo(fileName);
+        //                file.InitialDirectory = fileInfo.DirectoryName;
+        //                file.CheckFileExists = true;
+        //                var result2 = file.ShowDialog();
+        //                if (result2 != Forms.DialogResult.Cancel)
+        //                {
+        //                    using (var r = new AudioFileReader(file.FileName))
+        //                    if (r.TotalTime.TotalSeconds >= EndPos)
+        //                    {
+        //                        FileName = file.FileName;
+        //                    }
+        //                }
+        //            }
+        //            if (result == Forms.DialogResult.No)
+        //            {
+        //                break;
+        //            }
+        //        }
+        //    }
 
-            if (_fileReader != null)
-            {
-                try
-                {
-                    _out.Init(_fileReader);
-                }
-                catch (MmException e)
-                {
-                    Debug.WriteLine(e.Message);
-                }
-            }
-        }
+        //    if (_fileReader != null)
+        //    {
+        //        try
+        //        {
+        //            _out.Init(_fileReader);
+        //        }
+        //        catch (MmException e)
+        //        {
+        //            Debug.WriteLine(e.Message);
+        //        }
+        //    }
+        //}
 
-        public AudioSound(AudioRecorder recorder, double startPos, double endPos, float volume)
-        {
-            _buffWaveProvider = (BufferedWaveProvider)recorder.GetWaveProvider();
-            _out = new WaveOut();
-            _out.DeviceNumber = OutputDevice.MainOutput.Index;
-            _startPos = startPos;
-            _endPos = endPos;
-            Volume = volume;
-            if (_endPos - _startPos != 0) _timer = new Timer((_endPos - _startPos) * 1000);
-            else _timer = new Timer(0.001);
-            _timer.Elapsed += new ElapsedEventHandler(OnStop);
-            _timer.AutoReset = false;
-
-            _out.Init(_buffWaveProvider.ToSampleProvider().Skip(TimeSpan.FromSeconds(_startPos)));
-        }
-
-        public AudioSound(IWaveProvider wave, double startPos, double endPos, float volume)
+        private AudioSound(IWaveProvider wave, double startPos, double endPos, float volume, bool disposeAtEnd)
         {
             _out = new WaveOut();
             _out.DeviceNumber = OutputDevice.MainOutput.Index;
             _startPos = startPos;
             _endPos = endPos;
             Volume = volume;
-            if (_endPos - _startPos != 0) _timer = new Timer((_endPos - _startPos) * 1000);
-            else _timer = new Timer(0.001);
-            _timer.Elapsed += new ElapsedEventHandler(OnStop);
-            _timer.AutoReset = false;
 
             _out.Init(wave);
+
+            _out.PlaybackStopped += _out_PlaybackStopped;
         }
 
-        private AudioSound(AudioSound sound) : this(sound.FileName, sound._startPos, sound._endPos, sound.Volume)
+        private void _out_PlaybackStopped(object sender, StoppedEventArgs e)
         {
-            if (sound._buffWaveProvider != null)
-            {
-                _buffWaveProvider = sound._buffWaveProvider;
-            }
+            OnEndReached();
+            if (_disposeAtEnd) Dispose();
+        }
+
+        private void PauseDefaultStopEvent()
+        {
+            _out.PlaybackStopped -= _out_PlaybackStopped;
+        }
+
+        private void ResumeDefaultStopEvent()
+        {
+            _out.PlaybackStopped += _out_PlaybackStopped;
+        }
+
+        public AudioSound(ISampleProvider sample, WaveStream waveStream, double startPos, double endPos, float volume, bool disposeAtEnd) : this(sample.ToWaveProvider(), startPos, endPos, volume, disposeAtEnd)
+        {
+            _waveStream = waveStream;
         }
 
         private void OnStopMethodCalled()
@@ -215,18 +186,10 @@ namespace SoundBoardDotNet
             OnEndReached();
         }
 
-        private void OnSoundStarted(AudioSound newInstance)
+        private void OnSoundStarted()
         {
-            SoundStartedOnAnotherInstanceEventHandler handler = StartedOnAnotherInstance;
-            handler?.Invoke(this, newInstance);
-        }
-
-        public static AudioSound PlaySound(AudioSound sound)
-        {
-            var s = new AudioSound(sound);
-            s.Play();
-            sound.OnSoundStarted(s);
-            return s;
+            SoundStartedEventHandler handler = Started;
+            handler?.Invoke(this);
         }
 
         public static void PlayRecordedSound(AudioSound sound)
@@ -236,9 +199,9 @@ namespace SoundBoardDotNet
 
         public void Play(double? time = null)
         {
-            if (_fileReader != null)
+            if (WaveStream != null)
             {
-                _fileReader.CurrentTime = TimeSpan.FromSeconds(time.HasValue ? time.Value : _startPos);
+                WaveStream.CurrentTime = TimeSpan.FromSeconds(time.HasValue ? time.Value : _startPos);
             }
             try
             {
@@ -255,7 +218,7 @@ namespace SoundBoardDotNet
             try
             {
                 _out.Play();
-                _timer.Start();
+                OnSoundStarted();
                 Sounds.Add(this);
             }
             catch (NullReferenceException)
@@ -272,14 +235,15 @@ namespace SoundBoardDotNet
 
         public void Stop()
         {
+            PauseDefaultStopEvent();
             StopProcedure();
+            ResumeDefaultStopEvent();
             OnStopMethodCalled();
         }
 
         private void _stop()
         {
             _out.Stop();
-            _timer.Stop();
         }
 
         public static void StopAll()
@@ -295,8 +259,7 @@ namespace SoundBoardDotNet
         {
             _stop();
             _out.Dispose();
-            if (_fileReader != null) _fileReader.Dispose();
-            _timer.Dispose();
+            if (WaveStream != null) WaveStream.Dispose();
             SoundDisposedEventHandler handler = Disposed;
             Disposed?.Invoke(this);
         }

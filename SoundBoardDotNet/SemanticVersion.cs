@@ -27,5 +27,10 @@ namespace SoundBoardDotNet
             if (version.Number[0] == Major) return true;
             return false;
         }
+
+        public override string ToString()
+        {
+            return MyVersionNumber.ToString();
+        }
     }
 }
