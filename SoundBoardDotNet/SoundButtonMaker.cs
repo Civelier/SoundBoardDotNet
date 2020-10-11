@@ -148,9 +148,9 @@ namespace SoundBoardDotNet
         {
             SoundForm = new SelectSound(UpdateBtnText, Data);
             Btn.Text = Name;
-            if (SoundForm.Sound != null)
+            if (SoundForm.SoundInfo != null)
             {
-                if (SoundForm.Sound.WaveStream != null) Btn.Text += "\n" + Data.Name;
+                if (SoundForm.SoundInfo.WaveStream != null) Btn.Text += "\n" + Data.Name;
             }
         }
 

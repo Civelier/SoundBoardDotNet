@@ -67,12 +67,7 @@ namespace SoundBoardDotNet
 
         public WaveStream WaveStream
         {
-            get => WaveGraph.WaveStream;
-            set
-            {
-                WaveGraph.WaveStream = value;
-                _updateWidth();
-            }
+            get => SoundInfo?.WaveStream;
         }
 
         public double PlaySeconds
@@ -102,16 +97,14 @@ namespace SoundBoardDotNet
             get => _soundInfo;
             set
             {
-                if (!_soundInfo.Equals(value))
+                if (_soundInfo != value)
                 {
                     if (_soundInfo != null)
                     {
-                        _soundInfo.SoundInstanceStarted -= _soundInfo_SoundInstanceStarted;
-                        _soundInfo.Disposed -= _soundInfo_Disposed;
                         _soundInfo.Dispose();
                     }
                     _soundInfo = value;
-                    WaveStream = _soundInfo?.WaveStream;
+                    WaveGraph.WaveStream = _soundInfo?.WaveStream;
                     if (_soundInfo != null)
                     {
                         _soundInfo.SoundInstanceStarted += _soundInfo_SoundInstanceStarted;
@@ -129,7 +122,9 @@ namespace SoundBoardDotNet
 
         private void _soundInfo_Disposed(AudioSoundInfo sender)
         {
-            SoundInfo = null;
+            _soundInfo = null;
+            sender.Disposed -= _soundInfo_Disposed;
+            sender.SoundInstanceStarted -= _soundInfo_SoundInstanceStarted;
         }
 
         public NumericUpDown StartUpDown => StartPositionUpDown;
@@ -281,7 +276,7 @@ namespace SoundBoardDotNet
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
-            _updateWidth();
+            _updateWidth(false);
         }
 
         private void ResizeViewer(object sender, EventArgs e)
@@ -289,11 +284,18 @@ namespace SoundBoardDotNet
             Width = Parent.Width - 20;
         }
 
-        void _updateWidth()
+        void _updateWidth(bool resetCursors = true)
         {
             SuspendLayout();
-            if (SoundInfo?.WaveStream != null)
-                WaveGraph.WaveStream = SoundInfo?.WaveStream;
+            double startPos = SoundInfo?.StartPos ?? 0, currentPos = SoundInfo?.StartPos ?? 0;
+            double endPos = SoundInfo?.EndPos ?? 0;
+            if (!resetCursors)
+            {
+                startPos = HeadStart.Seconds;
+                currentPos = HeadCurrent.Seconds;
+                endPos = HeadEnd.Seconds;
+            }
+
             HeadEnd.Height = HeadStart.Height = HeadCurrent.Height = WaveGraph.Height = SpacingPanel.Height = WaveGraphPanel.Height - 20;
             if (WaveStream == null)
             {
@@ -310,8 +312,9 @@ namespace SoundBoardDotNet
             HeadEnd.ParentOffset = HeadStart.ParentOffset = HeadCurrent.ParentOffset = WaveGraph.Left;
             HeadEnd.ParentPanel = HeadStart.ParentPanel = HeadCurrent.ParentPanel = WaveGraphPanel;
             HeadEnd.TotalSeconds = HeadStart.TotalSeconds = HeadCurrent.TotalSeconds = WaveStream.TotalTime.TotalSeconds;
-            HeadStart.Seconds = HeadCurrent.Seconds = SoundInfo?.StartPos ?? 0;
-            HeadEnd.Seconds = SoundInfo?.EndPos ?? WaveStream.TotalTime.TotalSeconds;
+            HeadStart.Seconds = startPos;
+            HeadCurrent.Seconds = currentPos;
+            HeadEnd.Seconds = endPos;
             ResumeLayout();
         }
 

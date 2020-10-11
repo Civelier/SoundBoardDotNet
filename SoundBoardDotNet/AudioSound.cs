@@ -15,22 +15,33 @@ namespace SoundBoardDotNet
 {
     public class AudioSound : IDisposable
     {
+        public bool IsDisposed { get; private set; }
+
         public static List<AudioSound> Sounds = new List<AudioSound>();
         private WaveOut _out;
 
         private double _startPos, _endPos;
 
-        public double StartPos => _startPos;
+        public double StartPos
+        {
+            get
+            {
+                CheckDisposed();
+                return _startPos;
+            }
+        }
 
         public double Time
         {
             get
             {
+                CheckDisposed();
                 if (WaveStream == null) return 0;
                 return WaveStream.CurrentTime.TotalSeconds;
             }
             set
             {
+                CheckDisposed();
                 if (WaveStream != null)
                 {
                     if (_endPos - value > 0)
@@ -48,13 +59,32 @@ namespace SoundBoardDotNet
             }
         }
 
-        public double EndPos => _endPos;
+        public double EndPos
+        {
+            get
+            {
+                CheckDisposed();
+                return _endPos;
+            }
+        }
 
-        public bool IsPlaying => _out.PlaybackState == PlaybackState.Playing;
+        public bool IsPlaying
+
+        {
+            get
+            {
+                CheckDisposed();
+                return _out.PlaybackState == PlaybackState.Playing;
+            }
+        }
 
         public float Volume
         {
-            get { return _out.Volume; }
+            get 
+            { 
+                CheckDisposed();
+                return _out.Volume; 
+            }
             set
             {
                 _out.Volume = value;
@@ -64,7 +94,14 @@ namespace SoundBoardDotNet
         private bool _disposeAtEnd;
         private WaveStream _waveStream;
 
-        public WaveStream WaveStream => _waveStream;
+        public WaveStream WaveStream
+        {
+            get
+            {
+                CheckDisposed();
+                return _waveStream;
+            }
+        }
 
         public event SoundStoppedEventHandler Stopped;
         public event SoundDisposedEventHandler Disposed;
@@ -199,6 +236,7 @@ namespace SoundBoardDotNet
 
         public void Play(double? time = null)
         {
+            CheckDisposed();
             if (WaveStream != null)
             {
                 WaveStream.CurrentTime = TimeSpan.FromSeconds(time.HasValue ? time.Value : _startPos);
@@ -235,6 +273,7 @@ namespace SoundBoardDotNet
 
         public void Stop()
         {
+            CheckDisposed();
             PauseDefaultStopEvent();
             StopProcedure();
             ResumeDefaultStopEvent();
@@ -244,6 +283,11 @@ namespace SoundBoardDotNet
         private void _stop()
         {
             _out.Stop();
+        }
+
+        private void CheckDisposed()
+        {
+            if (IsDisposed) throw new ObjectDisposedException("AudioSound");
         }
 
         public static void StopAll()
@@ -257,9 +301,11 @@ namespace SoundBoardDotNet
 
         public void Dispose()
         {
+            CheckDisposed();
             _stop();
             _out.Dispose();
             if (WaveStream != null) WaveStream.Dispose();
+            IsDisposed = true;
             SoundDisposedEventHandler handler = Disposed;
             Disposed?.Invoke(this);
         }

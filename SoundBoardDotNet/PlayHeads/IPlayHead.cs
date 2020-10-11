@@ -22,7 +22,6 @@ namespace SoundBoardDotNet.PlayHeads
         int XLocation { get; set; }
         int ParentOffset { set; }
         SoundWaveViewer Viewer { set; }
-
-        void UpdateLocationFromSeconds();
+        AudioSoundInfo SoundInfo { set; }
     }
 }

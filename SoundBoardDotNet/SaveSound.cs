@@ -16,8 +16,49 @@ namespace SoundBoardDotNet
     public partial class SaveSound : Form
     {
         private static string _defaultStartPath = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
-        public AudioRecorder Recorder;
-        public AudioSound Sound;
+        public AudioRecorder Recorder
+        {
+            get => _recorder;
+            set
+            {
+                SoundInfo = new AudioSoundInfo(value, 0, 0, VolumeControl.Volume);
+                _recorder = value;
+            }
+        }
+        public AudioSoundInfo SoundInfo
+        {
+            get => SoundWaveGraph.SoundInfo;
+            private set
+            {
+                if (SoundInfo != value)
+                {
+                    SoundWaveGraph.SoundInfo = value;
+                    if (SoundInfo != null)
+                    {
+                        SoundInfo.Disposed += _soundInfo_Disposed;
+                        SoundInfo.PropertyChanged += _soundInfo_PropertyChanged;
+                    }
+                }
+            }
+        }
+
+        private void _soundInfo_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "StartPos":
+                    
+                default:
+                    break;
+            }
+        }
+
+        private void _soundInfo_Disposed(AudioSoundInfo sender)
+        {
+            sender.Disposed -= _soundInfo_Disposed;
+            _recorder.CloseWaveStream();
+            WaveGraph.WaveStream = null;
+        }
 
         public SaveSound()
         {
@@ -36,18 +77,19 @@ namespace SoundBoardDotNet
                 InputCombo.Items.Add(inputDevice.DeviceName);
             }
             InputCombo.SelectedIndex = 0;
-            var prov = Recorder.GetWaveProvider();
-            Sound = new AudioSound(prov, 0, 0, VolumeControl.Volume);
-            Sound.EndPos = Recorder.RecordedTime;
+
+
+            //SoundInfo = new AudioSoundInfo(Recorder, 0, 0, VolumeControl.Volume);
+            SoundInfo.EndPos = Recorder.RecordedTime;
 
             SoundWaveGraph.StartUpDown.ValueChanged += StartTime_ValueChanged;
             SoundWaveGraph.EndUpDown.ValueChanged += EndTime_ValueChanged;
             SoundWaveGraph.StartUpDown.Minimum = 0;
-            SoundWaveGraph.StartUpDown.Maximum = (decimal)Sound.EndPos;
+            SoundWaveGraph.StartUpDown.Maximum = (decimal)SoundInfo.EndPos;
             SoundWaveGraph.EndUpDown.Minimum = 0;
             SoundWaveGraph.EndUpDown.Maximum = SoundWaveGraph.StartUpDown.Maximum;
             SoundWaveGraph.EndUpDown.Value = SoundWaveGraph.StartUpDown.Maximum;
-            TotalTimeLabel.Text = $"{SoundWaveGraph.EndUpDown.Maximum} s";
+            TotalTimeLabel.Text = TimeSpan.FromSeconds(SoundInfo.TotalSeconds).ToString(@"mm\:ss\.ffff");
             KeyCombo.Items.Add("Select a key");
             foreach (var item in Form1.MyKeyboard)
             {
@@ -58,7 +100,6 @@ namespace SoundBoardDotNet
             }
             KeyCombo.SelectedIndex = 0;
             //SaveButton.Enabled = false
-            SoundWaveGraph.WaveStream = Recorder.GetWaveStream();
         }
 
         private void SupressKeys(object sender, KeyEventArgs e)
@@ -164,6 +205,9 @@ namespace SoundBoardDotNet
         }
 
         private bool _isSaved = false;
+        private AudioSoundInfo _soundInfo;
+        private AudioRecorder _recorder;
+
         private bool SaveFile()
         {
             if (_isSaved) return true;
@@ -224,11 +268,11 @@ namespace SoundBoardDotNet
             Recorder.Save(fileName);
             btn.Btn.Text = btn.Name + "\n" + NameTextBox.Text;
             btn.Data.FilePath = fileName;
-            btn.Data.StartTime = (double)SoundWaveGraph.StartUpDown.Value;
-            btn.Data.EndTime = (double)SoundWaveGraph.EndUpDown.Value;
+            btn.Data.StartTime = SoundWaveGraph.StartTime;
+            btn.Data.EndTime = SoundWaveGraph.EndTime;
             btn.Data.Name = NameTextBox.Text;
-            btn.SoundForm.Sound = new AudioSound(btn.Data.FilePath, btn.Data.StartTime, btn.Data.EndTime, btn.Data.Volume);
-            btn.SoundForm.Data.FilePath = btn.Data.FilePath = btn.SoundForm.Sound.FileName;
+            btn.SoundForm.SoundInfo = new AudioSoundInfo(btn.Data.FilePath, btn.Data.StartTime, btn.Data.EndTime, btn.Data.Volume);
+            btn.SoundForm.Data.FilePath = btn.Data.FilePath = btn.SoundForm.SoundInfo.FileName;
             _isSaved = true;
             Form1.MyForm.HasChanged = true;
             return true;
@@ -264,8 +308,8 @@ namespace SoundBoardDotNet
 
         private void Play()
         {
-            AudioSound.StopAll();
-            AudioSound.PlayRecordedSound(new AudioSound(Recorder, (double)SoundWaveGraph.StartUpDown.Value, (double)SoundWaveGraph.EndUpDown.Value, VolumeControl.Volume));
+            SoundInfo.StopAllInstances();
+            SoundInfo.GetActiveAudioSound().Play();
         }
 
         private void PlayButton_Click(object sender, EventArgs e)
@@ -291,13 +335,13 @@ namespace SoundBoardDotNet
         private void StartTime_ValueChanged(object sender, EventArgs e)
         {
             SoundWaveGraph.EndUpDown.Minimum = SoundWaveGraph.StartUpDown.Value;
-            Sound.StartPos = Convert.ToDouble(SoundWaveGraph.StartUpDown.Value);
+            SoundInfo.StartPos = Convert.ToDouble(SoundWaveGraph.StartUpDown.Value);
         }
 
         private void EndTime_ValueChanged(object sender, EventArgs e)
         {
             SoundWaveGraph.StartUpDown.Maximum = SoundWaveGraph.EndUpDown.Value;
-            Sound.EndPos = Convert.ToDouble(SoundWaveGraph.EndUpDown.Value);
+            SoundInfo.EndPos = Convert.ToDouble(SoundWaveGraph.EndUpDown.Value);
         }
 
         private SoundButtonMaker GetButton()
@@ -355,25 +399,20 @@ namespace SoundBoardDotNet
 
         private void InputCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Recorder.CloseWaveStream();
-            Recorder = InputDevice.GetRecordedDevices()[InputCombo.SelectedIndex].Recorder;
-            var prov = Recorder.GetWaveProvider();
             VolumeControl.Volume = 1;
-            Sound = new AudioSound(Recorder, 0, 0, VolumeControl.Volume);
-            SoundWaveGraph.WaveStream = Recorder.GetWaveStream();
-            Sound.EndPos = Recorder.RecordedTime;
+            Recorder = InputDevice.GetRecordedDevices()[InputCombo.SelectedIndex].Recorder;
+            SoundInfo.EndPos = SoundInfo.TotalSeconds;
             SoundWaveGraph.StartUpDown.Minimum = 0;
-            SoundWaveGraph.StartUpDown.Maximum = (decimal)Sound.EndPos;
+            SoundWaveGraph.StartUpDown.Maximum = (decimal)SoundInfo.EndPos;
             SoundWaveGraph.EndUpDown.Minimum = 0;
             SoundWaveGraph.EndUpDown.Maximum = SoundWaveGraph.StartUpDown.Maximum;
             SoundWaveGraph.EndUpDown.Value = SoundWaveGraph.StartUpDown.Maximum;
-            TotalTimeLabel.Text = $"{SoundWaveGraph.EndUpDown.Maximum} s";
+            TotalTimeLabel.Text = TimeSpan.FromSeconds(SoundInfo.TotalSeconds).ToString(@"mm\:ss\.ffff");
         }
 
         private void SaveSound_FormClosed(object sender, FormClosedEventArgs e)
         {
-            SoundWaveGraph.WaveStream = null;
-            Recorder.CloseWaveStream();
+            SoundInfo.Dispose();
             InputDevice.StartRecorders();
         }
 

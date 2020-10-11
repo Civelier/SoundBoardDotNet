@@ -18,7 +18,7 @@ namespace SoundBoardDotNet
 {
     public partial class SelectSound : Form
     {
-        public AudioSound Sound;
+        public AudioSoundInfo SoundInfo;
         public string FileName;
 
         public TextBox GetNameTextBox { get { return NameTextBox; } }
@@ -181,9 +181,9 @@ namespace SoundBoardDotNet
                 }
                 return;
             }
-            if (Sound != null)
+            if (SoundInfo != null)
             {
-                if (Sound.WaveStream == null)
+                if (SoundInfo.WaveStream == null)
                 {
                     if (eraseIfEmpty)
                     {
@@ -196,12 +196,12 @@ namespace SoundBoardDotNet
                 }
             }
 
-            Sound = new AudioSound(FileNameBox.Text, (double)SoundWaveGraph.StartUpDown.Value, (double)SoundWaveGraph.EndUpDown.Value, VolumeControl.Volume);
+            SoundInfo = new AudioSoundInfo(FileNameBox.Text, (double)SoundWaveGraph.StartUpDown.Value, (double)SoundWaveGraph.EndUpDown.Value, VolumeControl.Volume);
 
-            WaveGraph.WaveStream = Sound.WaveStream;
-            SoundWaveGraph.SoundInfo = Sound;
+            WaveGraph.WaveStream = SoundInfo.WaveStream;
+            SoundWaveGraph.SoundInfo = SoundInfo;
             var temp = SoundWaveGraph.EndUpDown.Value;
-            SoundWaveGraph.EndUpDown.Maximum = (decimal)Sound.WaveStream.TotalTime.TotalSeconds;
+            SoundWaveGraph.EndUpDown.Maximum = (decimal)SoundInfo.WaveStream.TotalTime.TotalSeconds;
             if (temp == 0)
                 SoundWaveGraph.EndUpDown.Value = SoundWaveGraph.EndUpDown.Maximum;
             TotalTimeLabel.Text = $"{SoundWaveGraph.EndUpDown.Maximum} s";
@@ -232,8 +232,8 @@ namespace SoundBoardDotNet
         {
             //var sound = AudioSound.AddSound(FileNameBox.Text, WaveGraph.Slider1Value, WaveGraph.Slider2Value, (float)VolumeTrack.Value / 100);
             //return sound != null;// true if successfull
-            if (Sound == null) return;
-            AudioSound.PlaySound(Sound);
+            if (SoundInfo == null) return;
+            SoundInfo.GetAudioSound().Play();
         }
 
         private void BrowseButton_Click(object sender, EventArgs e)
@@ -261,7 +261,7 @@ namespace SoundBoardDotNet
                 MessageBox.Show("Enter a valid File to play!");
                 return;
             }
-            CurrentSound = AudioSound.PlaySound(Sound);
+            SoundInfo.GetAudioSound().Play();
         }
 
         private void PlayButton_Click(object sender, EventArgs e)
@@ -306,17 +306,17 @@ namespace SoundBoardDotNet
         {
             if (Data.FilePath != "")
             {
-                if (Sound == null) Sound = new AudioSound(Data.FilePath, Data.StartTime, Data.EndTime, Data.Volume);
+                if (SoundInfo == null) SoundInfo = new AudioSoundInfo(Data.FilePath, Data.StartTime, Data.EndTime, Data.Volume);
                 else
                 {
-                    if (Sound.FileName != Data.FilePath) Sound = new AudioSound(Data.FilePath, Data.StartTime, Data.EndTime, Data.Volume);
+                    if (SoundInfo.FileName != Data.FilePath) SoundInfo = new AudioSoundInfo(Data.FilePath, Data.StartTime, Data.EndTime, Data.Volume);
                 }
-                if (Sound.WaveStream == null) return;
-                Data.FilePath = Sound.FileName;
+                if (SoundInfo.WaveStream == null) return;
+                Data.FilePath = SoundInfo.FileName;
                 FileNameBox.Text = Data.FilePath;
-                WaveGraph.WaveStream = Sound.WaveStream;
+                WaveGraph.WaveStream = SoundInfo.WaveStream;
                 var temp = SoundWaveGraph.EndUpDown.Maximum;
-                SoundWaveGraph.EndUpDown.Maximum = (decimal)Sound.WaveStream.TotalTime.TotalSeconds;
+                SoundWaveGraph.EndUpDown.Maximum = (decimal)SoundInfo.WaveStream.TotalTime.TotalSeconds;
                 if (temp == 0)
                     SoundWaveGraph.EndUpDown.Value = SoundWaveGraph.EndUpDown.Maximum;
                 TotalTimeLabel.Text = $"{SoundWaveGraph.EndUpDown.Maximum} s";
@@ -363,19 +363,19 @@ namespace SoundBoardDotNet
 
         private void Volume_VolumeChanged(object sender, EventArgs e)
         {
-            if (Sound != null) Sound.Volume = VolumeControl.Volume;
+            if (SoundInfo != null) SoundInfo.Volume = VolumeControl.Volume;
         }
 
         private void StartTime_ValueChanged(object sender, EventArgs e)
         {
-            if (Sound == null) return;
-            Sound.StartPos = (double)SoundWaveGraph.StartUpDown.Value;
+            if (SoundInfo == null) return;
+            SoundInfo.StartPos = (double)SoundWaveGraph.StartUpDown.Value;
         }
 
         private void EndTime_ValueChanged(object sender, EventArgs e)
         {
-            if (Sound == null) return;
-            Sound.EndPos = (double)SoundWaveGraph.EndUpDown.Value;
+            if (SoundInfo == null) return;
+            SoundInfo.EndPos = (double)SoundWaveGraph.EndUpDown.Value;
         }
     }
 }

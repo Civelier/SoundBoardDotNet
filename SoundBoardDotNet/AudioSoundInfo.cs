@@ -11,15 +11,21 @@ namespace SoundBoardDotNet
 {
     public class AudioSoundInfo : INotifyPropertyChanged, IDisposable
     {
+        public bool IsDisposed { get; private set; }
         private double _startPos;
         private double _endPos;
         private float _volume;
 
-        public double StartPos 
+        public double StartPos
         {
-            get => _startPos;
+            get
+            {
+                CheckDisposed();
+                return _startPos;
+            }
             set
             {
+                CheckDisposed();
                 if (_startPos != value)
                 {
                     _startPos = value;
@@ -27,11 +33,16 @@ namespace SoundBoardDotNet
                 }
             }
         }
-        public double EndPos 
+        public double EndPos
         {
-            get => _endPos;
+            get
+            {
+                CheckDisposed();
+                return _endPos;
+            }
             set
             {
+                CheckDisposed();
                 if (_endPos != value)
                 {
                     _endPos = value;
@@ -39,20 +50,43 @@ namespace SoundBoardDotNet
                 }
             }
         }
-        public float Volume 
+        public float Volume
         {
-            get => _volume;
+            get
+            {
+                CheckDisposed();
+                return _volume;
+            }
             set
             {
+                CheckDisposed();
                 if (_volume != value)
                 {
                     _volume = value;
+                    foreach (var sound in _instances)
+                    {
+                        sound.Volume = value;
+                    }
                     OnPropertyChanged("Volume");
                 }
             }
         }
-        public readonly double TotalSeconds;
-        public double SelectedLength => EndPos - StartPos;
+        public double TotalSeconds
+        {
+            get
+            {
+                CheckDisposed();
+                return _totalSeconds;
+            }
+        }
+        public double SelectedLength
+        {
+            get
+            {
+                CheckDisposed();
+                return EndPos - StartPos;
+            }
+        }
 
         private readonly IWaveProvider _wave;
         private readonly WaveStream _waveStream;
@@ -61,28 +95,70 @@ namespace SoundBoardDotNet
         public event SoundStartedOnAnotherInstanceEventHandler SoundInstanceStarted;
         public event SoundInfoDisposedEventHandler Disposed;
 
-        public WaveStream WaveStream => _waveStream;
+        public WaveStream WaveStream
+        {
+            get
+            {
+                CheckDisposed();
+                return _waveStream;
+            }
+        }
 
-        public bool CanHaveMultipleInstances => _canHaveMultipleInstances;
+        public bool CanHaveMultipleInstances
+        {
+            get
+            {
+                CheckDisposed();
+                return _canHaveMultipleInstances;
+            }
+        }
 
         private List<AudioSound> _instances;
         private bool _canHaveMultipleInstances;
 
         private delegate WaveStream RequestWaveStreamFunction();
         private RequestWaveStreamFunction _waveStreamRequest;
+        private double _totalSeconds;
+        private string _fileName;
+
+        public string FileName
+        {
+            get
+            {
+                CheckDisposed();
+                return _fileName;
+            }
+        }
 
         public AudioSoundInfo(AudioRecorder recorder, double startPos, double endPos, float volume)
         {
-            recorder.GetWaveStream();
+            IsDisposed = false;
             _wave = recorder.GetWaveProvider();
             _waveStream = recorder.GetWaveStream();
             
             _startPos = startPos;
             _endPos = endPos;
             _volume = volume;
-            TotalSeconds = _waveStream.Length;
+            _totalSeconds = _waveStream.Length;
             _instances = new List<AudioSound>();
             _canHaveMultipleInstances = false;
+        }
+
+        public AudioSoundInfo(string fileName, double startPos, double endPos, float volume)
+        {
+            IsDisposed = false;
+            var afr = new AudioFileReader(fileName);
+            _waveStream = afr;
+            _wave = afr.ToWaveProvider();
+
+            _startPos = startPos;
+            _endPos = endPos;
+            _volume = volume;
+            _totalSeconds = _waveStream.Length;
+            _instances = new List<AudioSound>();
+            _canHaveMultipleInstances = true;
+
+            _waveStreamRequest = () => new AudioFileReader(fileName);
         }
 
         private void OnPropertyChanged(string propertyName)
@@ -93,7 +169,13 @@ namespace SoundBoardDotNet
 
         public ISampleProvider GetSample()
         {
+            CheckDisposed();
             return _wave.ToSampleProvider().Skip(TimeSpan.FromSeconds(StartPos)).Take(TimeSpan.FromSeconds(SelectedLength));
+        }
+
+        private void CheckDisposed()
+        {
+            if (IsDisposed) throw new ObjectDisposedException("AudioSoundInfo");
         }
 
         private void OnSoundStarted(AudioSound newSound)
@@ -104,6 +186,7 @@ namespace SoundBoardDotNet
 
         private WaveStream RequestNewWaveStream()
         {
+            CheckDisposed();
             if (!_canHaveMultipleInstances) throw new Exception("Only one instance of stream can be generated!\nUse the \"WaveStream\" property instead.");
             else
             {
@@ -113,6 +196,7 @@ namespace SoundBoardDotNet
 
         public AudioSound GetAudioSound(bool disposeAtEnd = true)
         {
+            CheckDisposed();
             if (!_canHaveMultipleInstances && _instances.Count > 0)
             {
                 throw new Exception("Only one instance of stream can be generated! Use \"GetActiveAudioSound\" instead.");
@@ -126,6 +210,7 @@ namespace SoundBoardDotNet
 
         public AudioSound GetActiveAudioSound(bool disposeAtEnd = true)
         {
+            CheckDisposed();
             if (_canHaveMultipleInstances) throw new Exception("More than one instance can be created.\nUse this only when only one instance is possible.");
             if (_instances.Count == 1) return _instances[0];
             var s = new AudioSound(GetSample(), WaveStream, StartPos, EndPos, Volume, disposeAtEnd);
@@ -155,19 +240,37 @@ namespace SoundBoardDotNet
 
         public void StopAllInstances()
         {
+            CheckDisposed();
             foreach (var sound in _instances)
             {
                 sound.Stop();
             }
+            if (_instances.Count > 0)
+            {
+                Console.WriteLine($"Stopped instances but {_instances.Count} haven\'t been disposed!");
+            }
+        }
+
+        public void DisposeInstances()
+        {
+            CheckDisposed();
+            foreach (var sound in _instances)
+            {
+                sound.Dispose();
+            }
+            _instances.Clear();
         }
 
         public void Dispose()
         {
+            CheckDisposed();
             foreach (var sound in _instances)
             {
                 sound.Dispose();
             }
             _waveStream.Dispose();
+            _waveStreamRequest = null;
+            IsDisposed = true;
             OnDisposed();
         }
     }
