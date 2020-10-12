@@ -18,7 +18,11 @@ namespace SoundBoardDotNet
 {
     public partial class SelectSound : Form
     {
-        public AudioSoundInfo SoundInfo;
+        public AudioSoundInfo SoundInfo
+        {
+            get => SoundWaveGraph.SoundInfo;
+            set => SoundWaveGraph.SoundInfo = value;
+        }
         public string FileName;
 
         public TextBox GetNameTextBox { get { return NameTextBox; } }
@@ -181,6 +185,8 @@ namespace SoundBoardDotNet
                 }
                 return;
             }
+            if (FileNameBox.Text == SoundInfo?.FileName) return;
+
             if (SoundInfo != null)
             {
                 if (SoundInfo.WaveStream == null)
@@ -198,13 +204,9 @@ namespace SoundBoardDotNet
 
             SoundInfo = new AudioSoundInfo(FileNameBox.Text, (double)SoundWaveGraph.StartUpDown.Value, (double)SoundWaveGraph.EndUpDown.Value, VolumeControl.Volume);
 
-            WaveGraph.WaveStream = SoundInfo.WaveStream;
-            SoundWaveGraph.SoundInfo = SoundInfo;
-            var temp = SoundWaveGraph.EndUpDown.Value;
             SoundWaveGraph.EndUpDown.Maximum = (decimal)SoundInfo.WaveStream.TotalTime.TotalSeconds;
-            if (temp == 0)
-                SoundWaveGraph.EndUpDown.Value = SoundWaveGraph.EndUpDown.Maximum;
-            TotalTimeLabel.Text = $"{SoundWaveGraph.EndUpDown.Maximum} s";
+            SoundWaveGraph.EndUpDown.Value = SoundWaveGraph.EndUpDown.Maximum;
+            TotalTimeLabel.Text = TimeSpan.FromSeconds(SoundInfo.TotalSeconds).ToString(@"mm\:ss\.ffff");
             VolumeControl.Volume = 1;
         }
 
@@ -239,6 +241,7 @@ namespace SoundBoardDotNet
         private void BrowseButton_Click(object sender, EventArgs e)
         {
             _fileDialog.ShowDialog();
+            if (FileNameBox.Text == _fileDialog.FileName) return;
             FileNameBox.Text = _fileDialog.FileName;
             var pathList = FileNameBox.Text.Split('\\');
             var extensionList = pathList[pathList.Length - 1].Split('.');

@@ -115,6 +115,18 @@
     <Compile Include="PlayHead.Designer.cs">
       <DependentUpon>PlayHead.cs</DependentUpon>
     </Compile>
+    <Compile Include="PlayHeads\CurrentPlayHead.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PlayHeads\CurrentPlayHead.Designer.cs">
+      <DependentUpon>CurrentPlayHead.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PlayHeads\EndPlayHead.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PlayHeads\EndPlayHead.Designer.cs">
+      <DependentUpon>EndPlayHead.cs</DependentUpon>
+    </Compile>
     <Compile Include="PlayHeads\IPlayHead.cs" />
     <Compile Include="PlayHeads\StartPlayHead.cs">
       <SubType>UserControl</SubType>
@@ -185,6 +197,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PlayHead.resx">
       <DependentUpon>PlayHead.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PlayHeads\CurrentPlayHead.resx">
+      <DependentUpon>CurrentPlayHead.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PlayHeads\EndPlayHead.resx">
+      <DependentUpon>EndPlayHead.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PlayHeads\StartPlayHead.resx">
       <DependentUpon>StartPlayHead.cs</DependentUpon>

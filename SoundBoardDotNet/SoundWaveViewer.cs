@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using NAudio.Wave;
 using NAudio.Gui;
+using SoundBoardDotNet.PlayHeads;
 
 namespace SoundBoardDotNet
 {
@@ -104,6 +105,9 @@ namespace SoundBoardDotNet
                         _soundInfo.Dispose();
                     }
                     _soundInfo = value;
+                    HeadStart.SoundInfo = value;
+                    HeadCurrent.SoundInfo = value;
+                    HeadEnd.SoundInfo = value;
                     WaveGraph.WaveStream = _soundInfo?.WaveStream;
                     if (_soundInfo != null)
                     {
@@ -135,6 +139,7 @@ namespace SoundBoardDotNet
         public SoundWaveViewer()
         {
             InitializeComponent();
+
             Zoom = 100;
             ZoomUpDown.ValueChanged += OnZoomChanged;
             //HeadEnd.Other = HeadStart;
@@ -145,11 +150,40 @@ namespace SoundBoardDotNet
             HeadStart.MouseMove += HeadStart_MouseMove;
             HeadCurrent.MouseDown += Head_MouseDown;
             HeadCurrent.MouseMove += HeadCurrent_MouseMove;
+            HeadCurrent.MouseUp += HeadCurrent_MouseUp;
             StartPositionUpDown.ValueChanged += StartPositionUpDown_ValueChanged;
             EndPositionUpDown.ValueChanged += EndPositionUpDown_ValueChanged;
             ScrollSpeed = 0.25;
-            HeadMove.Enabled = true;
+
+            SoundInfo.PropertyChanged += SoundInfo_PropertyChanged;
+
+            HeadStart.Viewer = this;
+            HeadStart.ParentOffset = WaveGraph.Left;
+            HeadStart.CreateCursorPanel();
+            HeadStart.CursorPanel.Parent = WaveGraph;
+
+            HeadCurrent.Viewer = this;
+            HeadCurrent.ParentOffset = WaveGraph.Left;
+            HeadCurrent.CreateCursorPanel();
+            HeadCurrent.CursorPanel.Parent = WaveGraph;
+
+            HeadEnd.Viewer = this;
+            HeadEnd.ParentOffset = WaveGraph.Left;
+            HeadEnd.CreateCursorPanel();
+            HeadEnd.CursorPanel.Parent = WaveGraph;
+
             _updateWidth();
+        }
+
+        private void SoundInfo_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged("SoundInfo." + e.PropertyName);
+        }
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private void HeadCurrent_MouseMove(object sender, MouseEventArgs e)
@@ -160,7 +194,7 @@ namespace SoundBoardDotNet
                 SuspendLayout();
                 //if (HeadCurrent.Seconds > HeadEnd.Seconds || HeadCurrent.Seconds < HeadStart.Seconds)
                 //{
-                    
+
                 //}
                 HeadCurrent.PointingX = Math.Max(HeadStart.PointingX, Math.Min(HeadEnd.PointingX, e.X + HeadCurrent.PointingX - MouseDownLocation.X));
                 UpdateCurrentPositionTimeLabel();
@@ -176,12 +210,12 @@ namespace SoundBoardDotNet
 
         private void EndPositionUpDown_ValueChanged(object sender, EventArgs e)
         {
-            HeadEnd.Seconds = (double)EndPositionUpDown.Value;
+            SoundInfo.EndPos = (double)EndPositionUpDown.Value;
         }
 
         private void StartPositionUpDown_ValueChanged(object sender, EventArgs e)
         {
-            HeadStart.Seconds = (double)StartPositionUpDown.Value;
+            SoundInfo.StartPos = (double)StartPositionUpDown.Value;
         }
 
         private Point MouseDownLocation;
@@ -194,7 +228,7 @@ namespace SoundBoardDotNet
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
                 MouseDownLocation = e.Location;
-                PlayHead p = (PlayHead)(sender);
+                IPlayHead p = (IPlayHead)sender;
                 GlidePanel(OutOfBoundDistance(p));
             }
         }
@@ -233,7 +267,11 @@ namespace SoundBoardDotNet
                     v = Math.Max(StartPositionUpDown.Minimum, Math.Min(StartPositionUpDown.Maximum, v));
                     HeadStart.Seconds = (double)v;
                 }
-                if (v == EndPositionUpDown.Value) v = EndPositionUpDown.Value - 0.00001m;
+                if (v == EndPositionUpDown.Value)
+                {
+                    if (EndPositionUpDown.Value - 0.00001m > 0) v = EndPositionUpDown.Value - 0.00001m;
+                    else EndPositionUpDown.Value += 0.00001m;
+                }
                 EndPositionUpDown.Minimum = v;
                 StartPositionUpDown.Value = v;
                 HeadCurrent.Seconds = Math.Max(HeadCurrent.Seconds, HeadStart.Seconds);
@@ -242,13 +280,13 @@ namespace SoundBoardDotNet
             }
         }
 
-        private bool IsOutOfBounds(PlayHead head)
+        private bool IsOutOfBounds(IPlayHead head)
         {
             return head.XLocation > WaveGraphPanel.Width + WaveGraphPanel.HorizontalScroll.Value || 
                 head.XLocation < WaveGraphPanel.HorizontalScroll.Value;
         }
 
-        private int OutOfBoundDistance(PlayHead head)
+        private int OutOfBoundDistance(IPlayHead head)
         {
             if (head.XLocation > WaveGraphPanel.Width)
             {
@@ -296,7 +334,7 @@ namespace SoundBoardDotNet
                 endPos = HeadEnd.Seconds;
             }
 
-            HeadEnd.Height = HeadStart.Height = HeadCurrent.Height = WaveGraph.Height = SpacingPanel.Height = WaveGraphPanel.Height - 20;
+            HeadEnd.Height = HeadCurrent.Height = WaveGraph.Height = SpacingPanel.Height = WaveGraphPanel.Height - 20;
             if (WaveStream == null)
             {
                 WaveGraph.Width = WaveGraphPanel.Width - 2 * 40;
@@ -307,11 +345,9 @@ namespace SoundBoardDotNet
             WaveGraph.SamplesPerPixel = (int)Math.Round(Zoom * bps / 10000);
             WaveGraph.Left = 40;
             WaveGraph.Width = (int)Math.Round((double)totalBytes / (WaveGraph.SamplesPerPixel * 8));
-            HeadEnd.ParentWidth = HeadStart.ParentWidth = HeadCurrent.ParentWidth = WaveGraph.Width + 2 * WaveGraph.Left;
             SpacingPanel.Left = WaveGraph.Right;
             HeadEnd.ParentOffset = HeadStart.ParentOffset = HeadCurrent.ParentOffset = WaveGraph.Left;
             HeadEnd.ParentPanel = HeadStart.ParentPanel = HeadCurrent.ParentPanel = WaveGraphPanel;
-            HeadEnd.TotalSeconds = HeadStart.TotalSeconds = HeadCurrent.TotalSeconds = WaveStream.TotalTime.TotalSeconds;
             HeadStart.Seconds = startPos;
             HeadCurrent.Seconds = currentPos;
             HeadEnd.Seconds = endPos;

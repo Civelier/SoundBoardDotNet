@@ -49,54 +49,58 @@
             // TotalTimeLabel
             // 
             this.TotalTimeLabel.AutoSize = true;
-            this.TotalTimeLabel.Location = new System.Drawing.Point(589, 172);
+            this.TotalTimeLabel.Location = new System.Drawing.Point(442, 140);
+            this.TotalTimeLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.TotalTimeLabel.Name = "TotalTimeLabel";
-            this.TotalTimeLabel.Size = new System.Drawing.Size(0, 16);
+            this.TotalTimeLabel.Size = new System.Drawing.Size(0, 13);
             this.TotalTimeLabel.TabIndex = 44;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(515, 172);
+            this.label6.Location = new System.Drawing.Point(386, 140);
+            this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(70, 16);
+            this.label6.Size = new System.Drawing.Size(56, 13);
             this.label6.TabIndex = 43;
             this.label6.Text = "Total time:";
             // 
             // VolumeLabel
             // 
             this.VolumeLabel.AutoSize = true;
-            this.VolumeLabel.Location = new System.Drawing.Point(12, 140);
+            this.VolumeLabel.Location = new System.Drawing.Point(9, 114);
+            this.VolumeLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.VolumeLabel.Name = "VolumeLabel";
-            this.VolumeLabel.Size = new System.Drawing.Size(57, 16);
+            this.VolumeLabel.Size = new System.Drawing.Size(45, 13);
             this.VolumeLabel.TabIndex = 36;
             this.VolumeLabel.Text = "Volume:";
             // 
             // WaveGraph
             // 
             this.WaveGraph.AutoScroll = true;
-            this.WaveGraph.Location = new System.Drawing.Point(9, 198);
+            this.WaveGraph.Location = new System.Drawing.Point(7, 161);
+            this.WaveGraph.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.WaveGraph.Name = "WaveGraph";
             this.WaveGraph.SamplesPerPixel = 128;
-            this.WaveGraph.Size = new System.Drawing.Size(774, 258);
+            this.WaveGraph.Size = new System.Drawing.Size(580, 210);
             this.WaveGraph.StartPosition = ((long)(0));
             this.WaveGraph.TabIndex = 35;
             this.WaveGraph.WaveStream = null;
             // 
             // VolumeControl
             // 
-            this.VolumeControl.Location = new System.Drawing.Point(77, 131);
+            this.VolumeControl.Location = new System.Drawing.Point(58, 106);
+            this.VolumeControl.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.VolumeControl.Name = "VolumeControl";
-            this.VolumeControl.Size = new System.Drawing.Size(702, 26);
+            this.VolumeControl.Size = new System.Drawing.Size(529, 21);
             this.VolumeControl.TabIndex = 34;
             this.VolumeControl.VolumeChanged += new System.EventHandler(this.VolumeControl_VolumeChanged);
             // 
             // CancelButton
             // 
-            this.CancelButton.Location = new System.Drawing.Point(409, 463);
-            this.CancelButton.Margin = new System.Windows.Forms.Padding(4);
+            this.CancelButton.Location = new System.Drawing.Point(88, 375);
             this.CancelButton.Name = "CancelButton";
-            this.CancelButton.Size = new System.Drawing.Size(100, 28);
+            this.CancelButton.Size = new System.Drawing.Size(75, 23);
             this.CancelButton.TabIndex = 6;
             this.CancelButton.Text = "Cancel";
             this.CancelButton.UseVisualStyleBackColor = true;
@@ -104,28 +108,25 @@
             // 
             // NameTextBox
             // 
-            this.NameTextBox.Location = new System.Drawing.Point(13, 65);
-            this.NameTextBox.Margin = new System.Windows.Forms.Padding(4);
+            this.NameTextBox.Location = new System.Drawing.Point(10, 53);
             this.NameTextBox.Name = "NameTextBox";
-            this.NameTextBox.Size = new System.Drawing.Size(765, 22);
+            this.NameTextBox.Size = new System.Drawing.Size(577, 20);
             this.NameTextBox.TabIndex = 1;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 44);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(10, 36);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(48, 16);
+            this.label2.Size = new System.Drawing.Size(38, 13);
             this.label2.TabIndex = 30;
             this.label2.Text = "Name:";
             // 
             // StopButton
             // 
-            this.StopButton.Location = new System.Drawing.Point(117, 95);
-            this.StopButton.Margin = new System.Windows.Forms.Padding(4);
+            this.StopButton.Location = new System.Drawing.Point(88, 77);
             this.StopButton.Name = "StopButton";
-            this.StopButton.Size = new System.Drawing.Size(100, 28);
+            this.StopButton.Size = new System.Drawing.Size(75, 23);
             this.StopButton.TabIndex = 29;
             this.StopButton.Text = "Stop";
             this.StopButton.UseVisualStyleBackColor = true;
@@ -133,10 +134,9 @@
             // 
             // PlayButton
             // 
-            this.PlayButton.Location = new System.Drawing.Point(9, 96);
-            this.PlayButton.Margin = new System.Windows.Forms.Padding(4);
+            this.PlayButton.Location = new System.Drawing.Point(7, 78);
             this.PlayButton.Name = "PlayButton";
-            this.PlayButton.Size = new System.Drawing.Size(100, 28);
+            this.PlayButton.Size = new System.Drawing.Size(75, 23);
             this.PlayButton.TabIndex = 28;
             this.PlayButton.Text = "Play";
             this.PlayButton.UseVisualStyleBackColor = true;
@@ -144,10 +144,9 @@
             // 
             // SaveButton
             // 
-            this.SaveButton.Location = new System.Drawing.Point(301, 463);
-            this.SaveButton.Margin = new System.Windows.Forms.Padding(4);
+            this.SaveButton.Location = new System.Drawing.Point(7, 375);
             this.SaveButton.Name = "SaveButton";
-            this.SaveButton.Size = new System.Drawing.Size(100, 28);
+            this.SaveButton.Size = new System.Drawing.Size(75, 23);
             this.SaveButton.TabIndex = 5;
             this.SaveButton.Text = "Save";
             this.SaveButton.UseVisualStyleBackColor = true;
@@ -156,9 +155,10 @@
             // KeyCombo
             // 
             this.KeyCombo.FormattingEnabled = true;
-            this.KeyCombo.Location = new System.Drawing.Point(301, 98);
+            this.KeyCombo.Location = new System.Drawing.Point(226, 80);
+            this.KeyCombo.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.KeyCombo.Name = "KeyCombo";
-            this.KeyCombo.Size = new System.Drawing.Size(121, 24);
+            this.KeyCombo.Size = new System.Drawing.Size(92, 21);
             this.KeyCombo.TabIndex = 2;
             this.KeyCombo.SelectedIndexChanged += new System.EventHandler(this.KeyCombo_SelectedIndexChanged);
             this.KeyCombo.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyCombo_KeyDown);
@@ -166,37 +166,46 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(220, 101);
+            this.label8.Location = new System.Drawing.Point(165, 82);
+            this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(70, 16);
+            this.label8.Size = new System.Drawing.Size(58, 13);
             this.label8.TabIndex = 46;
             this.label8.Text = "Set to key:";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 13);
+            this.label1.Location = new System.Drawing.Point(10, 11);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(39, 16);
+            this.label1.Size = new System.Drawing.Size(34, 13);
             this.label1.TabIndex = 47;
             this.label1.Text = "Input:";
             // 
             // InputCombo
             // 
             this.InputCombo.FormattingEnabled = true;
-            this.InputCombo.Location = new System.Drawing.Point(62, 10);
+            this.InputCombo.Location = new System.Drawing.Point(46, 8);
+            this.InputCombo.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.InputCombo.Name = "InputCombo";
-            this.InputCombo.Size = new System.Drawing.Size(211, 24);
+            this.InputCombo.Size = new System.Drawing.Size(159, 21);
             this.InputCombo.TabIndex = 0;
             this.InputCombo.SelectedIndexChanged += new System.EventHandler(this.InputCombo_SelectedIndexChanged);
             // 
             // SoundWaveGraph
             // 
+            this.SoundWaveGraph.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.SoundWaveGraph.EndTime = 0D;
-            this.SoundWaveGraph.Location = new System.Drawing.Point(9, 198);
+            this.SoundWaveGraph.Location = new System.Drawing.Point(7, 161);
+            this.SoundWaveGraph.Margin = new System.Windows.Forms.Padding(2);
             this.SoundWaveGraph.Name = "SoundWaveGraph";
+            this.SoundWaveGraph.PlayingSound = null;
+            this.SoundWaveGraph.PlaySeconds = double.NaN;
             this.SoundWaveGraph.ScrollSpeed = 0.25D;
-            this.SoundWaveGraph.Size = new System.Drawing.Size(730, 258);
+            this.SoundWaveGraph.Size = new System.Drawing.Size(580, 210);
             this.SoundWaveGraph.SoundInfo = null;
             this.SoundWaveGraph.StartTime = 0D;
             this.SoundWaveGraph.TabIndex = 48;
@@ -204,9 +213,9 @@
             // 
             // SaveSound
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(804, 505);
+            this.ClientSize = new System.Drawing.Size(598, 410);
             this.Controls.Add(this.SoundWaveGraph);
             this.Controls.Add(this.InputCombo);
             this.Controls.Add(this.label1);
@@ -223,6 +232,7 @@
             this.Controls.Add(this.StopButton);
             this.Controls.Add(this.PlayButton);
             this.Controls.Add(this.SaveButton);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "SaveSound";
             this.Text = "SaveSound";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SaveSound_FormClosing);

@@ -10,11 +10,11 @@ using System.Windows.Forms;
 
 namespace SoundBoardDotNet.PlayHeads
 {
-    public partial class StartPlayHead : UserControl, IPlayHead
+    public partial class EndPlayHead : UserControl, IPlayHead
     {
         private AudioSoundInfo _soundInfo;
 
-        public double Seconds 
+        public double Seconds
         {
             get
             {
@@ -31,10 +31,10 @@ namespace SoundBoardDotNet.PlayHeads
             }
         }
 
-        public double Progression 
+        public double Progression
         {
-            get => TotalSeconds == 0 ? 0 : Seconds / TotalSeconds; 
-            set => Seconds = value * TotalSeconds; 
+            get => TotalSeconds == 0 ? 0 : Seconds / TotalSeconds;
+            set => Seconds = value * TotalSeconds;
         }
 
         public double TotalSeconds
@@ -44,12 +44,12 @@ namespace SoundBoardDotNet.PlayHeads
 
         public int ParentWidth => Parent?.Width ?? 0;
 
-        public int ScrollX 
-        { 
+        public int ScrollX
+        {
             get => (ParentPanel?.HorizontalScroll?.Value ?? 0) + XLocation;
             set => XLocation = value - (ParentPanel?.HorizontalScroll?.Value ?? 0);
         }
-        public int PointingX { get => ScrollX + Width; set => ScrollX = value - Width; }
+        public int PointingX { get => ScrollX; set => ScrollX = value; }
 
         public int ParentOffset { private get; set; }
 
@@ -70,7 +70,7 @@ namespace SoundBoardDotNet.PlayHeads
             set
             {
                 Left = value;
-                if (SoundInfo != null) SoundInfo.StartPos = Seconds;
+                if (SoundInfo != null) SoundInfo.EndPos = Seconds;
                 if (CursorPanel != null) CursorPanel.Left = PointingX - ParentOffset - 1;
             }
         }
@@ -101,8 +101,8 @@ namespace SoundBoardDotNet.PlayHeads
         {
             switch (e.PropertyName)
             {
-                case "StartPos":
-                    Seconds = SoundInfo.StartPos;
+                case "EndPos":
+                    Seconds = SoundInfo.EndPos;
                     break;
                 default:
                     break;
@@ -111,10 +111,9 @@ namespace SoundBoardDotNet.PlayHeads
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public StartPlayHead()
+        public EndPlayHead()
         {
             InitializeComponent();
-            
         }
 
         internal void CreateCursorPanel()
@@ -123,9 +122,9 @@ namespace SoundBoardDotNet.PlayHeads
             CursorPanel = new Panel();
             CursorPanel.Parent = Parent;
             CursorPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
-            CursorPanel.BackColor = Color.FromArgb(25, 215, 0);
+            CursorPanel.BackColor = Color.FromArgb(255, 0, 0);
             CursorPanel.Size = new Size(1, cursorHeight);
-            CursorPanel.Location = new Point(PointingX - ParentOffset - 1, 0);
+            CursorPanel.Location = new Point(PointingX - ParentOffset, 0);
         }
 
         private void OnPropertyChanged(string propertyName)

@@ -10,11 +10,11 @@ using System.Windows.Forms;
 
 namespace SoundBoardDotNet.PlayHeads
 {
-    public partial class StartPlayHead : UserControl, IPlayHead
+    public partial class CurrentPlayHead : UserControl, IPlayHead
     {
         private AudioSoundInfo _soundInfo;
 
-        public double Seconds 
+        public double Seconds
         {
             get
             {
@@ -31,10 +31,10 @@ namespace SoundBoardDotNet.PlayHeads
             }
         }
 
-        public double Progression 
+        public double Progression
         {
-            get => TotalSeconds == 0 ? 0 : Seconds / TotalSeconds; 
-            set => Seconds = value * TotalSeconds; 
+            get => TotalSeconds == 0 ? 0 : Seconds / TotalSeconds;
+            set => Seconds = value * TotalSeconds;
         }
 
         public double TotalSeconds
@@ -44,12 +44,12 @@ namespace SoundBoardDotNet.PlayHeads
 
         public int ParentWidth => Parent?.Width ?? 0;
 
-        public int ScrollX 
-        { 
+        public int ScrollX
+        {
             get => (ParentPanel?.HorizontalScroll?.Value ?? 0) + XLocation;
             set => XLocation = value - (ParentPanel?.HorizontalScroll?.Value ?? 0);
         }
-        public int PointingX { get => ScrollX + Width; set => ScrollX = value - Width; }
+        public int PointingX { get => ScrollX + Width / 2; set => ScrollX = value - Width / 2; }
 
         public int ParentOffset { private get; set; }
 
@@ -70,7 +70,6 @@ namespace SoundBoardDotNet.PlayHeads
             set
             {
                 Left = value;
-                if (SoundInfo != null) SoundInfo.StartPos = Seconds;
                 if (CursorPanel != null) CursorPanel.Left = PointingX - ParentOffset - 1;
             }
         }
@@ -84,37 +83,16 @@ namespace SoundBoardDotNet.PlayHeads
             {
                 if (_soundInfo != value)
                 {
-                    if (_soundInfo != null)
-                    {
-                        _soundInfo.PropertyChanged -= _soundInfo_PropertyChanged;
-                    }
                     _soundInfo = value;
-                    if (_soundInfo != null)
-                    {
-                        _soundInfo.PropertyChanged += _soundInfo_PropertyChanged;
-                    }
                 }
-            }
-        }
-
-        private void _soundInfo_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            switch (e.PropertyName)
-            {
-                case "StartPos":
-                    Seconds = SoundInfo.StartPos;
-                    break;
-                default:
-                    break;
             }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public StartPlayHead()
+        public CurrentPlayHead()
         {
             InitializeComponent();
-            
         }
 
         internal void CreateCursorPanel()
@@ -123,8 +101,8 @@ namespace SoundBoardDotNet.PlayHeads
             CursorPanel = new Panel();
             CursorPanel.Parent = Parent;
             CursorPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
-            CursorPanel.BackColor = Color.FromArgb(25, 215, 0);
-            CursorPanel.Size = new Size(1, cursorHeight);
+            CursorPanel.BackColor = Color.FromArgb(3, 145, 255);
+            CursorPanel.Size = new Size(2, cursorHeight);
             CursorPanel.Location = new Point(PointingX - ParentOffset - 1, 0);
         }
 
@@ -142,6 +120,11 @@ namespace SoundBoardDotNet.PlayHeads
         private void Head_MouseMove(object sender, MouseEventArgs e)
         {
             OnMouseMove(e);
+        }
+
+        private void Head_MouseUp(object sender, MouseEventArgs e)
+        {
+            OnMouseUp(e);
         }
     }
 }
