@@ -14,7 +14,6 @@ namespace SoundBoardDotNet.PlayHeads
         double Progression { get; set; }
         double TotalSeconds { get; }
         int ParentWidth { get; }
-        int WaveViewerWidth { set; }
         Panel CursorPanel { get; }
         Panel ParentPanel { set; }
         int ScrollX { get; set; }

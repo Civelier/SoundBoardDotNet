@@ -19,18 +19,6 @@ namespace SoundBoardDotNet
         public float Volume = 1;
         public double StartTime = 0, EndTime = 0;
 
-        private static List<List<string>> _decode(string encodedString)
-        {
-            var output = new List<List<string>>();
-            var decodedList = new List<string>(encodedString.Split(','));
-            
-            foreach(var v in decodedList)
-            {
-                output.Add(new List<string>(v.Split(':')));
-            }
-            return output;
-        }
-
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Name", Name);
@@ -49,29 +37,6 @@ namespace SoundBoardDotNet
             StartTime = info.GetDouble("StartTime");
             EndTime = info.GetDouble("EndTime");
             Index = info.GetInt32("Index");
-        }
-
-        public SoundButtonData(string encodedData)
-        {
-            var decodedData = _decode(encodedData);
-
-            foreach(var v in decodedData)
-            {
-                switch (v[0])
-                {
-                    case "Name":
-                        Name = v[1];
-                        break;
-                    case "FilePath":
-                        FilePath = v[1];
-                        break;
-                    case "Volume":
-                        Volume = float.Parse(v[1]);
-                        break;
-                    default:
-                        break;
-                }
-            }
         }
 
         public void Reset()

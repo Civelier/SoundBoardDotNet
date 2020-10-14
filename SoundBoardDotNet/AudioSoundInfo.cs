@@ -139,7 +139,7 @@ namespace SoundBoardDotNet
             _startPos = startPos;
             _endPos = endPos;
             _volume = volume;
-            _totalSeconds = _waveStream.Length;
+            _totalSeconds = _waveStream.TotalTime.TotalSeconds;
             _instances = new List<AudioSound>();
             _canHaveMultipleInstances = false;
         }
@@ -154,7 +154,7 @@ namespace SoundBoardDotNet
             _startPos = startPos;
             _endPos = endPos;
             _volume = volume;
-            _totalSeconds = _waveStream.Length;
+            _totalSeconds = _waveStream.TotalTime.TotalSeconds;
             _instances = new List<AudioSound>();
             _canHaveMultipleInstances = true;
 
@@ -254,9 +254,9 @@ namespace SoundBoardDotNet
         public void DisposeInstances()
         {
             CheckDisposed();
-            foreach (var sound in _instances)
+            while (_instances.Count > 0)
             {
-                sound.Dispose();
+                _instances.First().Dispose();
             }
             _instances.Clear();
         }
@@ -264,14 +264,18 @@ namespace SoundBoardDotNet
         public void Dispose()
         {
             CheckDisposed();
-            foreach (var sound in _instances)
+            while (_instances.Count > 0)
             {
-                sound.Dispose();
+                _instances.First().Dispose();
             }
             _waveStream.Dispose();
             _waveStreamRequest = null;
+            _instances = null;
             IsDisposed = true;
             OnDisposed();
+            Disposed = null;
+            SoundInstanceStarted = null;
+            PropertyChanged = null;
         }
     }
 }

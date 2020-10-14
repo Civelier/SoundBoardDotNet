@@ -213,10 +213,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.WaveGraphPanel.AutoScroll = true;
             this.WaveGraphPanel.Controls.Add(this.HeadEnd);
-            this.WaveGraphPanel.Controls.Add(this.HeadCurrent);
             this.WaveGraphPanel.Controls.Add(this.HeadStart);
             this.WaveGraphPanel.Controls.Add(this.WaveGraph);
             this.WaveGraphPanel.Controls.Add(this.SpacingPanel);
+            this.WaveGraphPanel.Controls.Add(this.HeadCurrent);
             this.WaveGraphPanel.Location = new System.Drawing.Point(0, 0);
             this.WaveGraphPanel.Margin = new System.Windows.Forms.Padding(2);
             this.WaveGraphPanel.Name = "WaveGraphPanel";
@@ -241,7 +241,7 @@
             this.HeadCurrent.BackColor = System.Drawing.Color.Transparent;
             this.HeadCurrent.Location = new System.Drawing.Point(173, 0);
             this.HeadCurrent.Name = "HeadCurrent";
-            this.HeadCurrent.PointingX = 205;
+            this.HeadCurrent.PointingX = 173;
             this.HeadCurrent.Progression = 0D;
             this.HeadCurrent.ScrollX = 173;
             this.HeadCurrent.Seconds = 0D;
@@ -254,7 +254,7 @@
             this.HeadStart.BackColor = System.Drawing.Color.Transparent;
             this.HeadStart.Location = new System.Drawing.Point(0, 0);
             this.HeadStart.Name = "HeadStart";
-            this.HeadStart.PointingX = 32;
+            this.HeadStart.PointingX = 0;
             this.HeadStart.Progression = 0D;
             this.HeadStart.ScrollX = 0;
             this.HeadStart.Seconds = 0D;

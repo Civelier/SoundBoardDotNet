@@ -19,13 +19,13 @@ namespace SoundBoardDotNet.PlayHeads
             get
             {
                 if (WaveViewerWidth == 0) return 0;
-                return (double)PointingX / WaveViewerWidth;
+                return (double)PointingX / WaveViewerWidth * TotalSeconds;
             }
             set
             {
                 if (Seconds != value)
                 {
-                    PointingX = (int)Math.Round(Progression * WaveViewerWidth);
+                    PointingX = (int)Math.Round(value / TotalSeconds * WaveViewerWidth);
                     OnPropertyChanged("Seconds");
                 }
             }
@@ -49,7 +49,7 @@ namespace SoundBoardDotNet.PlayHeads
             get => (ParentPanel?.HorizontalScroll?.Value ?? 0) + XLocation;
             set => XLocation = value - (ParentPanel?.HorizontalScroll?.Value ?? 0);
         }
-        public int PointingX { get => ScrollX; set => ScrollX = value; }
+        public int PointingX { get => ScrollX - ParentOffset; set => ScrollX = value + ParentOffset; }
 
         public int ParentOffset { private get; set; }
 
@@ -71,12 +71,13 @@ namespace SoundBoardDotNet.PlayHeads
             {
                 Left = value;
                 if (SoundInfo != null) SoundInfo.EndPos = Seconds;
-                if (CursorPanel != null) CursorPanel.Left = PointingX - ParentOffset - 1;
+                if (CursorPanel != null) CursorPanel.Left = PointingX;
             }
         }
         public SoundWaveViewer Viewer { private get; set; }
 
-        public int WaveViewerWidth { private get; set; }
+        private int WaveViewerWidth => Viewer?.WaveGraphWidth ?? 0;
+
         public AudioSoundInfo SoundInfo
         {
             private get => _soundInfo;
@@ -124,7 +125,7 @@ namespace SoundBoardDotNet.PlayHeads
             CursorPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
             CursorPanel.BackColor = Color.FromArgb(255, 0, 0);
             CursorPanel.Size = new Size(1, cursorHeight);
-            CursorPanel.Location = new Point(PointingX - ParentOffset, 0);
+            CursorPanel.Location = new Point(PointingX, 0);
         }
 
         private void OnPropertyChanged(string propertyName)

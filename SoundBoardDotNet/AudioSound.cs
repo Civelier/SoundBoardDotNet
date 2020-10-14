@@ -292,11 +292,10 @@ namespace SoundBoardDotNet
 
         public static void StopAll()
         {
-            foreach (var sound in Sounds)
+            while (Sounds.Count > 0)
             {
-                sound.Dispose();
+                Sounds.First().Dispose();
             }
-            Sounds.Clear();
         }
 
         public void Dispose()
@@ -305,6 +304,7 @@ namespace SoundBoardDotNet
             _stop();
             _out.Dispose();
             if (WaveStream != null) WaveStream.Dispose();
+            Sounds.Remove(this);
             IsDisposed = true;
             SoundDisposedEventHandler handler = Disposed;
             Disposed?.Invoke(this);

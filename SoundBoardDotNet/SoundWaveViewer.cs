@@ -112,6 +112,7 @@ namespace SoundBoardDotNet
                     if (_soundInfo != null)
                     {
                         _soundInfo.SoundInstanceStarted += _soundInfo_SoundInstanceStarted;
+                        _soundInfo.PropertyChanged += SoundInfo_PropertyChanged;
                         _soundInfo.Disposed += _soundInfo_Disposed;
                     }
                 }
@@ -129,12 +130,15 @@ namespace SoundBoardDotNet
             _soundInfo = null;
             sender.Disposed -= _soundInfo_Disposed;
             sender.SoundInstanceStarted -= _soundInfo_SoundInstanceStarted;
+            sender.PropertyChanged -= SoundInfo_PropertyChanged;
         }
 
         public NumericUpDown StartUpDown => StartPositionUpDown;
         public NumericUpDown EndUpDown => EndPositionUpDown;
 
         public double ScrollSpeed { get; set; }
+
+        internal int WaveGraphWidth => WaveGraph.Width;
 
         public SoundWaveViewer()
         {
@@ -154,8 +158,6 @@ namespace SoundBoardDotNet
             StartPositionUpDown.ValueChanged += StartPositionUpDown_ValueChanged;
             EndPositionUpDown.ValueChanged += EndPositionUpDown_ValueChanged;
             ScrollSpeed = 0.25;
-
-            SoundInfo.PropertyChanged += SoundInfo_PropertyChanged;
 
             HeadStart.Viewer = this;
             HeadStart.ParentOffset = WaveGraph.Left;
@@ -334,7 +336,7 @@ namespace SoundBoardDotNet
                 endPos = HeadEnd.Seconds;
             }
 
-            HeadEnd.Height = HeadCurrent.Height = WaveGraph.Height = SpacingPanel.Height = WaveGraphPanel.Height - 20;
+            WaveGraph.Height = SpacingPanel.Height = WaveGraphPanel.Height - 20;
             if (WaveStream == null)
             {
                 WaveGraph.Width = WaveGraphPanel.Width - 2 * 40;
