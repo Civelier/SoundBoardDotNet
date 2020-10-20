@@ -94,6 +94,12 @@
     <Compile Include="AudioRecorder.cs" />
     <Compile Include="AudioSound.cs" />
     <Compile Include="AudioSoundInfo.cs" />
+    <Compile Include="DataBinding\ActionHookHistory.cs" />
+    <Compile Include="DataBinding\BasicActionHook.cs" />
+    <Compile Include="DataBinding\IActionHook.cs" />
+    <Compile Include="DataBinding\RevertableModel.cs" />
+    <Compile Include="DataBinding\RevertableModelActionHook.cs" />
+    <Compile Include="DataBinding\UndoAllContext.cs" />
     <Compile Include="Devices.cs" />
     <Compile Include="DevicesForm.cs">
       <SubType>Form</SubType>
@@ -134,6 +140,7 @@
     <Compile Include="PlayHeads\StartPlayHead.Designer.cs">
       <DependentUpon>StartPlayHead.cs</DependentUpon>
     </Compile>
+    <Compile Include="SelectSoundFactory.cs" />
     <Compile Include="SemanticVersion.cs" />
     <Compile Include="SoundEvents\SoundDisposedEventArgs.cs" />
     <Compile Include="SoundEvents\SoundInfoDisposedEventHandler.cs" />

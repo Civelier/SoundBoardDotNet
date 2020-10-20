@@ -11,7 +11,6 @@ namespace SoundBoardDotNet
 {
     public class SoundButtonMaker
     {
-        public SelectSound SoundForm;
         public bool HasSound => Data.FilePath != "";
         public Button Btn;
         public SoundButtonData Data;
@@ -134,7 +133,7 @@ namespace SoundBoardDotNet
         {
             Name = name;
             Data = new SoundButtonData();
-            SoundForm = new SelectSound(UpdateBtnText, Data);
+            
             Btn = new Button();
             Btn.Click += Btn_Click;
             Btn.Size = new Size(width * Scale, height * Scale);
@@ -146,32 +145,23 @@ namespace SoundBoardDotNet
 
         public void Update()
         {
-            SoundForm = new SelectSound(UpdateBtnText, Data);
+            SelectSoundFactory.ShowSelectSound(FormCallBack, Data);
             Btn.Text = Name;
-            if (SoundForm.SoundInfo != null)
+            if (SelectSoundFactory.SoundForm.SoundInfo != null)
             {
-                if (SoundForm.SoundInfo.WaveStream != null) Btn.Text += "\n" + Data.Name;
+                if (SelectSoundFactory.SoundForm.SoundInfo.WaveStream != null) Btn.Text += "\n" + Data.Name;
             }
         }
 
-        private void UpdateBtnText()
+        private void FormCallBack()
         {
-            Btn.Text = $"{Name}\n{SoundForm.GetNameTextBox.Text}";
+            Btn.Text = $"{Name}\n{SelectSoundFactory.SoundForm.GetNameTextBox.Text}";
+
         }
 
         virtual protected void Btn_Click(object sender, EventArgs e)
         {
-            if (SoundForm == null) SoundForm = new SelectSound(UpdateBtnText, Data);
-            if (!SoundForm.IsDisposed)
-            {
-                SoundForm.LoadFromData();
-                SoundForm.Show();
-            }
-            else
-            {
-                SoundForm = new SelectSound(UpdateBtnText, Data);
-                SoundForm.Show();
-            }
+            SelectSoundFactory.ShowSelectSound(FormCallBack, Data);
             Form1.SetFocus();
         }
     }

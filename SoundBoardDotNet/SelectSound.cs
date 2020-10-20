@@ -33,18 +33,43 @@ namespace SoundBoardDotNet
         //public WaveForm MyWaveForm { get { return WaveGraph; } }
 
         private OpenFileDialog _fileDialog = new OpenFileDialog();
-        public SoundButtonData Data;
+
+        private SoundButtonData _data;
+
+        public SoundButtonData Data
+        {
+            get => _data;
+            set
+            {
+                _data = value;
+                SoundWaveGraph.SetSoundInfoWithoutDispose(_data.SoundInfo);
+            }
+        }
 
         public delegate void CallBack();
 
         private CallBack _cb;
 
-        public SelectSound(CallBack cb, SoundButtonData data)
+        //public SelectSound(CallBack cb, SoundButtonData data)
+        //{
+        //    Data = data;
+        //    _cb = cb;
+        //    _fileDialog.Filter = "All playable files (*.wav,*.mp3)|*.wav;*.WAV;*.mp3;*.MP3";
+        //    _fileDialog.FilterIndex = 0;
+        //    InitializeComponent();
+        //    AddActionsForControlsOfTypes((Control c) => c.KeyDown += PlayStopOnKeys, typeof(Button), typeof(ComboBox), typeof(NumericUpDown));
+        //    AddActionsForControlsOfTypes((Control c) => c.KeyDown += SelectNextOnEnterKey, typeof(ComboBox), typeof(NumericUpDown), typeof(TextBox));
+        //    AddActionsForControlsOfTypes((Control c) => c.KeyDown += SpaceForNumUpDown, typeof(NumericUpDown));
+        //    AddArrowSelectForControls(SoundWaveGraph.StartUpDown, SoundWaveGraph.EndUpDown, SaveButton, CancelButton);
+        //    AddActionsForControlsOfTypes((Control c) => { c.KeyDown += CloseOnEsc; c.KeyDown += SupressKeys; }, typeof(Button), typeof(ComboBox), typeof(NumericUpDown), typeof(TextBox));
+        //    SoundWaveGraph.StartUpDown.ValueChanged += StartTime_ValueChanged;
+        //    SoundWaveGraph.EndUpDown.ValueChanged += EndTime_ValueChanged;
+
+        //    LoadFromData();
+        //}
+
+        public SelectSound()
         {
-            Data = data;
-            _cb = cb;
-            _fileDialog.Filter = "All playable files (*.wav,*.mp3)|*.wav;*.WAV;*.mp3;*.MP3";
-            _fileDialog.FilterIndex = 0;
             InitializeComponent();
             AddActionsForControlsOfTypes((Control c) => c.KeyDown += PlayStopOnKeys, typeof(Button), typeof(ComboBox), typeof(NumericUpDown));
             AddActionsForControlsOfTypes((Control c) => c.KeyDown += SelectNextOnEnterKey, typeof(ComboBox), typeof(NumericUpDown), typeof(TextBox));
@@ -53,6 +78,12 @@ namespace SoundBoardDotNet
             AddActionsForControlsOfTypes((Control c) => { c.KeyDown += CloseOnEsc; c.KeyDown += SupressKeys; }, typeof(Button), typeof(ComboBox), typeof(NumericUpDown), typeof(TextBox));
             SoundWaveGraph.StartUpDown.ValueChanged += StartTime_ValueChanged;
             SoundWaveGraph.EndUpDown.ValueChanged += EndTime_ValueChanged;
+        }
+
+        internal void UpdateSelectSound(CallBack cb, SoundButtonData data)
+        {
+            Data = data;
+            _cb = cb;
 
             LoadFromData();
         }
@@ -307,15 +338,23 @@ namespace SoundBoardDotNet
 
         public void LoadFromData()
         {
-            if (Data.FilePath != "")
+            if (Data.FilePath != "" && Data.FilePath != null)
             {
-                if (SoundInfo == null) SoundInfo = new AudioSoundInfo(Data.FilePath, Data.StartTime, Data.EndTime, Data.Volume);
+                if (SoundInfo == null)
+                {
+                    throw new NotImplementedException();
+                    SoundInfo = new AudioSoundInfo(Data.FilePath, Data.StartTime, Data.EndTime, Data.Volume);
+                }
                 else
                 {
-                    if (SoundInfo.FileName != Data.FilePath) SoundInfo = new AudioSoundInfo(Data.FilePath, Data.StartTime, Data.EndTime, Data.Volume);
+                    if (SoundInfo.FileName != Data.FilePath)
+                    {
+                        throw new NotImplementedException();
+                        SoundInfo = new AudioSoundInfo(Data.FilePath, Data.StartTime, Data.EndTime, Data.Volume);
+                    }
                 }
                 if (SoundInfo.WaveStream == null) return;
-                Data.FilePath = SoundInfo.FileName;
+                //Data.FilePath = SoundInfo.FileName;
                 FileNameBox.Text = Data.FilePath;
                 WaveGraph.WaveStream = SoundInfo.WaveStream;
                 var temp = SoundWaveGraph.EndUpDown.Maximum;

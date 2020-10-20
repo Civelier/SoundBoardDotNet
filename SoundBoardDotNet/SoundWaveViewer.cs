@@ -120,6 +120,30 @@ namespace SoundBoardDotNet
             }
         }
 
+        internal void SetSoundInfoWithoutDispose(AudioSoundInfo soundInfo)
+        {
+            if (_soundInfo != soundInfo)
+            {
+                if (_soundInfo != null)
+                {
+                    _soundInfo.Disposed -= _soundInfo_Disposed;
+                    _soundInfo.SoundInstanceStarted -= _soundInfo_SoundInstanceStarted;
+                    _soundInfo.PropertyChanged -= SoundInfo_PropertyChanged;
+                }
+                _soundInfo = soundInfo;
+                HeadStart.SoundInfo = soundInfo;
+                HeadCurrent.SoundInfo = soundInfo;
+                HeadEnd.SoundInfo = soundInfo;
+                WaveGraph.WaveStream = _soundInfo?.WaveStream;
+                if (_soundInfo != null)
+                {
+                    _soundInfo.SoundInstanceStarted += _soundInfo_SoundInstanceStarted;
+                    _soundInfo.PropertyChanged += SoundInfo_PropertyChanged;
+                    _soundInfo.Disposed += _soundInfo_Disposed;
+                }
+            }
+        }
+
         private void _soundInfo_SoundInstanceStarted(AudioSoundInfo sender, AudioSound newInstance)
         {
             PlayingSound = newInstance;
@@ -212,12 +236,12 @@ namespace SoundBoardDotNet
 
         private void EndPositionUpDown_ValueChanged(object sender, EventArgs e)
         {
-            SoundInfo.EndPos = (double)EndPositionUpDown.Value;
+            if (SoundInfo != null) SoundInfo.EndPos = (double)EndPositionUpDown.Value;
         }
 
         private void StartPositionUpDown_ValueChanged(object sender, EventArgs e)
         {
-            SoundInfo.StartPos = (double)StartPositionUpDown.Value;
+            if (SoundInfo != null) SoundInfo.StartPos = (double)StartPositionUpDown.Value;
         }
 
         private Point MouseDownLocation;

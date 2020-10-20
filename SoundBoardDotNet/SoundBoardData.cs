@@ -253,8 +253,6 @@ namespace SoundBoardDotNet
         {
             try
             {
-                Data.Clear();
-                Data = (List<SoundButtonData>)info.GetValue("Data", typeof(List<SoundButtonData>));
                 try
                 {
                     if (ProjectFileVersion.Upgrade((FileVersion)info.GetValue("Version", typeof(FileVersion))))
@@ -268,6 +266,8 @@ namespace SoundBoardDotNet
                     System.Windows.Forms.MessageBox.Show("File corrupted or invalid!", "Invalid file", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
                     throw new Exception("File corrupted!");
                 }
+                Data.Clear();
+                Data = (List<SoundButtonData>)info.GetValue("Data", typeof(List<SoundButtonData>));
             }
             catch (SerializationException)
             {

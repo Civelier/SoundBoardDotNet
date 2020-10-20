@@ -271,8 +271,8 @@ namespace SoundBoardDotNet
             btn.Data.StartTime = SoundWaveGraph.StartTime;
             btn.Data.EndTime = SoundWaveGraph.EndTime;
             btn.Data.Name = NameTextBox.Text;
-            btn.SoundForm.SoundInfo = new AudioSoundInfo(btn.Data.FilePath, btn.Data.StartTime, btn.Data.EndTime, btn.Data.Volume);
-            btn.SoundForm.Data.FilePath = btn.Data.FilePath = btn.SoundForm.SoundInfo.FileName;
+            SelectSoundFactory.SoundForm.SoundInfo = new AudioSoundInfo(btn.Data.FilePath, btn.Data.StartTime, btn.Data.EndTime, btn.Data.Volume);
+            SelectSoundFactory.SoundForm.Data.FilePath = btn.Data.FilePath = SelectSoundFactory.SoundForm.SoundInfo.FileName;
             _isSaved = true;
             Form1.MyForm.HasChanged = true;
             return true;

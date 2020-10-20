@@ -15,9 +15,45 @@ namespace SoundBoardDotNet
     {
         public int Index = 0;
         public string Name = "";
-        public string FilePath = "";
-        public float Volume = 1;
-        public double StartTime = 0, EndTime = 0;
+        public string FilePath
+        {
+            get => SoundInfo?.FileName ?? "";
+            set
+            {
+                if (FilePath != (SoundInfo?.FileName ?? ""))
+                {
+                    SoundInfo.Dispose();
+                    if ((value ?? "") == "") SoundInfo = null;
+                    else SoundInfo = new AudioSoundInfo(value, 0, 0, 1);
+                }
+            }
+        }
+        public float Volume 
+        { 
+            get => SoundInfo?.Volume ?? 1;
+            set
+            {
+                if (SoundInfo != null) SoundInfo.Volume = value;
+            }
+        }
+        public double StartTime 
+        { 
+            get => SoundInfo?.StartPos ?? 0;
+            set
+            {
+                if (SoundInfo != null) SoundInfo.StartPos = value;
+            }
+        }
+        public double EndTime
+        {
+            get => SoundInfo?.EndPos ?? 0;
+            set
+            {
+                if (SoundInfo != null) SoundInfo.EndPos = value;
+            }
+        }
+
+        public AudioSoundInfo SoundInfo { get; private set; }
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {

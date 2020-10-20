@@ -226,7 +226,7 @@ namespace SoundBoardDotNet
             var btn = GetButton(SoundButtonMaker.KeyToChar(e.KeyCode));
             if (btn != null)
             {
-                btn.SoundForm.PlaySoundAsync();
+                SelectSoundFactory.SoundForm.PlaySoundAsync();
                 e.Handled = e.SuppressKeyPress = true;
                 return;
             }
